@@ -1,5 +1,6 @@
 import pandas as pd
-from loader.classe_loader import DataLoader
+from .classe_loader import DataLoader
+
 
 #sottoclasse di loader specializzata nel caricamento del formato csv
 

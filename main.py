@@ -16,20 +16,10 @@ Prerequisiti:
 - Il file deve essere presente nella directory indicata da `file_path`.
 
 """
-from scripts.data_preprocessing.loader.factory import Factory
+from scripts.data_preprocessing.loader.factory import Factory, load_data
+
 if __name__ == "__main__":
-    file_path = "C:/Users/lscor/OneDrive/Magistrale/F_Intelligenza_artificiale/Fia_project/data/version_4.json"
+   
+    dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
 
-    # Creazione del loader usando la Factory
-    loader = Factory.get_loader(file_path)
-
-    # Caricamento del dataset
-    dataset = loader.load(file_path)
-
-    print("\nDataset caricato:")
     print(dataset)
-
-
-processed_path = "C:/Users/lscor/OneDrive/Magistrale/F_Intelligenza_artificiale/Fia_project/data/dati_prepocessati.csv"
-dataset.to_csv(processed_path, index=False)  # Salva senza includere l'indice
-print(f"Dataset preprocessato salvato in: {processed_path}")
