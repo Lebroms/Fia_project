@@ -4,7 +4,7 @@ Created on Wed Jan 22 18:13:44 2025
 
 @author: emagi
 """
-
+import pandas as pd
 
 def gestisci_valori_mancanti(df, strategy="media"):
     """
@@ -15,22 +15,32 @@ def gestisci_valori_mancanti(df, strategy="media"):
         strategy (str): Strategia di gestione ('media', 'mediana', 'moda', 'elimina').
 
     Uscita:
-        pd.DataFrame: DataFrame processato.
+        pd.DataFrame: stesso DataFrame processato.
     """
     if strategy == "media":
-        return df.fillna(df.mean())  
+        numeric_cols = df.select_dtypes(include=["number"]).columns
+        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+    
     elif strategy == "mediana":
-        return df.fillna(df.median())
+        numeric_cols = df.select_dtypes(include=["number"]).columns
+        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())
+
     elif strategy == "moda":
-        return df.fillna(df.mode().iloc[0])
+        numeric_cols = df.select_dtypes(include=["number"]).columns
+        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mode().iloc[0])
+
     elif strategy == "elimina":
-        return df.dropna()
+        df = df.dropna()
+    
     else:
         raise ValueError(f"Strategia '{strategy}' non riconosciuta.")
+    
+    return df
         
-        """df.mean restituisce una serie che ha come indici i nomi delle colonne e come
+    """df.mean restituisce una serie che ha come indici i nomi delle colonne e come
         valori le medie delle rispettive colonne e df.fillna capisce di dover assegnare ad
         ogni valore Nan che incontra la media della sua colonna. Nel caso la colonna contenesse
-        valori non numerici si df.mean che df.fillna lascia i valori Nan inalterati"""
+        valori non numerici sia df.mean che df.fillna lascia i valori Nan inalterati"""
         
         
+

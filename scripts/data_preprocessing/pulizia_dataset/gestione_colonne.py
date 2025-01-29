@@ -9,7 +9,17 @@ import pandas as pd
 from rapidfuzz.fuzz import ratio
 import re
 
-def elimina_colonne_levenshtein(df, columns_to_keep, threshold=80):
+def elimina_colonne_levenshtein(df, columns_to_keep=["clump thickness 1", 
+                                                     "uniformity of cell size 2",
+                                                     "uniformity of cell shape 3", 
+                                                     "marginal adhesion 4",
+                                                     "single epithelial cell size 5", 
+                                                     "bare nuclei 6",
+                                                     "bland chromatin 7",
+                                                     "normal nucleoli 8",
+                                                     "mitoses 9",
+                                                     "classt 10"], threshold=68):
+    
     """
     Mantiene nel dataset solo le colonne che hanno una corrispondenza approssimativa 
     usando la distanza di Levenshtein.
@@ -47,14 +57,8 @@ def elimina_colonne_levenshtein(df, columns_to_keep, threshold=80):
     # Rinomina e restituisce il dataset filtrato   
     df=df[list(matched_columns.keys())].rename(columns=matched_columns)
     
-    return df
+    return df, matched_columns
 
-#colonne di default del dataframe
-columns_default=["Clump Thickness col_1", "Uniformity of Cell Size col_2",
-                 "Uniformity of Cell Shape col_3", "Marginal Adhesion col_4",
-                 "Single Epithelial Cell Size col_5", "Bare Nuclei col_6",
-                 "Bland Chromatin col_7","Normal Nucleoli col_8","Mitoses col_9",
-                 "Class col_10"]
 
 
             
