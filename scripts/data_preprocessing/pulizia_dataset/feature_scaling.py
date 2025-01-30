@@ -21,8 +21,9 @@ def scala_features(df, metodo="normalization"):
         None: (come sottoprogramma) Viene modificato il DataFrame originale per risparmiare memoria in caso di
         df molto grandi
     """
+    
     for col in df.columns:
-        if df[col].dtype in ['int64', 'float64']: #Controlla il tipo complessivo della colonna (se la colonna
+        if str(df[col].dtypes) in ['int64', 'float64']: #Controlla il tipo complessivo della colonna (se la colonna
             if metodo == "normalization":         # è mista è di tipo object)
                 # Min-Max Scaling
                 min_val = df[col].min()

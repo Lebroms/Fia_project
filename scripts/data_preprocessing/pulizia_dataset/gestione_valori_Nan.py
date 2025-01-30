@@ -17,17 +17,16 @@ def gestisci_valori_mancanti(df, strategy="media"):
     Uscita:
         pd.DataFrame: stesso DataFrame processato.
     """
+
+    
     if strategy == "media":
-        numeric_cols = df.select_dtypes(include=["number"]).columns
-        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+        df.fillna(df.mean(),inplace=True)
     
     elif strategy == "mediana":
-        numeric_cols = df.select_dtypes(include=["number"]).columns
-        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].median())
+        df.fillna(df.median(),inplace=True)
 
     elif strategy == "moda":
-        numeric_cols = df.select_dtypes(include=["number"]).columns
-        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mode().iloc[0])
+        df.fillna(df.mode().iloc[0],inplace=True)
 
     elif strategy == "elimina":
         df = df.dropna()
