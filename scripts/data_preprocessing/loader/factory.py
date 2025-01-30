@@ -2,6 +2,8 @@ from .classe_loader import DataLoader
 from .csv_loader import CsvLoader
 from .xml_loader import XmlLoader
 from .json_loader import JsonLoader
+from .xlsx_loader import ExcelLoader
+from .txt_loader import TxtLoader
 
 class Factory:
     """
@@ -37,8 +39,11 @@ class Factory:
         # Mappa delle estensioni supportate ai rispettivi loader
         loaders = {
             'csv': CsvLoader,     # Loader per file CSV
-            'xlsx': XmlLoader,    # Loader per file Excel (formato .xlsx)
-            'xls': XmlLoader,     # Loader per file Excel (formato .xls)
+            'tsv':CsvLoader,      #Loader per file TSV
+            'txt': TxtLoader,     #Loader per file txt
+            'xlsx': ExcelLoader,    # Loader per file Excel (formato .xlsx)
+            'xls': ExcelLoader,     # Loader per file Excel (formato .xls)
+            'xml':XmlLoader,      #Loader per file XML
             'json': JsonLoader,   # Loader per file JSON
         }
 
@@ -53,27 +58,41 @@ class Factory:
             raise ValueError(f"Formato file non supportato: {file_path}")
 
 import json
+import argparse
+
+def parse_arguments():
+    """
+    Definisce e analizza gli argomenti della riga di comando.
+    
+    Returns:
+        argparse.Namespace: Oggetto con gli argomenti forniti dall'utente.
+    """
+    parser = argparse.ArgumentParser(description="Caricamento e pulizia dei dati.")
+
+    # Argomento obbligatorio: percorso del file di input
+    parser.add_argument("-i", "--input", required=True, help="Percorso del file di input")
+
+    return parser.parse_args()
 
 
-#funzione per il caricamento del file tramite l'uso di un file di configurazione in cui è salvato 
-#il file di partenza
+
 
 def load_data():
     """
-    Carica i dati da un file specificato nel file di configurazione.
+    Carica i dati da un file specificato da riga di comando.
     Returns:
         pd.DataFrame: Il dataset caricato.
     """
-    # Leggi il file di configurazione
-    with open("dati/config.json", "r") as config_file:
-        config = json.load(config_file)
-
-    input_path = config["input_file"]
+    # Parse degli argomenti dalla riga di comando
+    args = parse_arguments()
+    input_path = args.input
 
     try:
         # Usa la Factory per ottenere il loader corretto
         loader = Factory.get_loader(input_path)
         dataset = loader.load(input_path)  # Carica il dataset
+
+        dataset=convert_comma_to_dot(dataset)
         print("\nDataset caricato con successo.")
         return dataset
     except ValueError as e:
@@ -83,3 +102,28 @@ def load_data():
         print(f"Errore imprevisto: {e}")
         return None
 
+
+
+import pandas as pd
+
+def convert_comma_to_dot(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Converte tutte le colonne di tipo 'object' che contengono numeri con la virgola 
+    in numeri con il punto e le trasforma in float, se possibile.
+    
+    Args:
+        df (pd.DataFrame): Il DataFrame da modificare.
+    
+    Returns:
+        pd.DataFrame: Il DataFrame con i valori corretti.
+    """
+    for col in df.select_dtypes(include=['object']).columns:
+        df[col] = df[col].str.replace(',', '.', regex=True)
+        
+        # Prova a convertire in float, se tutti i valori possono essere convertiti
+        try:
+            df[col] = df[col].astype(float)
+        except ValueError:
+            pass  # Se ci sono errori, mantiene il tipo object
+    
+    return df
