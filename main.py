@@ -47,3 +47,7 @@ if __name__ == "__main__":
     # print(b)
    # print(string_columns)
     
+
+    print(dataset)
+    print(dataset.columns)
+
