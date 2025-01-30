@@ -16,24 +16,11 @@ Prerequisiti:
 - Il file deve essere presente nella directory indicata da `file_path`.
 
 """
-from scripts.data_preprocessing.loader.factory import load_data
-from prova_codice_levenshtain import elimina_colonne_levenshtein
+from scripts.data_preprocessing.loader.factory import Factory, load_data
 
 if __name__ == "__main__":
    
     dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
-    
 
-    print(dataset.dtypes)  
-     #restituisce le prime cinque colonne del dataset per accertare che il caricamento sia avvenuto
-
-
-    #dataset,matched_columns, unmatched_columns_to_match= elimina_colonne_levenshtein(dataset)
-
-    #print(dataset)
-    #print(matched_columns)
-    #print(unmatched_columns_to_match)
-    #print("Intestazioni finali del DataFrame:", dataset.columns.tolist())
-
-
-    
+    print(dataset)
+    print(dataset.columns)

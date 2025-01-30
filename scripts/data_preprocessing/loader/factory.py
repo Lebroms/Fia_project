@@ -2,8 +2,10 @@ from .classe_loader import DataLoader
 from .csv_loader import CsvLoader
 from .xml_loader import XmlLoader
 from .json_loader import JsonLoader
-from .xlsx_loader import ExcelLoader
 from .txt_loader import TxtLoader
+from .Excel_loader import ExcelLoader
+
+import pandas as pd
 
 class Factory:
     """
@@ -39,12 +41,12 @@ class Factory:
         # Mappa delle estensioni supportate ai rispettivi loader
         loaders = {
             'csv': CsvLoader,     # Loader per file CSV
-            'tsv':CsvLoader,      #Loader per file TSV
-            'txt': TxtLoader,     #Loader per file txt
+            'tsv':CsvLoader,      #Loader per file Tsv
+            'txt':TxtLoader,        # Loader per file Txt
             'xlsx': ExcelLoader,    # Loader per file Excel (formato .xlsx)
             'xls': ExcelLoader,     # Loader per file Excel (formato .xls)
-            'xml':XmlLoader,      #Loader per file XML
-            'json': JsonLoader,   # Loader per file JSON
+            'json': JsonLoader,     # Loader per file JSON
+            'xml':XmlLoader
         }
 
         # Recupera la classe del loader appropriato dalla mappa
@@ -58,24 +60,10 @@ class Factory:
             raise ValueError(f"Formato file non supportato: {file_path}")
 
 import json
-import argparse
-
-def parse_arguments():
-    """
-    Definisce e analizza gli argomenti della riga di comando.
-    
-    Returns:
-        argparse.Namespace: Oggetto con gli argomenti forniti dall'utente.
-    """
-    parser = argparse.ArgumentParser(description="Caricamento e pulizia dei dati.")
-
-    # Argomento obbligatorio: percorso del file di input
-    parser.add_argument("-i", "--input", required=True, help="Percorso del file di input")
-
-    return parser.parse_args()
 
 
-
+#funzione per il caricamento del file tramite l'uso di un file di configurazione in cui è salvato 
+#il file di partenza
 
 def load_data():
     """
@@ -86,6 +74,7 @@ def load_data():
     # Parse degli argomenti dalla riga di comando
     args = parse_arguments()
     input_path = args.input
+
 
     try:
         # Usa la Factory per ottenere il loader corretto
@@ -104,7 +93,6 @@ def load_data():
 
 
 
-import pandas as pd
 
 def convert_comma_to_dot(df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -127,3 +115,21 @@ def convert_comma_to_dot(df: pd.DataFrame) -> pd.DataFrame:
             pass  # Se ci sono errori, mantiene il tipo object
     
     return df
+
+
+
+import argparse
+
+def parse_arguments():
+    """
+    Definisce e analizza gli argomenti della riga di comando.
+    
+    Returns:
+        argparse.Namespace: Oggetto con gli argomenti forniti dall'utente.
+    """
+    parser = argparse.ArgumentParser(description="Caricamento e pulizia dei dati.")
+
+    # Argomento obbligatorio: percorso del file di input
+    parser.add_argument("-i", "--input", required=True, help="Percorso del file di input")
+
+    return parser.parse_args()
