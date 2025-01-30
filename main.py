@@ -23,3 +23,4 @@ if __name__ == "__main__":
     dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
 
     print(dataset)
+    print(dataset.columns)
