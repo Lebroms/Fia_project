@@ -17,10 +17,18 @@ Prerequisiti:
 
 """
 from scripts.data_preprocessing.loader.factory import Factory, load_data
-
+from prova_codice_levenshtain import elimina_colonne_levenshtein
 if __name__ == "__main__":
    
     dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
+    #dataset= elimina_colonne_levenshtein(dataset)
 
-    print(dataset)
-    print(dataset.columns)
+
+
+    #print(dataset)
+    #print(dataset.columns)
+
+    print(dataset.dtypes)
+
+
+
