@@ -27,9 +27,27 @@ def crea_dummy_variables(df):
     # Crea le dummy variables. Il parametro columns accetta qualsiasi iterabile quindi anche
     # un index proveniente da df.columns. drop_first elimina la prima dummy in ordine 
     # alfabetico (del valore). dtype=int metti i valori delle dummies con 0 e 1
-    df= pd.get_dummies(df, columns=string_columns, drop_first=True, dtype=int)
+
+    for col in string_columns:
+        dummies = pd.get_dummies(df[col], prefix=col, drop_first=True, dtype=int)
+        dummies.columns = [f"{col} {i}" for i in range(len(dummies.columns))]
+
+        if len(dummies.columns) == 1:
+            dummies.columns=[f"{col}"] #se si ha una sola dummy variable lasciale il suo nome originale
+                                       # (e non {col} 0)
+        df = df.drop(columns=[col])
+        df = pd.concat([df, dummies], axis=1)
+
+        """
+        Questo ciclo for itera su tutte le colonne che contengono valori stringa e crea
+        un nuovo dataframe (dummies) che contiene solo le colonne dummies che  
+        vengono nominate come <col>, <col> 1, <col> 2, ecc. 
+        """
 
     return df
+
+
+
 
 
 
