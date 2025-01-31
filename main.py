@@ -48,12 +48,14 @@ if __name__ == "__main__":
     
 
 
-    dataset = elimina_colonne(dataset)
+    dataset = elimina_colonne(dataset) #elimina le colonne che non si desiderano
     
-    dataset = crea_dummy_variables(dataset)
+    dataset = crea_dummy_variables(dataset) #converte le colonne che sono del tipo string in valori numerici usando le dummy variables
 
-    [Features, colonne_label] = classlabel_selector(dataset, col_lab_5)
+    [Features, colonne_label] = classlabel_selector(dataset) #divide il dataframe in due sotto dataframe: feature e label
 
+    
+    
     Features = gestisci_valori_mancanti(dataset)
     
     scala_features(Features)

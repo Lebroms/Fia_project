@@ -6,7 +6,7 @@ Created on Wed Jan 22 18:13:44 2025
 """
 import pandas as pd
 
-def gestisci_valori_mancanti(df, strategy="media"):
+def gestisci_valori_mancanti(df):
     """
     Gestisce i valori mancanti nel DataSet.
 
@@ -17,7 +17,11 @@ def gestisci_valori_mancanti(df, strategy="media"):
     Uscita:
         pd.DataFrame: stesso DataFrame processato.
     """
-
+    
+    strategy=input("\n Scegliere una strategia di sostituzione dei valori mancanti tra le seguenti: \n media \u25CF mediana \u25CF moda \u279C ")
+    
+    if not strategy:
+        strategy="media" #strategia di default
     
     if strategy == "media":
         df.fillna(df.mean(),inplace=True)
@@ -27,9 +31,8 @@ def gestisci_valori_mancanti(df, strategy="media"):
 
     elif strategy == "moda":
         df.fillna(df.mode().iloc[0],inplace=True)
+    
 
-    elif strategy == "elimina":
-        df = df.dropna()
     
     else:
         raise ValueError(f"Strategia '{strategy}' non riconosciuta.")
