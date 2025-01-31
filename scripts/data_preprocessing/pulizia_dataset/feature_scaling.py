@@ -8,7 +8,7 @@ Created on Tue Jan 28 12:27:07 2025
 
 import pandas as pd
 
-def scala_features(df, metodo="normalization"):
+def scala_features(df):
     """
     Esegue il feature scaling su tutte le colonne numeriche di un DataFrame utilizzando normalizzazione o standardizzazione.
     Il datframe deve essere già completamente numerico e non deve contenere Nan
@@ -21,7 +21,12 @@ def scala_features(df, metodo="normalization"):
         None: (come sottoprogramma) Viene modificato il DataFrame originale per risparmiare memoria in caso di
         df molto grandi
     """
+
+    metodo=input("\n Scegliere un metodo per lo scaling delle feature: \n normalization \u25CF standardization \u279C")
     
+    if not metodo:
+        metodo="normalization"
+
     for col in df.columns:
         if str(df[col].dtypes) in ['int64', 'float64']: #Controlla il tipo complessivo della colonna (se la colonna
             if metodo == "normalization":         # è mista è di tipo object)
