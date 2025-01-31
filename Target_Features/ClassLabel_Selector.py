@@ -1,25 +1,25 @@
 import pandas as pd
 
-def classlabel_selector(df, colonna_target):
+def classlabel_selector(df, colonna_target=["classt"]):
     """
-    Questa funzione divide un file dataset CSV in colonne features e target
-    e salva i risultati in file separati. La colonna target contiene i valori
-    beningno/maligno (2 o 4), le altre colonne contengono i valori restanti.
+    Questa funzione divide un dataframe in colonne features e target.
+    Il dataframe in ingresso viene sovrascritto dal nuovo dataframe features, mentre
+    viene creato un nuovo dataframe target.
 
-    input_file: Path del file CSV in ingresso.
-    colonna_target: Nome della colonna target nel dataset.
+    args: DataFrame da dividere.
+          colonna_target: lista delle colonne target nel Dataframe.
+
+    return: due dataframe: features, target
     """
 
-    if colonna_target not in df.columns:
-        print(f"Errore: la colonna target '{colonna_target}' non esiste nel file.")
-        return
+    for i in colonna_target:
+        if i not in df.columns:
+            print(f"Errore: la colonna target '{i}' non esiste nel file.")
+            return
 
-    # Errore da segnalare in caso non esista la colonna target.
+    # Errore da segnalare in caso non esista un elemento di "colonna target".
 
-    features = df.drop(columns=[colonna_target])
+    df = df.drop(columns=[colonna_target])
     target = df[[colonna_target]]
-    return features, target
-
-    # Divide il dataset in features e target.
-
+    return df, target
 
