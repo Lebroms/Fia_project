@@ -1,3 +1,4 @@
+
 """
 Questo script rappresenta l'entry point del progetto per il caricamento e la gestione del dataset.
 
@@ -21,7 +22,9 @@ from scripts.data_preprocessing.pulizia_dataset.dummy_variables import crea_dumm
 from scripts.data_preprocessing.pulizia_dataset.feature_scaling import scala_features
 from scripts.data_preprocessing.pulizia_dataset.gestisci_colonne import elimina_colonne
 from scripts.data_preprocessing.pulizia_dataset.gestione_valori_Nan import gestisci_valori_mancanti
-from rapidfuzz.fuzz import ratio
+from scripts.data_preprocessing.Target_Features.ClassLabel_Selector import classlabel_selector
+
+import pandas as pd
 
 if __name__ == "__main__":
     
@@ -33,6 +36,13 @@ if __name__ == "__main__":
     col3=["Random_String","Irrelevant_Numeric","Sam!"]
     col4=["sample_code_number","randomfeature2","col_11"]
     col5=["irrelevant_col_1","col_0","irrelevant_col_2"]
+    col_lab_2_3=["Class"]
+    col_lab_4=["class"]
+    col_lab_5=["col_10"]
+
+    """queste variabili servono solo per provare il codice con tutti e 5 i file più velocemente,
+       nella versione finale queste variabili saranno inserite tramite riga di comando"""
+
     
     
     
@@ -40,18 +50,17 @@ if __name__ == "__main__":
 
     dataset = elimina_colonne(dataset)
     
-    dataset = crea_dummy_variables(dataset)    
+    dataset = crea_dummy_variables(dataset)
+
+    [Features, colonne_label] = classlabel_selector(dataset, col_lab_5)
+
+    Features = gestisci_valori_mancanti(dataset)
     
-    dataset = gestisci_valori_mancanti(dataset)
-    
-    scala_features(dataset)
-    
-    
-    print(dataset.dtypes)   
-    
-    print(dataset.columns)
-    print(dataset)
-     
+    scala_features(Features)
+
+    print(Features.dtypes)
+    print(Features)
+    print(colonne_label)
    
    
     
