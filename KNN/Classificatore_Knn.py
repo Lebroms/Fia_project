@@ -23,13 +23,11 @@ def trova_k_vicini(X_train_set, Y_train_set, X_test, k=3):
 
     for idx, row in X_train_set.iterrows():
         dist = distanza_euclidea(row.values, X_test)
-        distanze.append((dist, Y_train_set.iloc[idx]))
+        distanze.append((dist, Y_train_set.loc[idx]))
 
-        distanze.sort(key=lambda x: x[
-            0])  # ordina la lista delle distanze tra il campione e i vari record in ordine crescente, rispetto alla distanza
+        distanze.sort(key=lambda x: x[0])  # ordina la lista delle distanze tra il campione e i vari record in ordine crescente, rispetto alla distanza
 
-        k_vicini = [label for _, label in
-                    distanze[:k]]  # riporta la lista delle prime k-label, ordinata rispetto alle distanze
+        k_vicini = [label for _, label in distanze[:k]]  # riporta la lista delle prime k-label, ordinata rispetto alle distanze
 
     return k_vicini
 
@@ -37,6 +35,7 @@ def trova_k_vicini(X_train_set, Y_train_set, X_test, k=3):
 def predici_label(k_vicini):
     count = {}
     for label in k_vicini:
+        label = label.item()
         if label in count:
             count[label] += 1
         else:
@@ -50,10 +49,13 @@ def predici_label(k_vicini):
 
 class Classificatore_KNN:
 
-    def __init__(self, k, X_train, Y_train):
+    def __init__(self, X_train, Y_train):
         """
         Inizializza il classificatore K-NN controllando che k sia valido.
         """
+        # inizializzazione del valore dei k vicini da usare per il classificatore
+        k = int(input("Inserire il valore dei k vicini da voler usare per costruire il Classificatore KNN: "))
+        self.k=k
         self.n_train = len(X_train)  # Numero di campioni nel training set
 
         if not isinstance(k, int) or k <= 0:
