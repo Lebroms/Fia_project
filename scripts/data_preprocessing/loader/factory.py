@@ -75,6 +75,9 @@ def load_data():
     args = parse_arguments()
     input_path = args.input
 
+    print(f"\n \U0001F4C2 Sto caricando il file '{input_path}' per fare un modello di KNN basato su {args.k} neighbors...\n")
+
+
 
     try:
         # Usa la Factory per ottenere il loader corretto
@@ -82,7 +85,7 @@ def load_data():
         dataset = loader.load(input_path)  # Carica il dataset
 
         dataset=convert_comma_to_dot(dataset)
-        print("\nDataset caricato con successo.")
+        print("\n \U00002705 Dataset caricato con successo. \n")
         return dataset
     except ValueError as e:
         print(f"Errore: {e}")
@@ -130,6 +133,9 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Caricamento e pulizia dei dati.")
 
     # Argomento obbligatorio: percorso del file di input
-    parser.add_argument("-i", "--input", required=True, help="Percorso del file di input")
+    parser.add_argument("-i","--input", type=str, default="dati/version_1.csv", help="Nome del file di input")
+
+
+    parser.add_argument("-k", "--k", type=int, default=3, help="Numero di vicini desiderato per il classificatore")
 
     return parser.parse_args()

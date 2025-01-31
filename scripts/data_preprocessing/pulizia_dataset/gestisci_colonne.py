@@ -7,9 +7,7 @@ Created on Thu Jan 30 18:16:48 2025
 
 import pandas as pd
 
-def elimina_colonne(df, columns_to_drop=["Blood Pressure",
-                                         "Sample code number",
-                                         "Heart Rate"]):
+def elimina_colonne(df):
     """
     Rimuove dal DataFrame le colonne specificate nella lista columns_to_drop.
     
@@ -22,6 +20,18 @@ def elimina_colonne(df, columns_to_drop=["Blood Pressure",
         pd.DataFrame: Lo stesso DataFrame senza le colonne specificate.
     
     """
+    print("\nLe colonne del dataframe caricato sono:\n")
+    for col in df.columns:
+        print(col)
+
+
+    columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da uno spazio): ").split()
+
+    if not columns_to_drop:
+        columns_to_drop=["Blood Pressure","Sample code number","Heart Rate"] #colonne da eliminare di default del version_1.csv
+
+    
+
     # Trova le colonne che non esistono nel DataFrame (Differenza tra insiemi)
     missing_columns = list(set(columns_to_drop) - set(df.columns))
 

@@ -24,7 +24,9 @@ from scripts.data_preprocessing.pulizia_dataset.gestione_valori_Nan import gesti
 from rapidfuzz.fuzz import ratio
 
 if __name__ == "__main__":
-   
+    
+    
+
     dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
     
     col2=["Irrelevant_Feature1","Irrelevant_Feature2","Sample code number"]
@@ -32,7 +34,11 @@ if __name__ == "__main__":
     col4=["sample_code_number","randomfeature2","col_11"]
     col5=["irrelevant_col_1","col_0","irrelevant_col_2"]
     
-    dataset = elimina_colonne(dataset, col5)
+    
+    
+
+
+    dataset = elimina_colonne(dataset)
     
     dataset = crea_dummy_variables(dataset)    
     
