@@ -1,6 +1,6 @@
 import pandas as pd
 
-def classlabel_selector(df, colonna_target=["classt"]):
+def classlabel_selector(df, colonne_target=["classtype_v1"]):
     """
     Questa funzione divide un dataframe in colonne features e target.
     Il dataframe in ingresso viene sovrascritto dal nuovo dataframe features, mentre
@@ -12,14 +12,21 @@ def classlabel_selector(df, colonna_target=["classt"]):
     return: due dataframe: features, target
     """
 
-    for i in colonna_target:
+    for i in colonne_target:
         if i not in df.columns:
             print(f"Errore: la colonna target '{i}' non esiste nel file.")
             return
 
-    # Errore da segnalare in caso non esista un elemento di "colonna target".
+    df.dropna(subset=colonne_target, inplace=True)
+    """
+    Questo comando viene aggiunto per agevolare l'utilizzo di funzioni che vengono implementate 
+    successivamente. Vengono rimosse tutte le righe contenenti valori NaN all'interno delle
+    colonne_target.
+    """
 
-    df = df.drop(columns=[colonna_target])
-    target = df[[colonna_target]]
+
+    target = df[colonne_target]
+    df = df.drop(columns=colonne_target)
+
     return df, target
 

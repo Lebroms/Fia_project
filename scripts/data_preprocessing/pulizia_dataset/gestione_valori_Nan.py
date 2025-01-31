@@ -36,10 +36,12 @@ def gestisci_valori_mancanti(df, strategy="media"):
     
     return df
         
-    """df.mean restituisce una serie che ha come indici i nomi delle colonne e come
-        valori le medie delle rispettive colonne e df.fillna capisce di dover assegnare ad
-        ogni valore Nan che incontra la media della sua colonna. Nel caso la colonna contenesse
-        valori non numerici sia df.mean che df.fillna lascia i valori Nan inalterati"""
+    """
+    df.mean restituisce una serie che ha come indici i nomi delle colonne e come
+    valori le medie delle rispettive colonne e df.fillna capisce di dover assegnare ad
+    ogni valore Nan che incontra la media della sua colonna. Nel caso la colonna contenesse
+    valori non numerici sia df.mean che df.fillna lascia i valori Nan inalterati
+    """
         
         
 
