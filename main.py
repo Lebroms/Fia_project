@@ -28,6 +28,9 @@ import pandas as pd
 
 from KNN.Classificatore_Knn import Classificatore_KNN
 
+
+from Model_Evaluation.Validation.Holdout_Class import HoldoutValidation
+
 if __name__ == "__main__":
     
     
@@ -49,13 +52,37 @@ if __name__ == "__main__":
     print(colonne_label)
 
 
-    #--------------------------------parte aggiunntiva a titolo di prova
+    #-------------------------------parte per testare Holdout
 
+
+    validators=HoldoutValidation(0.2)
+
+    Features_train_set,Features_test_set,Labels_train_set,Labels_test_set=validators.validation(Features,colonne_label)
+
+    print("feature_train \n")
+    print(len(Features_train_set))
+    print(Features_train_set)
+    print("feature_test \n")
+    print(len(Features_test_set))
+    print(Features_test_set)
+    print("label_train \n")
+    print(Labels_train_set)
+    print(len(Labels_train_set))
+    print("label_test \n")
+    print(len(Labels_test_set))
+    print(Labels_test_set)
+
+
+
+
+
+    #--------------------------------parte aggiunntiva a titolo di prova
+    
     #inizializzazione del valore dei k vicini da usare per il classificatore
     #k=input("Inserire il valore dei k vicini da voler usare per costruire il Classificatore KNN: ")
 
     # Supponiamo che il DataFrame si chiami Features
-    num_righe = len(Features)
+    '''num_righe = len(Features)
     train_size = int(num_righe * 0.9)  # Calcola il 70% delle righe
 
     # Creazione dei dataset di training e test
@@ -78,7 +105,7 @@ if __name__ == "__main__":
         if predizione == valore:
             c += 1
 
-    print(c)
+    print(c)'''
 
 
 
