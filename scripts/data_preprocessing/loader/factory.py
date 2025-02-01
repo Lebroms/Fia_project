@@ -95,8 +95,6 @@ def load_data():
         return None
 
 
-
-
 def convert_comma_to_dot(df: pd.DataFrame) -> pd.DataFrame:
     """
     Converte tutte le colonne di tipo 'object' che contengono numeri con la virgola 
