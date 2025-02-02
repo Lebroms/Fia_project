@@ -18,6 +18,7 @@ class Metriche:
         correct = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == pred)
         # Zip viene utilizzato per iterare simultaneamente sulle etichette reali (y_real) e sulle etichette predette (y_pred)
         # l'if  verifica se l'etichetta predetta è uguale a quella reale. Se lo è, aggiunge 1 al conteggio.
+        print(correct)
         return correct / len(self.y_pred)
         #dividiamo il numero di predizioni corrette per tutti i valori predetti
 
@@ -64,7 +65,7 @@ class Metriche:
         specificity = self.specificity()
         return np.sqrt(sensitivity * specificity)
 
-    def auc(self):
+    '''def auc(self):
         """
         Calcola l'Area Under the Curve (AUC) come la media di Sensitivity e Specificity.
         """
@@ -96,30 +97,76 @@ class Metriche:
         for i in range(1, len(fpr)):
             auc_value += (fpr[i] - fpr[i - 1]) * (tpr[i] + tpr[i - 1]) / 2
 
-        return auc_value
+        return auc_value'''
+    
+
+    def all_the_above(self):
+        accuracy=Metriche.accuracy()
+        errore_rate=Metriche.error_rate()
+        sensitivity=Metriche.sensitivity()
+        specificity=Metriche.specificity()
+        geometric_mean=Metriche.geometric_mean()
+        area_under_the_curve=Metriche.auc()
 
 
-    '''def scegli_metrica(self):
+    def scegli_metrica(self):
         """
-        Calcola tutte le metriche e le raccoglie in un dizionario.
+        Calcola tutte le metriche selezionate dall'utente e restituisce i loro valori.
         """
-        print("\nScegliere tra le seguenti le metriche da scegliere: \n")
-        lista_metriche=["Accuracy", "Error Rate", "Sensitivity", "Specificity", "Geometric Mean","Area Under the Curve"]
-        for index, el in enumerate(lista_metriche, start=1):  # start=1 per partire da 1 invece di 0
-            print(f"\u25BA {index}. Per selezionare {el} premere {index}\n")
+        lista_metriche = [
+            "Accuracy", "Error Rate", "Sensitivity", "Specificity",
+            "Geometric Mean", "Area Under the Curve", "Tutte le metriche"]
 
-        metriche_scelte=(input)
+        n = len(lista_metriche)
+        numeri_validi = {str(i) for i in range(1, n+1)}  # Numeri validi (da "1" a "7")
 
+        while True:
+            print("\nScegliere tra le seguenti metriche quelle che si vogliono visualizzare:\n")
+            for index, el in enumerate(lista_metriche, start=1):
+                print(f"\u25BA {index}. Per selezionare {el} premere {index}\n")
 
-        metrics = {
-            "Accuracy": self.accuracy(),
-            "Error Rate": self.error_rate(),
-            "Sensitivity": self.sensitivity(),
-            "Specificity": self.specificity(),
-            "Geometric Mean": self.geometric_mean(),
-            "Area Under the Curve": self.auc()
+            metriche_scelte = input("Inserisci i numeri delle metriche separati da spazio: ").split()
+
+            # Se l'utente non inserisce nulla, seleziona tutte le metriche
+            if not metriche_scelte:
+                metriche_scelte = ["7"] 
+
+            # Controlla se tutte le metriche scelte sono valide
+            if all(el in numeri_validi for el in metriche_scelte):
+                break  # Se sono tutte valide, esce dal ciclo
+            else:
+                print("\nErrore: Alcuni numeri inseriti non sono validi. Riprova.")
+
+        # Dizionario con i riferimenti alle funzioni (non eseguite subito)
+        metrics_functions = {
+            "1": self.accuracy,
+            "2": self.error_rate,
+            "3": self.sensitivity,
+            "4": self.specificity,
+            "5": self.geometric_mean,
+            "7": self.all_the_above
         }
-        return metrics'''
+
+        if "7" in metriche_scelte:
+            metriche_selezionate = {}
+            for key, func in metrics_functions.items():
+                if key != "7":  # Evitiamo di chiamare all_the_above()
+                    metriche_selezionate[key] = func()
+        else:
+            metriche_selezionate = {}
+            for key in metriche_scelte:
+                metriche_selezionate[key] = metrics_functions[key]()
+
+
+        for key, value in metriche_selezionate.items():
+            nome_metrica=lista_metriche[int(key)-1]
+            print(f"{nome_metrica} vale: {value}")
+
+        return metriche_selezionate
+
+        
+
+
 
 
 
