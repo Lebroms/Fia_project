@@ -36,5 +36,5 @@ class CsvLoader(DataLoader):
                 if ";" in first_line:
                     separator = ";"
 
-        print(f"Caricamento del file: {file_path} con separatore '{separator}'")
+        
         return pd.read_csv(file_path, sep=separator)

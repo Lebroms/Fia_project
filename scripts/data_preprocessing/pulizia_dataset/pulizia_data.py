@@ -11,9 +11,7 @@ import pandas as pd
 
 class Df_Processor:
     @staticmethod
-    def elimina_colonne(df, columns_to_drop=["Blood Pressure",
-                                             "Sample code number",
-                                             "Heart Rate"]):
+    def elimina_colonne(df):
         """
         Rimuove dal DataFrame le colonne specificate nella lista columns_to_drop.
         
@@ -26,6 +24,15 @@ class Df_Processor:
             pd.DataFrame: Lo stesso DataFrame senza le colonne specificate.
         
         """
+        print("\nLe colonne del dataframe caricato sono:\n")
+        for col in df.columns:
+            print(col)
+
+        columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da uno spazio): ").split()
+
+        if not columns_to_drop:
+            columns_to_drop=["Blood Pressure","Sample code number","Heart Rate"] #colonne da eliminare di default del version_1.csv
+            
         # Trova le colonne che non esistono nel DataFrame (Differenza tra insiemi)
         missing_columns = list(set(columns_to_drop) - set(df.columns))
 
@@ -69,7 +76,7 @@ class Df_Processor:
         return df
     
     @staticmethod
-    def gestisci_valori_mancanti(df, strategy="media"):
+    def gestisci_valori_mancanti(df):
         """
         Gestisce i valori mancanti nel DataSet.
 
@@ -80,7 +87,11 @@ class Df_Processor:
         Uscita:
             pd.DataFrame: stesso DataFrame processato.
         """
-
+        
+        strategy=input("\n Scegliere una strategia di sostituzione dei valori mancanti tra le seguenti: \n media \u25CF mediana \u25CF moda \u279C ")
+        
+        if not strategy:
+            strategy="media" #strategia di default
         
         if strategy == "media":
             df.fillna(df.mean(),inplace=True)
@@ -107,7 +118,7 @@ class Df_Processor:
         """
     
     @staticmethod
-    def scala_features(df, metodo="normalization"):
+    def scala_features(df):
         """
         Esegue il feature scaling su tutte le colonne numeriche di un DataFrame utilizzando normalizzazione o standardizzazione.
         Il datframe deve essere già completamente numerico e non deve contenere Nan
@@ -120,6 +131,11 @@ class Df_Processor:
             None: (come sottoprogramma) Viene modificato il DataFrame originale per risparmiare memoria in caso di
             df molto grandi
         """
+        
+        metodo=input("\n Scegliere un metodo per lo scaling delle feature: \n normalization \u25CF standardization \u279C")
+        
+        if not metodo:
+            metodo="normalization"
         
         for col in df.columns:
             if str(df[col].dtypes) in ['int64', 'float64']: #Controlla il tipo complessivo della colonna (se la colonna

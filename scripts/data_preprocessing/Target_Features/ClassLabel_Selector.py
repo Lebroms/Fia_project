@@ -1,10 +1,11 @@
 import pandas as pd
 
-# Disabilita il warning SettingWithCopyWarning che veniva generato dalla riga 37 perchè non 
+
+# Disabilita il warning SettingWithCopyWarning che veniva generato dalla riga 44 (.replace) perchè non 
 # facciamo una copia del df target
 pd.set_option('mode.chained_assignment', None)
 
-def classlabel_selector(df, colonne_target=["classtype_v1"]):
+def classlabel_selector(df):
     """
     Questa funzione divide un dataframe in colonne features e target.
     Il dataframe in ingresso viene sovrascritto dal nuovo dataframe features, mentre
@@ -15,6 +16,11 @@ def classlabel_selector(df, colonne_target=["classtype_v1"]):
 
     return: due dataframe: features, target
     """
+
+    colonne_target = input("\n Quali colonne sono il target (separate da uno spazio): ").split()
+
+    if not colonne_target:
+        colonne_target=["classtype_v1"] #colonne target di default del version_1.csv
 
     for i in colonne_target:
         if i not in df.columns:
@@ -38,7 +44,8 @@ def classlabel_selector(df, colonne_target=["classtype_v1"]):
             target[colonne_target[0]] = target[colonne_target[0]].replace({2: 0, 4: 1})
     
     # .nunique verifica che la colonna contiene solo due valori
-    # .unique verifica che questi due valori sono 2 e 4 (meglio traformarlo in set)        
+    # .unique verifica che questi due valori sono 2 e 4 (meglio traformarlo in set)
+    # .replace sostituisce i 2 e 4 con 0 e 1     
     
     df = df.drop(columns=colonne_target)
 
