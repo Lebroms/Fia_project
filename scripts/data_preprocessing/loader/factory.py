@@ -75,7 +75,7 @@ def load_data():
     args = parse_arguments()
     input_path = args.input
 
-    print(f"\n \U0001F4C2 Sto caricando il file '{input_path}' per fare un modello di KNN basato su {args.k} neighbors...\n")
+    print(f"\n \U0001F4C2 Sto caricando il file '{input_path}' \n")
 
 
 
@@ -93,8 +93,6 @@ def load_data():
     except Exception as e:
         print(f"Errore imprevisto: {e}")
         return None
-
-
 
 
 def convert_comma_to_dot(df: pd.DataFrame) -> pd.DataFrame:
