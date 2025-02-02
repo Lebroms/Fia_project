@@ -5,7 +5,10 @@ from KNN.Classificatore_Knn import Classificatore_KNN
 from .classe_validation import validation
 
 from KNN.scegli_k import scegli_k
-from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
+from ..Metrics.Classe_Metriche import Metriche
+
+from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
+
 
 class HoldoutValidation(validation):
     """
@@ -75,12 +78,32 @@ class HoldoutValidation(validation):
         knn = Classificatore_KNN(X_training, Y_training,k)
         lista_predizioni = knn.predizione(X_test)
         print(lista_predizioni)
-        print(Y_test)
+        lista_label=Y_test.iloc[:, 0].tolist()
+        print(lista_label)
 
 
 
-        '''Calcolo_Metriche = Metriche(Y_test, lista_predizioni)
-        Metriche_Calcolate = Calcolo_Metriche.scegli_metrica(Calcolo_Metriche)'''
+
+        
+        
+
+        
+
+            
+
+
+
+
+
+        Metrica= Metriche(lista_label, lista_predizioni)
+        Metriche_selezionate = scegli_metriche()
+        Metriche_Calcolate=Metrica.calcola_metriche(Metriche_selezionate)
+
+        print("Le metriche calcolate sono:")
+        for c, v in Metriche_Calcolate.items():
+            print(f" \n - {c}: {v:.4f}")
+
+
 
 
 

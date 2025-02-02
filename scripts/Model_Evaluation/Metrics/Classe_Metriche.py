@@ -1,5 +1,7 @@
 import numpy as np
 
+
+from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_modalita_calcolo_metriche,scegli_metriche
 class Metriche:
     def __init__(self, y_real, y_pred):
         """
@@ -15,10 +17,11 @@ class Metriche:
         Calcola l'Accuracy Rate.
         Accuracy = (TruePositive + TrueNegative) / (TP + TN + FalsePositive + FalseNegative)
         """
+        
         correct = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == pred)
         # Zip viene utilizzato per iterare simultaneamente sulle etichette reali (y_real) e sulle etichette predette (y_pred)
         # l'if  verifica se l'etichetta predetta è uguale a quella reale. Se lo è, aggiunge 1 al conteggio.
-        print(correct)
+        
         return correct / len(self.y_pred)
         #dividiamo il numero di predizioni corrette per tutti i valori predetti
 
@@ -35,9 +38,9 @@ class Metriche:
         Questo misura quanto bene il modello identifica i casi positivi.
         Sensitivity = TruePositive / (TruePositive + FalseNegative)
         """
-        true_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 1 and pred == 1)
+        true_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 4.0 and pred == 4.0)
         #cambiare dataframe da 2 e 4 , a 0 e 1 con funzione
-        false_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 1 and pred == 0)
+        false_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 4.0 and pred == 2.0)
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 1; se sia il valore reale che quello predetto sono uguali a 1, allora verrà aggiunto 1
         # al conteggio dei true positive, altrimenti viene aggiunto 1 al conteggio dei falsi negativi
@@ -49,8 +52,8 @@ class Metriche:
         Questo misura quanto bene il modello identifica i casi negativi.
         Specificity = TrueNegative / (TrueNegative + FalsePositive)
         """
-        true_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 0 and pred == 0)
-        false_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 0 and pred == 1)
+        true_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 2.0 and pred == 2.0)
+        false_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 2.0 and pred == 4.0)
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 0; se sia il valore reale che quello predetto sono uguali a 0, allora verrà aggiunto 1
         # al conteggio dei true negative, altrimenti viene aggiunto 1 al conteggio dei false positive
@@ -100,42 +103,25 @@ class Metriche:
         return auc_value'''
     
 
-    '''def all_the_above(self):
+    def all_the_above(self):
         accuracy=Metriche.accuracy()
         errore_rate=Metriche.error_rate()
         sensitivity=Metriche.sensitivity()
         specificity=Metriche.specificity()
         geometric_mean=Metriche.geometric_mean()
-        area_under_the_curve=Metriche.auc()'''
+        area_under_the_curve=Metriche.auc()
 
 
-    def scegli_metrica(self):
+    
+
+
+    def calcola_metriche(self, metriche_scelte):
         """
-        Calcola tutte le metriche selezionate dall'utente e restituisce i loro valori.
+        Calcola le metriche selezionate dall'utente e restituisce un dizionario con i valori.
         """
         lista_metriche = [
             "Accuracy", "Error Rate", "Sensitivity", "Specificity",
             "Geometric Mean", "Area Under the Curve", "Tutte le metriche"]
-
-        n = len(lista_metriche)
-        numeri_validi = {str(i) for i in range(1, n+1)}  # Numeri validi (da "1" a "7")
-
-        while True:
-            print("\nScegliere tra le seguenti metriche quelle che si vogliono calcolare:\n")
-            for index, el in enumerate(lista_metriche, start=1):
-                print(f"\u25BA {index}. Per selezionare {el} premere {index}\n")
-
-            metriche_scelte = input("Inserisci i numeri delle metriche separati da spazio: ").split()
-
-            # Se l'utente non inserisce nulla, seleziona tutte le metriche
-            if not metriche_scelte:
-                metriche_scelte = ["7"] 
-
-            # Controlla se tutte le metriche scelte sono valide
-            if all(el in numeri_validi for el in metriche_scelte):
-                break  # Se sono tutte valide, esce dal ciclo
-            else:
-                print("\nErrore: Alcuni numeri inseriti non sono validi. Riprova.")
 
         # Dizionario con i riferimenti alle funzioni (non eseguite subito)
         metrics_functions = {
@@ -147,23 +133,24 @@ class Metriche:
             "7": self.all_the_above
         }
 
+        metriche_selezionate = {}
         if "7" in metriche_scelte:
-            metriche_selezionate = {}
             for key, func in metrics_functions.items():
                 if key != "7":  # Evitiamo di chiamare all_the_above()
-                    metriche_selezionate[key] = func()
+                    metriche_selezionate[lista_metriche[int(key)-1]] = func()
         else:
-            metriche_selezionate = {}
             for key in metriche_scelte:
-                metriche_selezionate[key] = metrics_functions[key]()
-
-
-        for key, value in metriche_selezionate.items():
-            nome_metrica=lista_metriche[int(key)-1]
-            print(f"{nome_metrica} vale: {value}")
-
+                nome_chiave = lista_metriche[int(key)-1]  # Usa key come indice per ottenere la stringa
+                metriche_selezionate[nome_chiave] = metrics_functions[key]()  # Assegna il valore alla chiave corretta
+        
+        
         return metriche_selezionate
 
+
+
+
+    
+    
         
 
 

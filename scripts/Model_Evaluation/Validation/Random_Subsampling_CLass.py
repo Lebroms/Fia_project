@@ -1,10 +1,16 @@
 import pandas as pd
 
+import numpy as np
+
 import random 
 from KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 from KNN.scegli_k import scegli_k
+
+from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
+
+from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
 
 
 
@@ -56,13 +62,24 @@ class RandomSubsamplingValidation(validation):
 
 
 
+        
+
 
 
 
     def validation(self, features, target):
+
+        num=self.num_experiments
         
         k=scegli_k()
-        risultati_esperimenti={}
+        dizionario_metriche={}
+        
+        modalità=scegli_modalita_calcolo_metriche(num)
+
+        Metriche_Selezionate =scegli_metriche()
+        
+
+
 
         for i in range(self.num_experiments):  # Ripetiamo per ogni esperimento
             n = len(features)  # Numero totale di campioni
@@ -85,10 +102,51 @@ class RandomSubsamplingValidation(validation):
             knn = Classificatore_KNN(X_train, y_train,k)
             lista_predizioni = knn.predizione(X_test)
 
+            lista_label=y_test.iloc[:, 0].tolist()
 
-            risultati_esperimenti[f"Esperimento {i+1}"]=lista_predizioni
+            
 
-        print(risultati_esperimenti)
+
+
+            
+            Metrica= Metriche(lista_label, lista_predizioni)
+
+            Metriche_Calcolate=Metrica.calcola_metriche(Metriche_Selezionate)
+
+            
+
+            
+            
+
+            
+            
+
+            if modalità == False:
+                print(f"Le metriche selezionate per l'esperimento {i+1} valgono:")
+                for c, v in Metriche_Calcolate.items():
+                    print(f"  - {c}: {v:.4f}")
+
+                
+            else:
+                dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate
+
+
+        
+
+        if dizionario_metriche:
+            for chiave, l_pred in zip(list(dizionario_metriche.values())[0].keys(), zip(*(d.values() for d in dizionario_metriche.values()))):
+                media_valori = np.mean(l_pred)
+                print(f"La media di {chiave} sui {self.num_experiments} esperimenti= {media_valori:.4f}")
+        
+
+
+            
+
+                
+
+
+
+        
 
 
 

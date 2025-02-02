@@ -5,6 +5,13 @@ from KNN.Classificatore_Knn import Classificatore_KNN
 from .classe_validation import validation
 
 from KNN.scegli_k import scegli_k
+from ..Metrics.Classe_Metriche import Metriche
+
+from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
+
+from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
+
+
 
 
 
@@ -79,6 +86,13 @@ class KfoldValidation(validation):
 
         k = scegli_k()
         folds = {}
+
+        num=self.n_folds
+        modalità=scegli_modalita_calcolo_metriche(num)
+
+        Metriche_Selezionate =scegli_metriche()
+        dizionario_metriche={}
+
         current = 0
         for index, i in enumerate(fold_sizes):
             indici_test = indici[current:current + i]
@@ -106,10 +120,38 @@ class KfoldValidation(validation):
             knn=Classificatore_KNN(feature_train_set,label_train_set,k)
             lista_predizioni=knn.predizione(feature_test_set)
 
+            lista_label=label_test_set.iloc[:, 0].tolist()
 
-            folds[f"fold_test {index+1}"] = (f"Lista predizioni{lista_predizioni}", f"Label test{label_test_set}")
 
-        print(folds)
+            Metrica= Metriche(lista_label, lista_predizioni)
+
+            Metriche_Calcolate=Metrica.calcola_metriche(Metriche_Selezionate)
+
+            
+
+            
+            
+
+            
+            
+
+            if modalità == False:
+                print(f"Le metriche selezionate per il test sul fold {index+1} valgono:")
+                for c, v in Metriche_Calcolate.items():
+                    print(f"  - {c}: {v:.4f}")
+
+                
+            else:
+                dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate
+
+
+        
+
+        if dizionario_metriche:
+            for chiave, l_pred in zip(list(dizionario_metriche.values())[0].keys(), zip(*(d.values() for d in dizionario_metriche.values()))):
+                media_valori = np.mean(l_pred)
+                print(f"La media di {chiave} sui {self.n_folds} esperimenti= {media_valori:.4f}")
+        
 
 
 
