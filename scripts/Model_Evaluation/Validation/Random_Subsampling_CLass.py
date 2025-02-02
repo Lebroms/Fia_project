@@ -1,10 +1,10 @@
 import pandas as pd
 
 import random 
-from KNN.Classificatore_Knn import Classificatore_KNN
+from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
-from KNN.scegli_k import scegli_k
+from ...KNN.scegli_k import scegli_k
 
 
 

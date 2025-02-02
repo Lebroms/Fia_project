@@ -5,8 +5,6 @@ from scripts.data_preprocessing.pulizia_dataset.pulizia_data import Df_Processor
 
 import pandas as pd
 
-from KNN.Classificatore_Knn import Classificatore_KNN
-
 from scripts.Model_Evaluation.Validation.validation_factory import validation_factory
 
 
@@ -16,15 +14,15 @@ if __name__ == "__main__":
 
     dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
    
-    dataset = Df_Processor.elimina_colonne(dataset) #elimina le colonne che non si desiderano
+    dataset = Df_Processor.elimina_colonne(dataset) # elimina le colonne che non si desiderano
     
-    dataset = Df_Processor.crea_dummy_variables(dataset) #converte le colonne che sono del tipo string in valori numerici usando le dummy variables
+    dataset = Df_Processor.crea_dummy_variables(dataset) # converte le colonne che sono del tipo string in valori numerici usando le dummy variables
 
-    Features, colonne_label = classlabel_selector(dataset) #divide il dataframe in due sotto dataframe: feature e label
+    Features, colonne_label = classlabel_selector(dataset) # divide il dataframe in due sotto dataframe: feature e label
 
-    Features = Df_Processor.gestisci_valori_mancanti(Features)
+    Features = Df_Processor.gestisci_valori_mancanti(Features) # gestisce i valori nan nelle features
     
-    Df_Processor.scala_features(Features)
+    Df_Processor.scala_features(Features) # scala i valori nelle features
 
     print(Features.dtypes)
     print(Features)
