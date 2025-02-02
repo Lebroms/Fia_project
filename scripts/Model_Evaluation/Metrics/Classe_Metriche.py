@@ -100,13 +100,13 @@ class Metriche:
         return auc_value'''
     
 
-    def all_the_above(self):
+    '''def all_the_above(self):
         accuracy=Metriche.accuracy()
         errore_rate=Metriche.error_rate()
         sensitivity=Metriche.sensitivity()
         specificity=Metriche.specificity()
         geometric_mean=Metriche.geometric_mean()
-        area_under_the_curve=Metriche.auc()
+        area_under_the_curve=Metriche.auc()'''
 
 
     def scegli_metrica(self):
@@ -121,7 +121,7 @@ class Metriche:
         numeri_validi = {str(i) for i in range(1, n+1)}  # Numeri validi (da "1" a "7")
 
         while True:
-            print("\nScegliere tra le seguenti metriche quelle che si vogliono visualizzare:\n")
+            print("\nScegliere tra le seguenti metriche quelle che si vogliono calcolare:\n")
             for index, el in enumerate(lista_metriche, start=1):
                 print(f"\u25BA {index}. Per selezionare {el} premere {index}\n")
 

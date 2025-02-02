@@ -16,7 +16,7 @@ class validation(ABC):
         """
 
     @abstractmethod
-    def evaluate(self, X, y):
+    def validation(self, features, target):
         pass  # Ogni strategia dovrà implementare questo metodo
 
 

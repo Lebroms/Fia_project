@@ -47,31 +47,13 @@ def predici_label(k_vicini):
     return random.choice(label_candidate)
 
 
+
+
+
 class Classificatore_KNN:
+    def __init__(self, X_train, Y_train,k):
 
-    def __init__(self, X_train, Y_train):
-        """
-        Inizializza il classificatore K-NN controllando che k sia valido.
-        """
-        # inizializzazione del valore dei k vicini da usare per il classificatore
-        k = int(input("Inserire il valore dei k vicini da voler usare per costruire il Classificatore KNN: "))
         self.k=k
-        self.n_train = len(X_train)  # Numero di campioni nel training set
-
-        if not isinstance(k, int) or k <= 0:
-            print("Errore: k deve essere un intero positivo. Impostato a 3 di default.")
-            self.k = 3  # Valore di default
-        elif k > self.n_train:
-            print(
-                f"Errore: k ({k}) è maggiore del numero di campioni nel training set ({self.n_train}). Impostato a {self.n_train}.")
-            self.k = self.n_train  # Impostiamo k uguale al numero di campioni disponibili
-        elif k % 2 == 0:
-            print(
-                f"Avviso: k ({k}) è pari. Questo potrebbe causare pareggi nella votazione. Considera di usare un valore dispari.")
-            self.k = k
-        else:
-            self.k = k  # Se tutto è corretto, assegniamo k normalmente
-
         self.X_train_set = X_train
         self.Y_train_set = Y_train
 
@@ -83,3 +65,6 @@ class Classificatore_KNN:
             predizione.append(label)
 
         return [float(x) for x in predizione]
+
+
+

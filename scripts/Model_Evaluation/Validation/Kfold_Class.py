@@ -4,6 +4,10 @@ from KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
+from KNN.scegli_k import scegli_k
+
+
+
 class KfoldValidation(validation):
     """
     Questa classe ha lo scopo di dividere il dataset in K sottogruppi di uguale dimensione, chiamati
@@ -18,16 +22,26 @@ class KfoldValidation(validation):
         shuffle: Parametro per scambiare casualmente l'ordine dei records nel DataFrame. Ovviamente
         i folds devono essere almeno 2 per essere mescolati.
         """
-        n_folds=input("Inserire il numero di folds in cui si vuole dividere il dataset:")
+        while True:  # Ciclo per chiedere il valore finché non è valido
+            n_folds = input(
+                "Imposta il numero di fold in cui dividere il dataset (numero intero ≥ 2): ").strip()
 
-        if not n_folds:
-            n_folds = 10 #se la riga di input è vuota imposta il numero di folds di default
+            if not n_folds:  # Se l'utente preme Invio senza inserire nulla
+                n_folds = "10"  # Imposta il valore predefinito
+                print("Nessun valore inserito. Imposto numero fold a 10 di default.")
 
+            try:
+                n_folds = int(n_folds)
+                if n_folds >= 2:
+                    break  # Esce dal ciclo se il valore è valido
+                else:
+                    print("Errore: Il valore deve essere un numero intero maggiore o uguale a 2. Riprova.")
+            except ValueError:
+                print("Errore: Inserisci un numero intero valido (es. 10). Riprova.")
 
-        if int(n_folds) < 2:
-            raise ValueError("Il numero di folds deve essere almeno 2")
+        self.n_folds = n_folds
+        print(f"Impostato il numero di fold a {self.n_folds}")
 
-        self.n_folds = int(n_folds)
 
 
     def validation(self, features, target):
@@ -63,9 +77,10 @@ class KfoldValidation(validation):
         di campioni e il numero di folds non è un intero il resto viene assegnato ai primi folds.
         """
 
-        folds = []
+        k = scegli_k()
+        folds = {}
         current = 0
-        for i in fold_sizes:
+        for index, i in enumerate(fold_sizes):
             indici_test = indici[current:current + i]
             """Seleziona gli indici da 0 a i, che verranno usati come test set."""
             indici_training = np.concatenate((indici[:current], indici[current + i:]))
@@ -88,17 +103,13 @@ class KfoldValidation(validation):
 
 
 
-            knn=Classificatore_KNN(feature_train_set,label_train_set)
+            knn=Classificatore_KNN(feature_train_set,label_train_set,k)
             lista_predizioni=knn.predizione(feature_test_set)
-            print(lista_predizioni)
-            print(label_test_set)
-            c = 0
-            for predizione, valore in zip(lista_predizioni, label_test_set.iloc[:, 0]):
-                if predizione == valore:
-                    c += 1
 
-            print(c)
 
+            folds[f"fold_test {index+1}"] = (f"Lista predizioni{lista_predizioni}", f"Label test{label_test_set}")
+
+        print(folds)
 
 
 

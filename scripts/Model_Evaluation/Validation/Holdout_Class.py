@@ -4,6 +4,9 @@ from KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
+from KNN.scegli_k import scegli_k
+from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
+
 class HoldoutValidation(validation):
     """
     Questa classe ha lo scopo di dividere il dataset in due parti: training e test. In input la classe
@@ -38,6 +41,7 @@ class HoldoutValidation(validation):
                 print("Errore: Inserisci un numero valido (es. 0.2 o 0,2). Riprova.")
 
         self.test_size = test_size
+        print(f"Impostata la percentuale al {test_size * 100}%")
 
 
     def validation(self, features, target):
@@ -67,17 +71,18 @@ class HoldoutValidation(validation):
         ad y_training e y_test i record della class label. La funzione .iloc viene utilizzata per
         selezionare righe o colonne in un DataFrame in base agli indici numerici.
         """
-
-        knn = Classificatore_KNN(X_training, Y_training)
+        k=scegli_k()
+        knn = Classificatore_KNN(X_training, Y_training,k)
         lista_predizioni = knn.predizione(X_test)
         print(lista_predizioni)
         print(Y_test)
-        c = 0
-        for predizione, valore in zip(lista_predizioni, Y_test.iloc[:, 0]):
-            if predizione == valore:
-                c += 1
 
-        print(c)
+
+
+        '''Calcolo_Metriche = Metriche(Y_test, lista_predizioni)
+        Metriche_Calcolate = Calcolo_Metriche.scegli_metrica(Calcolo_Metriche)'''
+
+
 
 
 

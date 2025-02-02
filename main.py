@@ -28,8 +28,8 @@ import pandas as pd
 
 from KNN.Classificatore_Knn import Classificatore_KNN
 
+from scripts.Model_Evaluation.Validation.validation_factory import validation_factory
 
-from Model_Evaluation.Validation.Holdout_Class import HoldoutValidation
 
 if __name__ == "__main__":
     
@@ -41,9 +41,10 @@ if __name__ == "__main__":
     
     dataset = crea_dummy_variables(dataset) #converte le colonne che sono del tipo string in valori numerici usando le dummy variables
 
-    [Features, colonne_label] = classlabel_selector(dataset) #divide il dataframe in due sotto dataframe: feature e label
 
-    Features = gestisci_valori_mancanti(dataset)
+    Features, colonne_label = classlabel_selector(dataset) #divide il dataframe in due sotto dataframe: feature e label
+    print(type(colonne_label))
+    Features = gestisci_valori_mancanti(Features)
     
     scala_features(Features)
 
@@ -55,11 +56,12 @@ if __name__ == "__main__":
     #-------------------------------parte per testare Holdout
 
 
-    validators=HoldoutValidation(0.2)
+    validators=validation_factory.getvalidationstrategy()
+    validators.validation(Features,colonne_label)
 
-    Features_train_set,Features_test_set,Labels_train_set,Labels_test_set=validators.validation(Features,colonne_label)
 
-    print("feature_train \n")
+
+    '''print("feature_train \n")
     print(len(Features_train_set))
     print(Features_train_set)
     print("feature_test \n")
@@ -70,7 +72,7 @@ if __name__ == "__main__":
     print(len(Labels_train_set))
     print("label_test \n")
     print(len(Labels_test_set))
-    print(Labels_test_set)
+    print(Labels_test_set)'''
 
 
 
