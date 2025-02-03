@@ -44,9 +44,9 @@ class Metriche:
         Questo misura quanto bene il modello identifica i casi positivi.
         Sensitivity = TruePositive / (TruePositive + FalseNegative)
         """
-        true_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 4.0 and pred == 4.0)
+        true_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 1 and pred == 1)
         #cambiare dataframe da 2 e 4 , a 0 e 1 con funzione
-        false_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 4.0 and pred == 2.0)
+        false_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 1 and pred == 0)
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 1; se sia il valore reale che quello predetto sono uguali a 1, allora verrà aggiunto 1
         # al conteggio dei true positive, altrimenti viene aggiunto 1 al conteggio dei falsi negativi
@@ -58,8 +58,8 @@ class Metriche:
         Questo misura quanto bene il modello identifica i casi negativi.
         Specificity = TrueNegative / (TrueNegative + FalsePositive)
         """
-        true_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 2.0 and pred == 2.0)
-        false_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 2.0 and pred == 4.0)
+        true_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 0 and pred == 0)
+        false_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 0 and pred == 1)
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 0; se sia il valore reale che quello predetto sono uguali a 0, allora verrà aggiunto 1
         # al conteggio dei true negative, altrimenti viene aggiunto 1 al conteggio dei false positive
@@ -150,19 +150,20 @@ class Metriche:
             "7": self.all_the_above
         }
 
-        metriche_selezionate = {}
+        metriche_calcolate = {}
         if "7" in metriche_scelte:
             for key, func in metrics_functions.items():
                 if key != "7":  # Evitiamo di chiamare all_the_above()
-                    metriche_selezionate[lista_metriche[int(key)-1]] = func()
+                    metriche_calcolate[lista_metriche[int(key)-1]] = func()
         else:
             for key in metriche_scelte:
                 nome_chiave = lista_metriche[int(key)-1]  # Usa key come indice per ottenere la stringa
-                metriche_selezionate[nome_chiave] = metrics_functions[key]()  # Assegna il valore alla chiave corretta
+                metriche_calcolate[nome_chiave] = metrics_functions[key]()  # Assegna il valore alla chiave corretta
         
         
-        return metriche_selezionate
-
+        return metriche_calcolate
+    
+    
 
 
 

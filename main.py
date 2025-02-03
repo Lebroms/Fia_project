@@ -7,6 +7,8 @@ import pandas as pd
 
 from scripts.Model_Evaluation.Validation.validation_factory import validation_factory
 
+from scripts.Model_Evaluation.Metrics.visualizzazione_performance import salva_metriche_su_excel
+
 
 if __name__ == "__main__":
     
@@ -33,58 +35,14 @@ if __name__ == "__main__":
 
 
     validators=validation_factory.getvalidationstrategy()
-    validators.validation(Features,colonne_label)
+    lista_metriche=validators.validation(Features,colonne_label)
+
+
+    salva_metriche_su_excel(lista_metriche)
 
 
 
-    '''print("feature_train \n")
-    print(len(Features_train_set))
-    print(Features_train_set)
-    print("feature_test \n")
-    print(len(Features_test_set))
-    print(Features_test_set)
-    print("label_train \n")
-    print(Labels_train_set)
-    print(len(Labels_train_set))
-    print("label_test \n")
-    print(len(Labels_test_set))
-    print(Labels_test_set)'''
-
-
-
-
-
-    #--------------------------------parte aggiunntiva a titolo di prova
     
-    #inizializzazione del valore dei k vicini da usare per il classificatore
-    #k=input("Inserire il valore dei k vicini da voler usare per costruire il Classificatore KNN: ")
-
-    # Supponiamo che il DataFrame si chiami Features
-    '''num_righe = len(Features)
-    train_size = int(num_righe * 0.9)  # Calcola il 70% delle righe
-
-    # Creazione dei dataset di training e test
-    Features_train_set = Features.iloc[:train_size]  # Primi 70%
-    Features_test_set = Features.iloc[train_size:]  # Ultimi 30%
-
-    Labels_train_set = colonne_label.iloc[:train_size]  # Primi 70%
-    Labels_test_set = colonne_label.iloc[train_size:]  # Ultimi 30%
-
-    Knn=Classificatore_KNN(Features_train_set,Labels_train_set)
-
-    lista_predizioni=Knn.predizione(Features_test_set)
-
-    print(lista_predizioni)
-
-    print(Labels_test_set)
-
-    c = 0
-    for predizione, valore in zip(lista_predizioni, Labels_test_set.iloc[:, 0]):
-        if predizione == valore:
-            c += 1
-
-    print(c)'''
-
 
 
    

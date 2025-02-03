@@ -4,16 +4,11 @@ from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-<<<<<<< HEAD
-from KNN.scegli_k import scegli_k
+from ...KNN.scegli_k import scegli_k
 from ..Metrics.Classe_Metriche import Metriche
 
 from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
 
-=======
-from ...KNN.scegli_k import scegli_k
-from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
->>>>>>> a1ec9b326eafae2708a48550d9d31466eba346bb
 
 class HoldoutValidation(validation):
     """
@@ -75,7 +70,7 @@ class HoldoutValidation(validation):
 
 
 
-        num_campioni = len(features) #calcola il numero di campioni (ovvero le righe presenti nel dataframe delle features
+        num_campioni = len(features) #calcola il numero di campioni (ovvero le righe presenti nel dataframe delle features)
         
         indici_test = np.random.choice(num_campioni, size=int(self.test_size * num_campioni), replace=False)
         """
@@ -121,10 +116,10 @@ class HoldoutValidation(validation):
 
         Metriche_Calcolate=Metrica.calcola_metriche(Metriche_selezionate)
         #chiama la funzione calcola_metriche della classe Metriche per calcolare le metriche appena selezionate
-
-        print("Le metriche calcolate sono:")
-        for c, v in Metriche_Calcolate.items():
-            print(f" \n - {c}: {v:.4f}")
+        return [Metriche_Calcolate] #restituisce una lista contenente il dizionario 
+        #print("Le metriche calcolate sono:")
+        #for c, v in Metriche_Calcolate.items():
+           # print(f" \n - {c}: {v:.4f}")
 
 
 

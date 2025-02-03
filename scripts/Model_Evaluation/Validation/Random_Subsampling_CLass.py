@@ -105,12 +105,16 @@ class RandomSubsamplingValidation(validation):
         num=self.num_experiments #assegna l'attributo num_experiments a num
         
         k=scegli_k() #chiama la funzione scegli_k per scegliere i k vicini
-        dizionario_metriche={} #crea un dizionario vuoto
         
+        
+        
+
+        Metriche_Selezionate =scegli_metriche() #chiama la funzione scegli_metriche 
+
         modalità=scegli_modalita_calcolo_metriche(num) 
         #chiama la funzione scegli_modalita_calcolo_metriche
 
-        Metriche_Selezionate =scegli_metriche() #chiama la funzione scegli_metriche 
+        lista_metriche=[]
         
 
 
@@ -153,8 +157,8 @@ class RandomSubsamplingValidation(validation):
             Metriche_Calcolate=Metrica.calcola_metriche(Metriche_Selezionate)
             #chiama la funzione calcola_metriche della classe Metriche per calcolare le metriche appena selezionate
 
+            lista_metriche.append((f"Esperimento{i+1}",Metriche_Calcolate))
             
-
             
             
 
@@ -162,31 +166,41 @@ class RandomSubsamplingValidation(validation):
             
             #blocco di codice per verificare il valore di modalità in base alla scelta dell'utente 
             #di calcolare la media delle metriche sugli esperimenti o le metriche per i singoli esperiemnti
-            if modalità == False:#l'utente ha scelto le singole metriche 
-                print(f"Le metriche selezionate per l'esperimento {i+1} valgono:")
-                for c, v in Metriche_Calcolate.items():
-                    print(f"  - {c}: {v:.4f}")
+            #if modalità == False:#l'utente ha scelto le singole metriche 
+                #print(f"Le metriche selezionate per l'esperimento {i+1} valgono:")
+                #for c, v in Metriche_Calcolate.items():
+                    #print(f"  - {c}: {v:.4f}")
 
                 
-            else:#l'utente ha scelto la media delle metriche 
-                dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate
+            #else:#l'utente ha scelto la media delle metriche 
+                #dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate
                 #aggiunge al dizionario_metriche il dizionario delle metriche dell'esperimenti corrente 
 
 
         
 
-        if dizionario_metriche: #uscito dal for questo se modalità è True è un dict di dict
+        if modalità: #uscito dal for questo se modalità è True è un dict di dict
+            metriche_raccolte = {}
 
-            # Iteriamo su tutte le metriche dei dizionari onterni (es. "accuracy", "precision", "recall").
-            # Per ogni metrica, creiamo una lista `l_pred` che contiene i valori di quella metrica
-            # per tutte le chiavi del dizionario più esterno.
-            for chiave, l_pred in zip(list(dizionario_metriche.values())[0].keys(), zip(*(d.values() for d in dizionario_metriche.values()))):
-                media_valori = np.mean(l_pred)#calcola la media dei valori nella lista 
-                print(f"La media di {chiave} sui {self.num_experiments} esperimenti= {media_valori:.4f}")
+            # Passo 1: Raccogliamo i valori di ogni metrica
+            for _, metriche in lista_metriche:
+                for nome_metrica, valore in metriche.items():
+                    if nome_metrica not in metriche_raccolte:
+                        metriche_raccolte[nome_metrica] = []  # Creiamo una lista per raccogliere i valori
+                    metriche_raccolte[nome_metrica].append(valore)
+
+            # Passo 2: Calcoliamo la media per ogni metrica
+            medie_metriche = {metrica: np.mean(valori) for metrica, valori in metriche_raccolte.items()}
+            return [medie_metriche]
+
         
 
 
-            
+        else:
+            metriche_per_esperimento=[]
+            for _,metriche in lista_metriche:
+                metriche_per_esperimento.append(metriche)
+            return metriche_per_esperimento #fa una lista in cui ogni elemento è un sottodizionario di dizinario_metriche 
 
                 
 

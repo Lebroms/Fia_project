@@ -95,10 +95,13 @@ class KfoldValidation(validation):
         folds = {} #crea un dizionario vuoto 
 
         num=self.n_folds #assegna l'attributo n_folds a num
-        modalità=scegli_modalita_calcolo_metriche(num)
+        
 
         Metriche_Selezionate =scegli_metriche()
-        dizionario_metriche={}#crea un dizionario vuoto
+
+        modalità=scegli_modalita_calcolo_metriche(num)
+
+        lista_metriche=[]#crea un dizionario vuoto
 
         current = 0
         for index, i in enumerate(fold_sizes):
@@ -134,6 +137,7 @@ class KfoldValidation(validation):
 
             Metriche_Calcolate=Metrica.calcola_metriche(Metriche_Selezionate)
 
+            lista_metriche.append((f"Esperimento{i+1}",Metriche_Calcolate))
             
 
             
@@ -142,23 +146,42 @@ class KfoldValidation(validation):
             
             
 
-            if modalità == False:
+            '''if modalità == False:
                 print(f"Le metriche selezionate per il test sul fold {index+1} valgono:")
                 for c, v in Metriche_Calcolate.items():
                     print(f"  - {c}: {v:.4f}")
 
                 
             else:
-                dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate
+                dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate'''
 
 
         
 
-        if dizionario_metriche:
-            for chiave, l_pred in zip(list(dizionario_metriche.values())[0].keys(), zip(*(d.values() for d in dizionario_metriche.values()))):
-                media_valori = np.mean(l_pred)
-                print(f"La media di {chiave} sui {self.n_folds} esperimenti= {media_valori:.4f}")
+        if modalità: #uscito dal for questo se modalità è True è un dict di dict
+            metriche_raccolte = {}
+
+            # Passo 1: Raccogliamo i valori di ogni metrica
+            for _, metriche in lista_metriche:
+                for nome_metrica, valore in metriche.items():
+                    if nome_metrica not in metriche_raccolte:
+                        metriche_raccolte[nome_metrica] = []  # Creiamo una lista per raccogliere i valori
+                    metriche_raccolte[nome_metrica].append(valore)
+
+            # Passo 2: Calcoliamo la media per ogni metrica
+            medie_metriche = {metrica: np.mean(valori) for metrica, valori in metriche_raccolte.items()}
+            return [medie_metriche]
+
         
+
+
+        else:
+            metriche_per_esperimento=[]
+            for _,metriche in lista_metriche:
+                metriche_per_esperimento.append(metriche)
+            return metriche_per_esperimento #fa una lista in cui ogni elemento è un sottodizionario di dizinario_metriche 
+
+            
 
 
 
