@@ -1,6 +1,19 @@
 
 
 def scegli_modalita_calcolo_metriche(num):
+    '''
+    Funzione che permette di scegliere la modalità di calcolo:fare la media delle singole metriche 
+    calcolate per il numero di esperimenti selezionato, oppure restituire le  metriche per i singoli 
+    esperimenti 
+
+    Parametri: 
+    num= intero che rappresenta il numero di esperimenti 
+
+    Return:
+    Modalità= variabile booleana che viene impostata su True se si vuole fare la media 
+    delle varie metriche su tutti gli esperimenti 
+    '''
+
     while True:
         print("Scegli la modalità di calcolo delle metriche:")
         print(f"1. Fai la media delle metriche selezionate sui {num} esperimenti")
@@ -23,7 +36,10 @@ def scegli_modalita_calcolo_metriche(num):
 
 def scegli_metriche():
         """
-        Chiede all'utente di selezionare le metriche da calcolare e restituisce la lista delle scelte.
+        Funzione che chiede all'utente di selezionare le metriche da calcolare e restituisce la lista delle scelte.
+
+        Return:
+        metriche_scelte= lista numerica delle metriche selezionate 
         """
         lista_metriche = [
         "Accuracy", "Error Rate", "Sensitivity", "Specificity",

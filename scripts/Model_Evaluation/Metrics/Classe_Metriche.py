@@ -2,12 +2,18 @@ import numpy as np
 
 
 from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_modalita_calcolo_metriche,scegli_metriche
+
+
 class Metriche:
     def __init__(self, y_real, y_pred):
+
         """
-        Inizializza la classe con i valori reali (y_real) e le predizioni del modello (y_pred).
-        :param y_real: Lista dei valori reali
-        :param y_pred: Lista delle predizioni del modello
+        Costruttore della classe:
+        Istanzia un oggetto della classe metriche contenente come attribuiti y_real e y_pred e come metodi tutte le funzioni di calcolo 
+        
+        Parametri:
+        y_real: Lista dei valori reali delle Label
+        y_pred: Lista delle predizioni del modello
         """
         self.y_real = y_real #Assegna alla variabile di istanza self.y_real la lista dei valori reali (y_real)
         self.y_pred = y_pred #Assegna alla variabile di istanza self.y_pred la lista dei valori reali (y_pred)
@@ -104,6 +110,10 @@ class Metriche:
     
 
     def all_the_above(self):
+        '''
+        Metodo che richiama tuttu i metodi per calcolare tutte le metriche  
+        '''
+
         accuracy=Metriche.accuracy()
         errore_rate=Metriche.error_rate()
         sensitivity=Metriche.sensitivity()
@@ -118,6 +128,13 @@ class Metriche:
     def calcola_metriche(self, metriche_scelte):
         """
         Calcola le metriche selezionate dall'utente e restituisce un dizionario con i valori.
+        Parametri:
+        metriche_scelte= una lista numerica corrispondente alle metriche selezionata 
+
+        Return:
+        Restituisce un dizionario di metriche che come chiavi ha i nomi delle metriche calcolate e come valori 
+        i corrispondenti risultati
+
         """
         lista_metriche = [
             "Accuracy", "Error Rate", "Sensitivity", "Specificity",
