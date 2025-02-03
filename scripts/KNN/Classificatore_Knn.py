@@ -23,7 +23,8 @@ def trova_k_vicini(X_train_set, Y_train_set, X_test, k=3):
 
     for idx, row in X_train_set.iterrows():
         dist = distanza_euclidea(row.values, X_test)
-        distanze.append((dist, Y_train_set.loc[idx]))
+        
+        distanze.append((dist, int(Y_train_set.loc[idx].values)))
 
         distanze.sort(key=lambda x: x[0])  # ordina la lista delle distanze tra il campione e i vari record in ordine crescente, rispetto alla distanza
 
@@ -35,7 +36,6 @@ def trova_k_vicini(X_train_set, Y_train_set, X_test, k=3):
 def predici_label(k_vicini):
     count = {}
     for label in k_vicini:
-        label = label.item()
         if label in count:
             count[label] += 1
         else:
@@ -43,7 +43,7 @@ def predici_label(k_vicini):
 
     max_count = max(count.values())
     label_candidate = [label for label, counter in count.items() if counter == max_count]
-
+    
     return random.choice(label_candidate)
 
 
