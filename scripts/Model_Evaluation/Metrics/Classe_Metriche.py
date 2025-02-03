@@ -1,11 +1,19 @@
 import numpy as np
 
+
+from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_modalita_calcolo_metriche,scegli_metriche
+
+
 class Metriche:
     def __init__(self, y_real, y_pred):
+
         """
-        Inizializza la classe con i valori reali (y_real) e le predizioni del modello (y_pred).
-        :param y_real: Lista dei valori reali
-        :param y_pred: Lista delle predizioni del modello
+        Costruttore della classe:
+        Istanzia un oggetto della classe metriche contenente come attribuiti y_real e y_pred e come metodi tutte le funzioni di calcolo 
+        
+        Parametri:
+        y_real: Lista dei valori reali delle Label
+        y_pred: Lista delle predizioni del modello
         """
         self.y_real = y_real #Assegna alla variabile di istanza self.y_real la lista dei valori reali (y_real)
         self.y_pred = y_pred #Assegna alla variabile di istanza self.y_pred la lista dei valori reali (y_pred)
@@ -15,9 +23,11 @@ class Metriche:
         Calcola l'Accuracy Rate.
         Accuracy = (TruePositive + TrueNegative) / (TP + TN + FalsePositive + FalseNegative)
         """
+        
         correct = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == pred)
         # Zip viene utilizzato per iterare simultaneamente sulle etichette reali (y_real) e sulle etichette predette (y_pred)
         # l'if  verifica se l'etichetta predetta è uguale a quella reale. Se lo è, aggiunge 1 al conteggio.
+        
         return correct / len(self.y_pred)
         #dividiamo il numero di predizioni corrette per tutti i valori predetti
 
@@ -64,7 +74,7 @@ class Metriche:
         specificity = self.specificity()
         return np.sqrt(sensitivity * specificity)
 
-    def auc(self):
+    '''def auc(self):
         """
         Calcola l'Area Under the Curve (AUC) come la media di Sensitivity e Specificity.
         """
@@ -96,30 +106,72 @@ class Metriche:
         for i in range(1, len(fpr)):
             auc_value += (fpr[i] - fpr[i - 1]) * (tpr[i] + tpr[i - 1]) / 2
 
-        return auc_value
+        return auc_value'''
+    
+
+    def all_the_above(self):
+        '''
+        Metodo che richiama tuttu i metodi per calcolare tutte le metriche  
+        '''
+
+        accuracy=Metriche.accuracy()
+        errore_rate=Metriche.error_rate()
+        sensitivity=Metriche.sensitivity()
+        specificity=Metriche.specificity()
+        geometric_mean=Metriche.geometric_mean()
+        area_under_the_curve=Metriche.auc()
 
 
-    '''def scegli_metrica(self):
+    
+
+
+    def calcola_metriche(self, metriche_scelte):
         """
-        Calcola tutte le metriche e le raccoglie in un dizionario.
+        Calcola le metriche selezionate dall'utente e restituisce un dizionario con i valori.
+        Parametri:
+        metriche_scelte= una lista numerica corrispondente alle metriche selezionata 
+
+        Return:
+        Restituisce un dizionario di metriche che come chiavi ha i nomi delle metriche calcolate e come valori 
+        i corrispondenti risultati
+
         """
-        print("\nScegliere tra le seguenti le metriche da scegliere: \n")
-        lista_metriche=["Accuracy", "Error Rate", "Sensitivity", "Specificity", "Geometric Mean","Area Under the Curve"]
-        for index, el in enumerate(lista_metriche, start=1):  # start=1 per partire da 1 invece di 0
-            print(f"\u25BA {index}. Per selezionare {el} premere {index}\n")
+        lista_metriche = [
+            "Accuracy", "Error Rate", "Sensitivity", "Specificity",
+            "Geometric Mean", "Area Under the Curve", "Tutte le metriche"]
 
-        metriche_scelte=(input)
-
-
-        metrics = {
-            "Accuracy": self.accuracy(),
-            "Error Rate": self.error_rate(),
-            "Sensitivity": self.sensitivity(),
-            "Specificity": self.specificity(),
-            "Geometric Mean": self.geometric_mean(),
-            "Area Under the Curve": self.auc()
+        # Dizionario con i riferimenti alle funzioni (non eseguite subito)
+        metrics_functions = {
+            "1": self.accuracy,
+            "2": self.error_rate,
+            "3": self.sensitivity,
+            "4": self.specificity,
+            "5": self.geometric_mean,
+            "7": self.all_the_above
         }
-        return metrics'''
+
+        metriche_calcolate = {}
+        if "7" in metriche_scelte:
+            for key, func in metrics_functions.items():
+                if key != "7":  # Evitiamo di chiamare all_the_above()
+                    metriche_calcolate[lista_metriche[int(key)-1]] = func()
+        else:
+            for key in metriche_scelte:
+                nome_chiave = lista_metriche[int(key)-1]  # Usa key come indice per ottenere la stringa
+                metriche_calcolate[nome_chiave] = metrics_functions[key]()  # Assegna il valore alla chiave corretta
+        
+        
+        return metriche_calcolate
+    
+    
+
+
+
+    
+    
+        
+
+
 
 
 

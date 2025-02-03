@@ -1,0 +1,4 @@
+
+Attualmente il progetto implementa la fase di prepocessing di un dataset proveniente da un qualsiasi file di log (esempi presenti nella cartella dati). Per eseguire il programma, dopo aver clonato il repository e installato i requirements, bisogna eseguire main.py dal terminale del proprio ambiente Python digitando "python main.py --input dati/<nome di uno dei file presente in dati>".
+
+Ora se l'utente non specifica --input dati/<nome di uno dei file presente in dati> ed esegue solo con "python main.py" il programma prenderà in input di default il file version_1.csv. Implementato il classificatore e i 3 metodi di model evaluation. Implementata l'interfaccia che verrà utilizzata dall'utente secondo tutte le specifiche tranne le metriche
