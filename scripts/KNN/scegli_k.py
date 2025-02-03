@@ -1,4 +1,14 @@
 def scegli_k():
+    '''
+    Funzione che permette all'utente di scegliere il numero di k vicini da utilizzare per il 
+    Classificatore. Gestisce vari casi di input stampando messaggi di errore e chiedendo di reinserire 
+    k nei casi in cui il valore di k inserito non vada bene.
+
+    Return:
+    k= intero che rappresenta il numero di vicini da usare per il Classificatore
+    '''
+
+
     while True:
         k = input(
             "Inserire il valore dei k vicini da voler usare per costruire il Classificatore KNN (default: 3): ").strip()

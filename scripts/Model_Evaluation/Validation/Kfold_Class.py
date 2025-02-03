@@ -99,7 +99,9 @@ class KfoldValidation(validation):
 
         Metriche_Selezionate =scegli_metriche()
 
+
         modalità =scegli_modalita_calcolo_metriche(num)
+
 
         lista_metriche=[]#crea un dizionario vuoto
 
