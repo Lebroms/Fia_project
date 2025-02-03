@@ -1,32 +1,9 @@
 
-"""
-Questo script rappresenta l'entry point del progetto per il caricamento e la gestione del dataset.
-
-Funzionalità principali:
-1. Carica un dataset da file con diverse estensioni supportate (CSV, JSON, XML).
-2. Utilizza una Factory per selezionare automaticamente il caricatore appropriato in base al tipo di file.
-3. Esegue il caricamento del dataset in un formato standard (pandas DataFrame).
-4. Mostra i dati caricati per confermarne il corretto caricamento.
-
-Come usarlo:
-- Specificare il percorso del file da caricare nella variabile `file_path`.
-- Lo script selezionerà il caricatore corretto e restituirà i dati pronti per l'elaborazione successiva.
-
-Prerequisiti:
-- Librerie richieste: pandas
-- Il file deve essere presente nella directory indicata da `file_path`.
-
-"""
-from scripts.data_preprocessing.loader.factory import Factory, load_data
-from scripts.data_preprocessing.pulizia_dataset.dummy_variables import crea_dummy_variables
-from scripts.data_preprocessing.pulizia_dataset.feature_scaling import scala_features
-from scripts.data_preprocessing.pulizia_dataset.gestisci_colonne import elimina_colonne
-from scripts.data_preprocessing.pulizia_dataset.gestione_valori_Nan import gestisci_valori_mancanti
+from scripts.data_preprocessing.loader.factory import load_data
 from scripts.data_preprocessing.Target_Features.ClassLabel_Selector import classlabel_selector
+from scripts.data_preprocessing.pulizia_dataset.pulizia_data import Df_Processor
 
 import pandas as pd
-
-from KNN.Classificatore_Knn import Classificatore_KNN
 
 from scripts.Model_Evaluation.Validation.validation_factory import validation_factory
 
@@ -36,17 +13,16 @@ if __name__ == "__main__":
     
 
     dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
-
-    dataset = elimina_colonne(dataset) #elimina le colonne che non si desiderano
+   
+    dataset = Df_Processor.elimina_colonne(dataset) # elimina le colonne che non si desiderano
     
-    dataset = crea_dummy_variables(dataset) #converte le colonne che sono del tipo string in valori numerici usando le dummy variables
+    dataset = Df_Processor.crea_dummy_variables(dataset) # converte le colonne che sono del tipo string in valori numerici usando le dummy variables
 
+    Features, colonne_label = classlabel_selector(dataset) # divide il dataframe in due sotto dataframe: feature e label
 
-    Features, colonne_label = classlabel_selector(dataset) #divide il dataframe in due sotto dataframe: feature e label
-    print(type(colonne_label))
-    Features = gestisci_valori_mancanti(Features)
+    Features = Df_Processor.gestisci_valori_mancanti(Features) # gestisce i valori nan nelle features
     
-    scala_features(Features)
+    Df_Processor.scala_features(Features) # scala i valori nelle features
 
     print(Features.dtypes)
     print(Features)

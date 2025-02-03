@@ -3,10 +3,10 @@ import pandas as pd
 import numpy as np
 
 import random 
-from KNN.Classificatore_Knn import Classificatore_KNN
+from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
-from KNN.scegli_k import scegli_k
+from ...KNN.scegli_k import scegli_k
 
 from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
 
@@ -102,10 +102,10 @@ class RandomSubsamplingValidation(validation):
         target: DataFrame con le class label.
         """
 
-        num=self.num_experiments
+        num=self.num_experiments #assegna l'attributo num_experiments a num
         
-        k=scegli_k()
-        dizionario_metriche={}
+        k=scegli_k() #chiama la funzione scegli_k per scegliere i k vicini
+        dizionario_metriche={} #crea un dizionario vuoto
         
         modalità=scegli_modalita_calcolo_metriche(num) 
         #chiama la funzione scegli_modalita_calcolo_metriche

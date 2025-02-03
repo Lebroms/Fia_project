@@ -1,16 +1,14 @@
 import numpy as np
 
-from KNN.Classificatore_Knn import Classificatore_KNN
+from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-from KNN.scegli_k import scegli_k
+from ...KNN.scegli_k import scegli_k
+
 from ..Metrics.Classe_Metriche import Metriche
 
-from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
-
 from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
-
 
 
 
