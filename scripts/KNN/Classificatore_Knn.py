@@ -3,6 +3,7 @@ import random
 import pandas as pd
 
 
+
 class Classificatore_KNN:
     """
     Classe che implementa il classificatore
@@ -25,6 +26,7 @@ class Classificatore_KNN:
 
     
     def __distanza_euclidea(self,x1, x2):
+
         """
         Calcola la distanza euclidea 
             Args:
@@ -32,6 +34,7 @@ class Classificatore_KNN:
                 - x2 (np array)
             Return: distanza (np float64)
             """
+
         return np.sqrt(sum((x1 - x2) ** 2))
 
 
@@ -50,7 +53,9 @@ class Classificatore_KNN:
         distanze = []
 
         for idx, row in X_train_set.iterrows():
+            
             dist = self.__distanza_euclidea(row.values, X_test)
+            
             distanze.append((dist, int(Y_train_set.loc[idx].values)))
             
 
@@ -105,6 +110,8 @@ class Classificatore_KNN:
         """
         predizione = []
         for x_test in np.array(X_test):
+            
+            
             k_vicini = self.__trova_k_vicini(self.X_train_set, self.Y_train_set, x_test, self.k)
             label = self.__predici_label(k_vicini)
             predizione.append(label)

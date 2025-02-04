@@ -9,14 +9,15 @@ import pandas as pd
 
 class Factory:
     """
-    Classe Factory che fornisce un metodo per ottenere dinamicamente un loader appropriato 
-    in base all'estensione del file. Supporta i formati CSV, XLSX, XLS e JSON.
+    Classe Factory per la gestione dinamica dei caricamenti di file.
 
-    Metodo:
-        - get_loader(file_path: str): Determina e restituisce il loader corretto 
-          basandosi sull'estensione del file fornito.
+    Questa classe fornisce un metodo per ottenere un'istanza del loader corretto in base
+    all'estensione del file, supportando diversi formati tra cui CSV, TSV, Excel, JSON, XML e TXT.
+
+    Methods:
+        get_loader(file_path: str) -> DataLoader:
+            Determina e restituisce il loader appropriato in base all'estensione del file.
     """
-
     @staticmethod
     def get_loader(file_path: str) -> DataLoader:
         """
@@ -28,12 +29,6 @@ class Factory:
         Returns:
             DataLoader: Un'istanza del loader appropriato per il tipo di file.
 
-        Raises:
-            ValueError: Sollevato se l'estensione del file non è supportata.
-
-        Esempio:
-            loader = Factory.get_loader("dataset.csv")
-            dataset = loader.load("dataset.csv")
         """
         # Estrai l'estensione del file (in minuscolo) dall'input
         file_extension = file_path.split('.')[-1].lower()
@@ -67,9 +62,17 @@ import json
 
 def load_data():
     """
-    Carica i dati da un file specificato da riga di comando.
+    Carica i dati da un file specificato tramite riga di comando.
+
+    Questa funzione:
+    - Analizza gli argomenti passati alla riga di comando per determinare il file di input.
+    - Utilizza la classe `Factory` per ottenere il loader corretto in base all'estensione.
+    - Converte eventuali numeri scritti con la virgola in numeri con il punto.
+    - Restituisce il DataFrame risultante.
+
     Returns:
         pd.DataFrame: Il dataset caricato.
+
     """
     # Parse degli argomenti dalla riga di comando
     args = parse_arguments()
@@ -97,14 +100,19 @@ def load_data():
 
 def convert_comma_to_dot(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Converte tutte le colonne di tipo 'object' che contengono numeri con la virgola 
-    in numeri con il punto e le trasforma in float, se possibile.
-    
+    Converte i numeri con la virgola in numeri con il punto all'interno di un DataFrame.
+
+    Questa funzione:
+    - Analizza tutte le colonne di tipo 'object' nel DataFrame.
+    - Sostituisce le virgole (`','`) con punti (`'.'`) nei valori.
+    - Tenta di convertire le colonne in numeri float, se possibile.
+
     Args:
-        df (pd.DataFrame): Il DataFrame da modificare.
-    
+        df (pd.DataFrame): Il DataFrame da elaborare.
+
     Returns:
-        pd.DataFrame: Il DataFrame con i valori corretti.
+        pd.DataFrame: Il DataFrame con i valori numerici corretti.
+
     """
     for col in df.select_dtypes(include=['object']).columns:
         df[col] = df[col].str.replace(',', '.', regex=True)
@@ -123,10 +131,14 @@ import argparse
 
 def parse_arguments():
     """
-    Definisce e analizza gli argomenti della riga di comando.
-    
+    Definisce e analizza gli argomenti passati dalla riga di comando.
+
+    Questa funzione permette di specificare:
+    - Il percorso del file di input da caricare (`-i` o `--input`).
+
     Returns:
-        argparse.Namespace: Oggetto con gli argomenti forniti dall'utente.
+        argparse.Namespace: Un oggetto contenente gli argomenti forniti dall'utente.
+
     """
     parser = argparse.ArgumentParser(description="Caricamento e pulizia dei dati.")
 
@@ -134,6 +146,6 @@ def parse_arguments():
     parser.add_argument("-i","--input", type=str, default="dati/version_1.csv", help="Nome del file di input")
 
 
-    parser.add_argument("-k", "--k", type=int, default=3, help="Numero di vicini desiderato per il classificatore")
+    
 
     return parser.parse_args()

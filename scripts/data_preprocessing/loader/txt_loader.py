@@ -3,25 +3,32 @@ from .classe_loader import DataLoader
 
 class TxtLoader(DataLoader):
     """
-    Sottoclasse di DataLoader specializzata nel caricamento di file TXT.
-    Il metodo load verifica il contenuto del file per scegliere il separatore più adatto.
+    Sottoclasse di DataLoader per il caricamento di file di testo (.txt).
 
-    Args:
-        file_path (str): Il percorso del file da caricare.
+    Questa classe implementa il metodo `load` per leggere file di testo strutturati 
+    (con separatori come tabulazione, punto e virgola o virgola) o file di testo non 
+    strutturati.
 
-    Returns:
-        pd.DataFrame: I dati caricati come DataFrame.
+    Il metodo determina automaticamente il separatore in base al contenuto della prima 
+    riga del file o, se nessun separatore è presente, lo carica come un'unica colonna `"text"`.
     """
 
     def load(self, file_path: str) -> pd.DataFrame:
         """
-        Carica un file di testo e lo converte in un DataFrame in base al separatore rilevato.
+        Carica un file di testo in un DataFrame, determinando automaticamente il formato.
+
+        Il comportamento è il seguente:
+        - Se la prima riga contiene un separatore (`\t`, `;`, `,`), il file viene trattato
+          come tabellare e letto con `pd.read_csv()` usando il separatore rilevato.
+        - Se nessun separatore viene trovato, il file viene caricato come una colonna unica
+          denominata `"text"`.
 
         Args:
             file_path (str): Il percorso del file da caricare.
 
         Returns:
-            pd.DataFrame: I dati caricati come DataFrame.
+            pd.DataFrame: Il contenuto del file caricato in un DataFrame.''' 
+
         """
         # Imposta un separatore di default
         separator = None

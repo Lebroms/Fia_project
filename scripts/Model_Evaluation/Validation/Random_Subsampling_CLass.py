@@ -18,25 +18,22 @@ from scripts.interfaccia_utente import interfaccia_utente
 
 class RandomSubsamplingValidation(validation):
     """
-
-    Questa classe ha lo scopo di dividere il dataset in due parti: training set e test set.
-    Implementa un metodo astratto della classe padre validation.
+    Implementazione della validazione Random Subsampling.
     
+    Questa classe suddivide il dataset in training set e test set ripetutamente
+    per un numero specificato di esperimenti e utilizza un classificatore KNN
+    per effettuare le predizioni e calcolare le metriche di valutazione.
     """
 
     def __init__(self):
 
-        '''
-        Costruttore della classe:
-        Istanzia un oggetto della classe RandomSubsamplingValidation che gestisce il modello di validazione 
-        Random sub Sampling con attributi "num_experiments" ovvero in numero di volte incui dividere il dataset
-        in test set e train set, e "test_size" ovvero la percentuale del dataset da usare come test set. Entrambi i valori 
-        inseriti dall'utente tramite riga di comando e assegnati all'istanza
         """
-        '''
+        Inizializza un'istanza di RandomSubsamplingValidation.
 
-        
-
+        Attributi:
+            num_experiments (int): Numero di esperimenti di validazione da eseguire.
+            test_size (float): Percentuale del dataset da assegnare al test set.
+        """
         self.num_experiments = interfaccia_utente.get_num_experiments()
         print(f"Impostato il numero di esperimenti a {self.num_experiments}")
 
@@ -55,34 +52,47 @@ class RandomSubsamplingValidation(validation):
     def validation(self, features, target):
 
         """
-        metodo importato dalla classe padre validation 
+        Esegue la validazione Random Subsampling suddividendo il dataset e calcolando le metriche.
 
-        Serve per dividere il dataset in training e test in base all'attributo della classe test_size e 
-        un numero di volte pari all'attributo num_experiments
+        Args:
+            features (pd.DataFrame): DataFrame contenente solo le feature del dataset.
+            target (pd.DataFrame): DataFrame contenente la classe target.
 
-        In questo metodo viene chiamata la classe esterna Classificatore_Knn per eseguire la predizione
-        sul test_set. E viene chiamata anche la classe Metriche per gestire il calcolo delle metriche 
-        
+        Returns:
+            list[dict]: Una lista contenente i dizionari con le metriche calcolate per ogni esperimento,
+                        oppure un unico dizionario con la media delle metriche se selezionato dall'utente.
 
-        Parametri:
-        features: DataFrame delle features.
-        target: DataFrame con le class label.
+        Fasi della validazione:
+        1. Suddivisione del dataset:
+            - Gli indici dei campioni vengono mescolati casualmente.
+            - Il test set ha dimensione pari a `test_size * numero_totale_campioni`.
+            - Il processo viene ripetuto `num_experiments` volte.
+        2. Predizione con KNN:
+            - L'utente seleziona il numero di vicini `k` tramite interfaccia.
+            - Il classificatore KNN viene addestrato con il training set.
+            - Effettua la predizione sui dati di test.
+        3. Calcolo delle metriche:
+            - Le predizioni vengono confrontate con le classi reali.
+            - Viene generata e plottata la matrice di confusione.
+            - Vengono calcolate le metriche selezionate dall'utente.
+        Se l'utente sceglie di aggregare le metriche, il metodo restituisce la media delle metriche sui vari esperimenti.
         """
 
         num=self.num_experiments #assegna l'attributo num_experiments a num
         
-        k=interfaccia_utente.get_k_neighbours() #chiama la funzione scegli_k per scegliere i k vicini
+        k=interfaccia_utente.get_k_neighbours() #chiama la classe interfaccia_utente per far scegliere k
         
         
         
 
-        Metriche_Selezionate =interfaccia_utente.get_metrics_to_calculate() #chiama la funzione scegli_metriche 
+        Metriche_Selezionate =interfaccia_utente.get_metrics_to_calculate() 
+        #chiama la classe interfaccia_utente per scegliere le metriche da calcolare 
 
         modalità=interfaccia_utente.get_mod_calculation_metrics(num) 
-        #chiama la funzione scegli_modalita_calcolo_metriche
+        #chiama la classe interfaccia_utente per scegliere le modalità con cui calcolare le metriche
 
-        lista_metriche=[]
-        lista_matrix=[]
+        lista_metriche=[]#crea un dizionario vuoto in cui salvare le metriche dei vari esperimenti
+        lista_matrix=[]#crea una lista vuota in cui mettere le matrici di confusione dei vari esperimenti
         
 
 
@@ -110,7 +120,7 @@ class RandomSubsamplingValidation(validation):
             #chiama la funzione predizione per predire la label dei campioni di test 
             # per l'esperimento corrente e le assegna a una lista
 
-            lista_label=y_test.iloc[:, 0].tolist()##mette i valori del dataframe contenente le label dei campioni
+            lista_label=y_test.iloc[:, 0].tolist()#mette i valori del dataframe contenente le label dei campioni
             #usati come test in una lista.
 
             
@@ -122,48 +132,36 @@ class RandomSubsamplingValidation(validation):
             #crea un istanza della classe metriche passando
             #le due liste appena assegnate
             
-            confusion_matrix=Metrica.make_confusion_matrix()
-            lista_matrix.append(confusion_matrix)
+            confusion_matrix=Metrica.make_confusion_matrix()#crea la matrice di confusione con la funzione apposita
+            lista_matrix.append(confusion_matrix)#aggiunge alla lista la matrice di confusione appena creata per l'esperimento corrente
 
             Metriche_Calcolate=Metrica.calcola_metriche(Metriche_Selezionate)
             #chiama la funzione calcola_metriche della classe Metriche per calcolare le metriche appena selezionate
 
             lista_metriche.append((f"Esperimento{i+1}",Metriche_Calcolate))
-            
+            #appende a lista_metriche una tupla che ha come primo elemento il nome 
+            #dell'esperimento e come secondo elemento un dizionario che ha come chiavi le metriche
+            #selezionate e come valori le i valori delle metriche sul fold corrente
+            #alla fine del for sarà una lista di tuple
             
             
 
-            
-            
-            #blocco di codice per verificare il valore di modalità in base alla scelta dell'utente 
-            #di calcolare la media delle metriche sugli esperimenti o le metriche per i singoli esperiemnti
-            #if modalità == False:#l'utente ha scelto le singole metriche 
-                #print(f"Le metriche selezionate per l'esperimento {i+1} valgono:")
-                #for c, v in Metriche_Calcolate.items():
-                    #print(f"  - {c}: {v:.4f}")
-
-                
-            #else:#l'utente ha scelto la media delle metriche 
-                #dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate
-                #aggiunge al dizionario_metriche il dizionario delle metriche dell'esperimenti corrente 
-
-        print(lista_matrix)
+        
         Metrica.plot_all_confusion_matrices(lista_matrix)
+        #chiama la funzione plot_all_confusion_matrices
 
-        if modalità: #uscito dal for questo se modalità è True è un dict di dict
+        if modalità: 
             metriche_raccolte = {}
-            
 
-            # Passo 1: Raccogliamo i valori di ogni metrica
             for _, metriche in lista_metriche:
                 for nome_metrica, valore in metriche.items():
                     if nome_metrica not in metriche_raccolte:
-                        metriche_raccolte[nome_metrica] = []  # Creiamo una lista per raccogliere i valori
+                        metriche_raccolte[nome_metrica] = []  #Creiamo una lista per raccogliere i valori della singola metrica tra i vari esperimenti
                     metriche_raccolte[nome_metrica].append(valore)
 
-            # Passo 2: Calcoliamo la media per ogni metrica
+            #Calcoliamo la media per ogni metrica
             medie_metriche = {metrica: np.mean(valori) for metrica, valori in metriche_raccolte.items()}
-            return [medie_metriche]
+            return [medie_metriche] #la lista di dizionari contenente le medie delle metriche sugli esperimenti
 
         
 
@@ -172,7 +170,7 @@ class RandomSubsamplingValidation(validation):
             metriche_per_esperimento=[]
             for _,metriche in lista_metriche:
                 metriche_per_esperimento.append(metriche)
-            return metriche_per_esperimento #fa una lista in cui ogni elemento è un sottodizionario di dizinario_metriche 
+            return metriche_per_esperimento #lista di dizionari delle metriche sui singoli esperimenti
 
                 
 
