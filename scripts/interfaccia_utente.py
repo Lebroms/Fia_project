@@ -81,7 +81,6 @@ class interfaccia_utente():
     
 
     @staticmethod
-
     def get_k_neighbours():
         '''
         Funzione che permette all'utente di scegliere il numero di k vicini da utilizzare per il 
@@ -137,7 +136,8 @@ class interfaccia_utente():
             except ValueError:
                 print("Errore: Inserisci un numero valido (es. 10). Riprova.")
         return int(num_experiments)
-    
+  
+    @staticmethod
     def get_num_folds():
         while True:  # Ciclo per chiedere il valore di num_folds finché non è valido
             n_folds = input(
@@ -189,7 +189,7 @@ class interfaccia_utente():
             else:
                 print("\nErrore: Alcuni numeri inseriti non sono validi. Riprova.")
 
-    
+    @staticmethod
     def get_mod_calculation_metrics(num):
         '''
         Funzione che permette di scegliere la modalità di calcolo:fare la media delle singole metriche 

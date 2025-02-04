@@ -4,9 +4,6 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec 
 
 
-
-
-
 class Metriche:
     def __init__(self, y_real, y_pred):
 
