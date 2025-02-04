@@ -1,4 +1,5 @@
 import numpy as np
+from pyexpat import features
 
 from ...KNN.Classificatore_Knn import Classificatore_KNN
 
@@ -41,7 +42,8 @@ class KfoldValidation(validation):
                 if n_folds >= 2:
                     break  # Esce dal ciclo se il valore è valido
                 else:
-                    print("Errore: Il valore deve essere un numero intero maggiore o uguale a 2. Riprova.")
+                    print("Errore: Non è possibile dividere il dataframe in un numero di folds che non sia intero. Riprova.")
+
             except ValueError:
                 print("Errore: Inserisci un numero intero valido (es. 10). Riprova.")
 
@@ -142,23 +144,6 @@ class KfoldValidation(validation):
             lista_metriche.append((f"Esperimento{i+1}",Metriche_Calcolate))
             
 
-            
-            
-
-            
-            
-
-            '''if modalità == False:
-                print(f"Le metriche selezionate per il test sul fold {index+1} valgono:")
-                for c, v in Metriche_Calcolate.items():
-                    print(f"  - {c}: {v:.4f}")
-
-                
-            else:
-                dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate'''
-
-
-        
 
         if modalità: #uscito dal for questo se modalità è True è un dict di dict
             metriche_raccolte = {}

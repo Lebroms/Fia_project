@@ -1,72 +1,94 @@
 import unittest
-import numpy as np
 import pandas as pd
 from scripts.Model_Evaluation.Validation.Kfold_Class import KfoldValidation
 
 
-# ✅ Mock manuale di `scegli_k()`
+"""
+Vengono innanzitutto definiti i mock, ovvero elementi di prova che verranno utilizzati
+nel test per valutare il funzionamento dei vari codici inerenti alla classe KfoldValidation. 
+"""
+
 def mock_scegli_k():
-    return 3  # Restituisce sempre 3
+    return 3  # Per il test si imposta il valore di default k=3, nel caso in cui non venga specificato
 
 
-# ✅ Mock manuale di `scegli_metriche()`
 def mock_scegli_metriche():
-    return ["accuracy"]  # Restituisce sempre "accuracy"
+    return ["Tutte le metriche"]  # Codice della metrica che si intende valutare
 
 
-# ✅ Mock manuale di `scegli_modalita_calcolo_metriche()`
 def mock_scegli_modalita_calcolo_metriche():
-    return False  # Restituisce sempre False
+    return False  # Si sceglie se si vuole visualizzare la media delle metriche di tutti i folds oppure i singoli valori
 
 
-# ✅ Mock manuale della classe `Classificatore_KNN`
 class MockClassificatoreKNN:
     def __init__(self, X_train, Y_train, k):
         self.k = k
 
     def predizione(self, X_test):
-        return [0] * len(X_test)  # Simula predizioni tutte 0
+        return [0] * len(X_test)
+    """
+    Nel test impostiamo tutti i valori delle predizioni a 0 perchè si vuole solamente
+    valutare la logica del codice. Impostare risultati variabili renderebbe il test inutilmente più complicato.
+    """
 
 
 class TestKfoldValidation(unittest.TestCase):
 
     def setUp(self):
-        """
-        Prepara un dataset di test con 100 righe e 5 colonne di features, più una colonna target.
-        """
-        np.random.seed(42)  # Per garantire risultati riproducibili
-        self.features = pd.DataFrame(np.random.rand(100, 5), columns=[f"feat_{i}" for i in range(5)])
-        self.target = pd.DataFrame(np.random.randint(0, 2, size=(100, 1)), columns=["target"])
+
+        Features = {
+            "features_1": [1, 3, 6, 9, 5, 6, 5, 7, 6, 4],
+            "features_2": [6, 4, 5, 3, 2, 1, 9, 5, 4, 1],
+            "features_3": [1, 2, 3, 4, 5, 6, 7, 8, 9, 2],
+            "features_4": [2, 9, 4, 1, 7, 8, 3, 1, 6, 9],
+            "features_5": [2, 8, 2, 5, 2, 0, 2, 2, 6, 1],
+            "features_6": [1, 3, 6, 9, 5, 6, 5, 7, 6, 4],
+            "features_7": [6, 4, 5, 3, 2, 1, 9, 5, 4, 1],
+            "features_8": [1, 3, 6, 9, 5, 6, 5, 7, 6, 4],
+            "features_9": [6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+        }
+
+        self.dfFeatures = pd.DataFrame(Features)
+
+        Target = {
+
+            "target": [0, 1, 0, 1, 0, 1, 1, 0, 1, 0]
+        }
+
+        self.dfTarget = pd.DataFrame(Target)
+
+    """
+    Viene definito un dataset di prova composto da 9 colonne features (features_1, features_2, ecc.) e 
+    una target, con valori casuali.   
+    """
 
     def test_validation(self):
-        """
-        Testa il metodo `validation()` della classe `KfoldValidation`
-        """
-        # ✅ Istanzia la classe `KfoldValidation`
-        kfold = KfoldValidation()
-        kfold.n_folds = 5  # Imposta manualmente il numero di folds
 
-        # ✅ Sostituisci i metodi con i mock manuali
+        kfold = KfoldValidation()
+
         kfold.scegli_k = mock_scegli_k
         kfold.scegli_metriche = mock_scegli_metriche
         kfold.scegli_modalita_calcolo_metriche = mock_scegli_modalita_calcolo_metriche
-        kfold.Classificatore_KNN = MockClassificatoreKNN  # Usa il mock della classe KNN
+        kfold.Classificatore_KNN = MockClassificatoreKNN
 
-        # ✅ Esegui `validation()`
-        metriche = kfold.validation(self.features, self.target)
+        """
+        Viene richiamata la classe KfoldValidation, e vengono assegnati a kfold i mock definiti precedentemente.
+        """
 
-        # ✅ Controlla il formato del risultato
-        self.assertIsInstance(metriche, list)  # Deve essere una lista
-        self.assertIsInstance(metriche[0], dict)  # Ogni elemento deve essere un dizionario
-        self.assertIn("accuracy", metriche[0])  # Il dizionario deve contenere "accuracy"
+        metriche = kfold.validation(self.dfFeatures, self.dfTarget)
 
-        # ✅ Verifica la suddivisione dei dati
-        num_campioni_test = len(self.features) // kfold.n_folds
-        num_campioni_train = len(self.features) - num_campioni_test
+        self.assertIsInstance(metriche, list)
+        self.assertIsInstance(metriche[0], dict)
+        for metrica in ["Accuracy", "Error Rate", "Sensitivity", "Specificity", "Geometric Mean"]:
+            self.assertIn(metrica, metriche[0])
 
-        self.assertEqual(num_campioni_test, 20)  # Ogni test set deve avere 20 campioni
-        self.assertEqual(num_campioni_train, 80)  # Il training set deve avere 80 campioni
-
+        """
+        Il metodo assertIsInstance serve a verificare che l'oggetto che si trova come primo parametro
+        sia effettivamente del tipo specificato nel secondo parametro.
+        Mentre assertIn verifica che l'elemento specificato come primo parametro sia contenuto
+        nell'oggetto specificato nel secondo parametro.
+        """
 
 if __name__ == "__main__":
     unittest.main()
+
