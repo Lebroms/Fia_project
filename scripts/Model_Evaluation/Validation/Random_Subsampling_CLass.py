@@ -32,7 +32,7 @@ class RandomSubsamplingValidation(validation):
         Random sub Sampling con attributi "num_experiments" ovvero in numero di volte incui dividere il dataset
         in test set e train set, e "test_size" ovvero la percentuale del dataset da usare come test set. Entrambi i valori 
         inseriti dall'utente tramite riga di comando e assegnati all'istanza
-        """
+
         '''
 
         while True:  # Ciclo per chiedere il valore di num_experiments finché non è valido

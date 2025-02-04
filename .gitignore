@@ -4,5 +4,6 @@ env/
 __pycache__/
 data/
 results/
+risultati/
 .idea/
 .DS_Store
