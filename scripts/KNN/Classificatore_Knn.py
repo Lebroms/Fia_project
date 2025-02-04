@@ -3,18 +3,6 @@ import random
 import pandas as pd
 
 
-# Carichiamo il dataset pre-elaborato
-
-
-# Supponiamo che features_df e labels_df siano già passati come DataFrame
-# features_df contiene le features e labels_df contiene le labels
-
-# Convertiamo i DataFrame in numpy arrays
-# features = features_df.values  # Converte le features in un array numpy
-# labels = labels_df.values.flatten()  # Converte le labels in un array numpy (appiattito se è una colonna)
-
-# Funzione per calcolare la distanza euclidea tra due punti
-
 
 
 
@@ -29,6 +17,7 @@ class Classificatore_KNN:
 
     
     def __distanza_euclidea(self,x1, x2):
+        
         return np.sqrt(sum((x1 - x2) ** 2))
 
 
@@ -36,7 +25,9 @@ class Classificatore_KNN:
         distanze = []
 
         for idx, row in X_train_set.iterrows():
+            
             dist = self.__distanza_euclidea(row.values, X_test)
+            
             distanze.append((dist, int(Y_train_set.loc[idx].values)))
             
 
@@ -68,6 +59,8 @@ class Classificatore_KNN:
     def predizione(self, X_test):
         predizione = []
         for x_test in np.array(X_test):
+            
+            
             k_vicini = self.__trova_k_vicini(self.X_train_set, self.Y_train_set, x_test, self.k)
             label = self.__predici_label(k_vicini)
             predizione.append(label)

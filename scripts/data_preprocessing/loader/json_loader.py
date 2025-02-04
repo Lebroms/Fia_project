@@ -4,15 +4,21 @@ from .classe_loader import DataLoader
 
 
 class JsonLoader(DataLoader):
+    """
+    Sottoclasse di DataLoader per il caricamento di file Json.
+
+    Questa classe implementa il metodo `load` per leggere file Json in un DataFrame.
+    
+    """
     def load(self, file_path: str) -> pd.DataFrame:
         """
-        Carica un file Json e lo converte in un DataFrame.
+        Carica un file Json in un DataFrame.
 
         Args:
-            file_path (str): Il percorso del file Json.
+            file_path (str): Il percorso del file da caricare.
 
         Returns:
-            pd.DataFrame: I dati caricati come DataFrame.
+            pd.DataFrame: Il contenuto del file caricato in un DataFrame.
         """
 
 

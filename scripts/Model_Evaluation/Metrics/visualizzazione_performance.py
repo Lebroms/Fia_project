@@ -4,15 +4,24 @@ from scripts.interfaccia_utente import interfaccia_utente
 
 def salva_metriche_su_excel(lista_dizionari):
     """
-    Chiede all'utente il nome del file Excel e salva una lista di dizionari di metriche
-    nella cartella 'results' dentro 'Fia_project'.
-    Se l'utente preme Invio senza inserire un nome, viene usato un nome di default.
+    Salva una lista di dizionari di metriche in un file Excel.  
 
     Args:
-        lista_dizionari (list): Lista di dizionari contenenti metriche.
+        lista_dizionari (list): Lista di dizionari contenenti metriche calcolate.
+
+    Struttura del file Excel salvato:
+        - Se è presente un solo dizionario, le metriche sono salvate in due colonne: 
+          la prima per il nome della metrica e la seconda per il valore.
+        - Se ci sono più dizionari (uno per ogni esperimento), il file avrà una struttura con:
+          - Le metriche disposte sulle righe.
+          - Ogni esperimento in una colonna separata.
 
     Returns:
-        None: Il file Excel viene salvato nella cartella 'results' dentro 'Fia_project'.
+        None: Il file viene salvato e non viene restituito alcun valore.
+
+    Output:
+        - Il file Excel viene generato e salvato nel percorso specificato.
+        - Un messaggio di conferma viene stampato a schermo con il percorso del file salvato.
     """
 
     # Chiede il nome del file all'utente
