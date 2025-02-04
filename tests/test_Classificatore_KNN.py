@@ -8,7 +8,7 @@ Created on Mon Feb  3 15:51:29 2025
 import unittest
 import numpy as np
 import pandas as pd
-from scripts.KNN.Classificatore_Knn import Classificatore_KNN, trova_k_vicini, predici_label
+from scripts.KNN.Classificatore_Knn import Classificatore_KNN
 
 class TestClassificatoreKNN(unittest.TestCase):
     """
@@ -17,7 +17,7 @@ class TestClassificatoreKNN(unittest.TestCase):
    
     def setUp(self):
 
-        # feature di train
+        # features di train
         self.X_train = pd.DataFrame({
             'Feature1': [1, 5, 10],
             'Feature2': [1, 5, 10]
@@ -26,7 +26,7 @@ class TestClassificatoreKNN(unittest.TestCase):
         self.Y_train = pd.DataFrame({
             'Label': [0, 0, 1]
         })
-
+        # features di test
         self.X_test = pd.DataFrame({
             'Feature1': [3],
             'Feature2': [3]
@@ -41,8 +41,8 @@ class TestClassificatoreKNN(unittest.TestCase):
         """
         Test sulla funzione trova_k_vicini per verificare che restituisca i vicini corretti.
         """
-        k_vicini = trova_k_vicini(self.X_train, self.Y_train, np.array([3,3]), self.k)  # si usa np.array([3,3]) perchè il metodo non vuole 
-                                                                                        # un df, per poter chiamare poi distanza euclidea
+        k_vicini = self.knn._Classificatore_KNN__trova_k_vicini(self.X_train, self.Y_train, np.array([3,3]), self.k)  # si usa np.array([3,3]) perchè il metodo non vuole 
+                                                                                                                      # un df, per poter chiamare poi distanza euclidea
        
         
         self.assertEqual(len(k_vicini), 2)  # Dovrebbero essere esattamente k=2 vicini ovvero (1,1) e (5,5)
@@ -54,7 +54,7 @@ class TestClassificatoreKNN(unittest.TestCase):
         Test sulla funzione predici_label per verificare che restituisca il valore più frequente tra i vicini.
         """
         k_vicini = [0, 1, 1]  # Il valore più frequente è 1
-        label_predetta = predici_label(k_vicini)
+        label_predetta = self.knn._Classificatore_KNN__predici_label(k_vicini)
         self.assertEqual(label_predetta, 1)
 
     def test_predizione(self):

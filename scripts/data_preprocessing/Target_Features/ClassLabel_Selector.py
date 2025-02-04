@@ -1,4 +1,5 @@
 import pandas as pd
+from scripts.interfaccia_utente import interfaccia_utente
 
 
 # Disabilita il warning SettingWithCopyWarning che veniva generato dalla riga 44 (.replace) perchè non 
@@ -17,10 +18,7 @@ def classlabel_selector(df):
     return: due dataframe: features, target
     """
 
-    colonne_target = input("\n Quali colonne sono il target (separate da uno spazio): ").split()
-
-    if not colonne_target:
-        colonne_target=["classtype_v1"] #colonne target di default del version_1.csv
+    colonne_target = interfaccia_utente.get_target_columns()
 
     for i in colonne_target:
         if i not in df.columns:
