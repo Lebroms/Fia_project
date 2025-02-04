@@ -5,11 +5,13 @@ Created on Sat Feb  1 17:02:29 2025
 @author: emagi
 """
 import pandas as pd
+from scripts.interfaccia_utente import interfaccia_utente
 
 """Si è preferito creare dei metodi statici invece che di istanza per evitare di creare 
     una copia del dataset """
 
 class Df_Processor:
+    
     @staticmethod
     def elimina_colonne(df):
         """
@@ -24,14 +26,7 @@ class Df_Processor:
             pd.DataFrame: Lo stesso DataFrame senza le colonne specificate.
         
         """
-        print("\nLe colonne del dataframe caricato sono:\n")
-        for col in df.columns:
-            print(col)
-
-        columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da uno spazio): ").split()
-
-        if not columns_to_drop:
-            columns_to_drop=["Blood Pressure","Sample code number","Heart Rate"] #colonne da eliminare di default del version_1.csv
+        columns_to_drop=interfaccia_utente.get_columns_to_drop_input(df)
             
         # Trova le colonne che non esistono nel DataFrame (Differenza tra insiemi)
         missing_columns = list(set(columns_to_drop) - set(df.columns))
@@ -88,10 +83,7 @@ class Df_Processor:
             pd.DataFrame: stesso DataFrame processato.
         """
         
-        strategy=input("\n Scegliere una strategia di sostituzione dei valori mancanti tra le seguenti: \n media \u25CF mediana \u25CF moda \u279C ")
-        
-        if not strategy:
-            strategy="media" #strategia di default
+        strategy=interfaccia_utente.get_replacement_stretegy()
         
         if strategy == "media":
             df.fillna(df.mean(),inplace=True)
@@ -132,10 +124,7 @@ class Df_Processor:
             df molto grandi
         """
         
-        metodo=input("\n Scegliere un metodo per lo scaling delle feature: \n normalization \u25CF standardization \u279C")
-        
-        if not metodo:
-            metodo="normalization"
+        metodo=interfaccia_utente.get_scaling_method()
         
         for col in df.columns:
             if str(df[col].dtypes) in ['int64', 'float64']: #Controlla il tipo complessivo della colonna (se la colonna

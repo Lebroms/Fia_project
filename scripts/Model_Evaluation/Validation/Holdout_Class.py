@@ -4,11 +4,12 @@ from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-from ...KNN.scegli_k import scegli_k
+
 from ..Metrics.Classe_Metriche import Metriche
 
-from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
 
+
+from scripts.interfaccia_utente import interfaccia_utente
 
 class HoldoutValidation(validation):
     """
@@ -27,27 +28,10 @@ class HoldoutValidation(validation):
         dall'utente tramite riga di comando 
         """
 
-        while True:  # Ciclo per chiedere il valore di test_size finché non è valido
-            test_size = input(
-                "Imposta la percentuale di campioni del dataset da assegnare al test set (valore tra 0 e 1): ").strip()
+        
 
-            if not test_size:  # Se l'utente preme Invio senza inserire nulla
-                test_size = "0.2"  # Imposta il valore predefinito
-                print("Nessun valore inserito. Imposto test_size a 0.2 di default.")
-
-            test_size = test_size.replace(",", ".")  # Sostituisce la virgola con il punto
-
-            try:
-                test_size = float(test_size)  # Converte in float
-                if 0 < test_size < 1:
-                    break  # Esce dal ciclo se il valore è valido
-                else:
-                    print("Errore: Il valore deve essere compreso tra 0 e 1. Riprova.")
-            except ValueError:
-                print("Errore: Inserisci un numero valido (es. 0.2 o 0,2). Riprova.")
-
-        self.test_size = test_size
-        print(f"Impostata la percentuale al {test_size * 100}%")
+        self.test_size = interfaccia_utente.get_size_of_test()
+        print(f"Impostata la percentuale al {self.test_size * 100}%")
 
 
     def validation(self, features, target):
@@ -91,9 +75,9 @@ class HoldoutValidation(validation):
         Y_training, Y_test = target.iloc[indici_training], target.iloc[indici_test]
         #individua in target le righe aventi indici del training e aventi gli indici del test
         #e le assegna ai dataframe X_training e X_test che contengono
-
         
-        k=scegli_k() #chiama la funzione scegli_k per scegliere i k vicini
+        
+        k=interfaccia_utente.get_k_neighbours() #chiama la funzione scegli_k per scegliere i k vicini
         knn = Classificatore_KNN(X_training, Y_training,k) #crea un istanza di Classificatore
         lista_predizioni = knn.predizione(X_test) 
         #chiama la funzione predizione sull'istanza di classificatore e assegna la predizione delle label del test
@@ -112,7 +96,16 @@ class HoldoutValidation(validation):
         Metrica= Metriche(lista_label, lista_predizioni)
         #crea un istanza della classe metriche passando
         #le due liste appena assegnate
-        Metriche_selezionate = scegli_metriche()#chiama la funzione scegli metriche per selezionare quali calcolare sulla predizione 
+        
+
+        Metriche_selezionate = interfaccia_utente.get_metrics_to_calculate()#chiama la funzione scegli metriche per selezionare quali calcolare sulla predizione 
+        
+        lista_matrix=[]
+        confusion_matrix=Metrica.make_confusion_matrix()
+        lista_matrix.append(confusion_matrix)
+
+        Metrica.plot_all_confusion_matrices(lista_matrix)
+
 
         Metriche_Calcolate=Metrica.calcola_metriche(Metriche_selezionate)
         #chiama la funzione calcola_metriche della classe Metriche per calcolare le metriche appena selezionate

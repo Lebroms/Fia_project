@@ -1,4 +1,6 @@
 import pandas as pd
+from scripts.interfaccia_utente import interfaccia_utente
+
 
 def salva_metriche_su_excel(lista_dizionari):
     """
@@ -14,36 +16,7 @@ def salva_metriche_su_excel(lista_dizionari):
     """
 
     # Chiede il nome del file all'utente
-    nome_file = input("Inserire il nome del file in cui salvare le performance (Invio per usare 'performance_model.xlsx'): ").strip()
-    
-    # Se l'utente preme solo Invio, usa il nome di default
-    if nome_file == "":
-        nome_file = "performance_model.xlsx"
-        print(f"Nessun file inserito. Carico i risultati nel file {nome_file}")
-
-    # Assicuriamoci che il nome del file abbia l'estensione corretta
-    if not nome_file.endswith(".xlsx"):
-        nome_file += ".xlsx"
-
-    # **Percorso fisso della cartella 'results' dentro 'Fia_project'**
-    percorso_completo = f"results/{nome_file}"  # Salva direttamente in 'results/'
-
-    try:
-        # Controlliamo se il file esiste
-        pd.read_excel(percorso_completo)
-        file_esiste = True
-    except FileNotFoundError:
-        file_esiste = False
-
-    # Se il file esiste, chiediamo all'utente cosa fare
-    if file_esiste:
-        scelta = input(f"Il file '{percorso_completo}' esiste già. Vuoi sovrascriverlo? (s/n): ").strip().lower()
-        
-        if scelta == "n":
-            nuovo_nome = input("Inserisci il nuovo nome del file (es. nuovo_file.xlsx): ").strip()
-            if not nuovo_nome.endswith(".xlsx"):
-                nuovo_nome += ".xlsx"  # Assicuriamoci che il file abbia l'estensione giusta
-            percorso_completo = f"results/{nuovo_nome}"  # Usa il nuovo nome scelto
+    percorso_completo=interfaccia_utente.get_file()
     
 
     if len(lista_dizionari) == 1:
@@ -59,5 +32,5 @@ def salva_metriche_su_excel(lista_dizionari):
     df.to_excel(percorso_completo, index=True)
 
     print(f"Le metriche sono state salvate in '{percorso_completo}'\n")
-    print(f"Il file si trova nella cartella 'results' dentro 'Fia_project'.")
+    print(f"Il file si trova nella cartella 'risultati' dentro 'Fia_project'.")
 

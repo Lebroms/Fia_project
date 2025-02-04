@@ -1,7 +1,10 @@
 import numpy as np
 
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec 
 
-from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_modalita_calcolo_metriche,scegli_metriche
+
+
 
 
 class Metriche:
@@ -15,20 +18,20 @@ class Metriche:
         y_real: Lista dei valori reali delle Label
         y_pred: Lista delle predizioni del modello
         """
-        self.y_real = y_real #Assegna alla variabile di istanza self.y_real la lista dei valori reali (y_real)
-        self.y_pred = y_pred #Assegna alla variabile di istanza self.y_pred la lista dei valori reali (y_pred)
-
+        self.y_real = np.array(y_real)  # Converti in array NumPy
+        self.y_pred = np.array(y_pred)  # Converti in array NumPy
     def accuracy(self):
         """
         Calcola l'Accuracy Rate.
         Accuracy = (TruePositive + TrueNegative) / (TP + TN + FalsePositive + FalseNegative)
         """
+
+        true_positive,true_negative,false_positive,false_negative,total=self.confusion_matrix()
+
+        accuracy_rate=(true_negative+true_positive)/total
         
-        correct = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == pred)
-        # Zip viene utilizzato per iterare simultaneamente sulle etichette reali (y_real) e sulle etichette predette (y_pred)
-        # l'if  verifica se l'etichetta predetta è uguale a quella reale. Se lo è, aggiunge 1 al conteggio.
         
-        return correct / len(self.y_pred)
+        return accuracy_rate
         #dividiamo il numero di predizioni corrette per tutti i valori predetti
 
     def error_rate(self):
@@ -36,6 +39,7 @@ class Metriche:
         Calcola l'Error Rate. Il quale è l'opposto dell'Accuracy Rate, identifica la percentuale di errore.
         Error Rate = 1 - Accuracy = (FalsePositive + FalseNegative) / (TP + TN + FalsePositive + FalseNegative)
         """
+        
         return 1 - self.accuracy()
 
     def sensitivity(self):
@@ -44,13 +48,17 @@ class Metriche:
         Questo misura quanto bene il modello identifica i casi positivi.
         Sensitivity = TruePositive / (TruePositive + FalseNegative)
         """
-        true_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 1 and pred == 1)
+        true_positive,true_negative,false_positive,false_negative,_=self.confusion_matrix()
+
+        
         #cambiare dataframe da 2 e 4 , a 0 e 1 con funzione
-        false_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 1 and pred == 0)
+        
+        sensitivity=true_positive/(true_positive+false_negative) if (true_positive + false_negative) != 0 else 0
+
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 1; se sia il valore reale che quello predetto sono uguali a 1, allora verrà aggiunto 1
         # al conteggio dei true positive, altrimenti viene aggiunto 1 al conteggio dei falsi negativi
-        return true_positive / (true_positive + false_negative) if (true_positive + false_negative) != 0 else 0
+        return sensitivity
 
     def specificity(self):
         """
@@ -58,12 +66,13 @@ class Metriche:
         Questo misura quanto bene il modello identifica i casi negativi.
         Specificity = TrueNegative / (TrueNegative + FalsePositive)
         """
-        true_negative = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 0 and pred == 0)
-        false_positive = sum(1 for real, pred in zip(self.y_real, self.y_pred) if real == 0 and pred == 1)
+        true_positive,true_negative,false_positive,false_negative,_=self.confusion_matrix()
+        specificity=true_negative/(true_negative+false_positive) if (true_negative + false_positive) != 0 else 0
+
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 0; se sia il valore reale che quello predetto sono uguali a 0, allora verrà aggiunto 1
         # al conteggio dei true negative, altrimenti viene aggiunto 1 al conteggio dei false positive
-        return true_negative / (true_negative + false_positive) if (true_negative + false_positive) != 0 else 0
+        return specificity
 
     def geometric_mean(self):
         """
@@ -165,17 +174,84 @@ class Metriche:
     
     
 
+    def confusion_matrix (self):
+        true_positive=np.sum((self.y_pred == 1) & (self.y_real == 1)) 
+        true_negative=np.sum((self.y_pred == 0) & (self.y_real == 0)) 
+        
+        false_positive=np.sum((self.y_pred == 1) & (self.y_real == 0)) 
+        false_negative=np.sum((self.y_pred == 0) & (self.y_real == 1)) 
+        total=true_positive+true_negative+false_positive+false_negative
+
+        
+        
+
+        return true_positive,true_negative,false_positive,false_negative,total
 
 
-    
-    
+    def make_confusion_matrix(self):
+        # Ottieni i valori dalla funzione confusion_matrix
+        true_positive, true_negative, false_positive, false_negative, _ = self.confusion_matrix()
+
+        # Definisci la matrice di confusione correttamente
+        confusion_matrix = np.array([[true_negative, false_positive],[false_negative, true_positive]])
+
+        return confusion_matrix
+
         
 
 
 
+    def plot_all_confusion_matrices(self, conf_matrices):
+        """
+        Plotta più matrici di confusione in un'unica immagine con dimensioni fisse e leggibili.
 
+        Args:
+            conf_matrices (list of np.array): Lista di matrici di confusione 2x2.
+        """
 
+        # Controllo se la lista è vuota
+        if not conf_matrices:
+            print("Errore: Nessuna matrice di confusione fornita.")
+            return
 
+        num_plot = len(conf_matrices)  # Numero totale di matrici
 
+        # **Limitiamo a 9 esperimenti massimo**
+        if num_plot > 9:
+            print("Errore: Sono supportati al massimo 9 esperimenti per il plot.")
+            return
 
+        cols = min(3, num_plot)  # Al massimo 3 colonne per riga
+        rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie
 
+        # **Figura di dimensione fissa per una buona leggibilità**
+        figsize = (15, 10)  # Dimensione della figura in pollici
+        fig = plt.figure(figsize=figsize)
+
+        # **Usiamo un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione**
+        gs = gridspec.GridSpec(rows, cols, figure=fig, wspace=0.4, hspace=0.4)
+
+        labels = ["Negativo", "Positivo"]
+
+        for idx, cm in enumerate(conf_matrices):
+            ax = fig.add_subplot(gs[idx])  # Assegna il subplot a una posizione nella griglia
+            ax.imshow(cm, cmap="coolwarm")
+
+            # Aggiunge i numeri nelle celle
+            for i in range(2):
+                for j in range(2):
+                    ax.text(j, i, str(cm[i, j]), ha='center', va='center', fontsize=14, color='black')
+
+            # Imposta gli assi
+            ax.set_xticks([0, 1])
+            ax.set_yticks([0, 1])
+            ax.set_xticklabels(labels)
+            ax.set_yticklabels(labels)
+            ax.set_xlabel("Predetto")
+            ax.set_ylabel("Reale")
+
+            ax.set_title(f"Esperimento {idx + 1}")
+
+        # **Ottimizza la spaziatura tra i subplot**
+        plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
+        plt.show()

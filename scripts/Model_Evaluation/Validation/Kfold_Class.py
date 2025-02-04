@@ -4,13 +4,13 @@ from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-from ...KNN.scegli_k import scegli_k
+
 
 from ..Metrics.Classe_Metriche import Metriche
 
-from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
 
 
+from scripts.interfaccia_utente import interfaccia_utente
 
 
 class KfoldValidation(validation):
@@ -28,24 +28,9 @@ class KfoldValidation(validation):
         viene diviso il dataset, inserito dall'utente tramite riga di comando.
 
         """
-        while True:  # Ciclo per chiedere il valore di num_folds finché non è valido
-            n_folds = input(
-                "Imposta il numero di fold in cui dividere il dataset (numero intero ≥ 2): ").strip()
+        
 
-            if not n_folds:  # Se l'utente preme Invio senza inserire nulla
-                n_folds = "10"  # Imposta il valore predefinito
-                print("Nessun valore inserito. Imposto numero fold a 10 di default.")
-
-            try:
-                n_folds = int(n_folds)
-                if n_folds >= 2:
-                    break  # Esce dal ciclo se il valore è valido
-                else:
-                    print("Errore: Il valore deve essere un numero intero maggiore o uguale a 2. Riprova.")
-            except ValueError:
-                print("Errore: Inserisci un numero intero valido (es. 10). Riprova.")
-
-        self.n_folds = n_folds
+        self.n_folds = interfaccia_utente.get_num_folds()
         print(f"Impostato il numero di fold a {self.n_folds}")
 
 
@@ -91,17 +76,18 @@ class KfoldValidation(validation):
         i primi folds.
         """
 
-        k = scegli_k() #chiama la funzione scegli_k per scegliere i k vicini
+        k = interfaccia_utente.get_k_neighbours() #chiama la funzione scegli_k per scegliere i k vicini
         folds = {} #crea un dizionario vuoto 
 
         num=self.n_folds #assegna l'attributo n_folds a num
         
 
-        Metriche_Selezionate =scegli_metriche()
+        Metriche_Selezionate =interfaccia_utente.get_metrics_to_calculate()
 
-        modalità=scegli_modalita_calcolo_metriche(num)
+        modalità=interfaccia_utente.get_mod_calculation_metrics(num)
 
         lista_metriche=[]#crea un dizionario vuoto
+        lista_matrix=[]
 
         current = 0
         for index, i in enumerate(fold_sizes):
@@ -135,6 +121,10 @@ class KfoldValidation(validation):
 
             Metrica= Metriche(lista_label, lista_predizioni)
 
+            
+            confusion_matrix=Metrica.make_confusion_matrix()
+            lista_matrix.append(confusion_matrix)
+            
             Metriche_Calcolate=Metrica.calcola_metriche(Metriche_Selezionate)
 
             lista_metriche.append((f"Esperimento{i+1}",Metriche_Calcolate))
@@ -156,10 +146,11 @@ class KfoldValidation(validation):
                 dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate'''
 
 
-        
+        Metrica.plot_all_confusion_matrices(lista_matrix)
 
         if modalità: #uscito dal for questo se modalità è True è un dict di dict
             metriche_raccolte = {}
+            
 
             # Passo 1: Raccogliamo i valori di ogni metrica
             for _, metriche in lista_metriche:

@@ -6,13 +6,13 @@ import random
 from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
-from ...KNN.scegli_k import scegli_k
+
 
 from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
 
-from scripts.Model_Evaluation.Metrics.scegli_mod_calcolo_metrics import scegli_metriche,scegli_modalita_calcolo_metriche
 
 
+from scripts.interfaccia_utente import interfaccia_utente
 
 
 
@@ -35,47 +35,14 @@ class RandomSubsamplingValidation(validation):
         """
         '''
 
-        while True:  # Ciclo per chiedere il valore di num_experiments finché non è valido
-            num_experiments = input("Imposta il numero di esperimenti da eseguire (numero intero positivo)")
+        
 
-            if not num_experiments:  # Se l'utente preme Invio senza inserire nulla
-                num_experiments = "10"  # Imposta il valore predefinito
-                print("Nessun valore inserito. Imposto numero esperimenti a 10 di default.")
-
-
-            try:
-                num_experiments = int(num_experiments)
-                if num_experiments > 0:
-                    break  # Esce dal ciclo se il valore è valido
-                else:
-                    print("Errore: Il valore deve essere positivo. Riprova.")
-            except ValueError:
-                print("Errore: Inserisci un numero valido (es. 10). Riprova.")
-
-        self.num_experiments = int(num_experiments)
+        self.num_experiments = interfaccia_utente.get_num_experiments()
         print(f"Impostato il numero di esperimenti a {self.num_experiments}")
 
-        while True:  # Ciclo per chiedere il valore finché non è valido
-            test_size = input(
-                "Imposta la percentuale di campioni del dataset da assegnare al test set (valore tra 0 e 1): ").strip()
-
-            if not test_size:  # Se l'utente preme Invio senza inserire nulla
-                test_size = "0.2"  # Imposta il valore predefinito
-                print("Nessun valore inserito. Imposto test_size a 0.2 di default.")
-
-            test_size = test_size.replace(",", ".")  # Sostituisce la virgola con il punto
-
-            try:
-                test_size = float(test_size)  # Converte in float
-                if 0 < test_size < 1:
-                    break  # Esce dal ciclo se il valore è valido
-                else:
-                    print("Errore: Il valore deve essere compreso tra 0 e 1. Riprova.")
-            except ValueError:
-                print("Errore: Inserisci un numero valido (es. 0.2 o 0,2). Riprova.")
-
-        self.test_size = test_size
-        print(f"Impostata la percentuale al {test_size * 100}%")
+        
+        self.test_size = interfaccia_utente.get_size_of_test()
+        print(f"Impostata la percentuale al {self.test_size * 100}%")
 
 
 
@@ -104,17 +71,18 @@ class RandomSubsamplingValidation(validation):
 
         num=self.num_experiments #assegna l'attributo num_experiments a num
         
-        k=scegli_k() #chiama la funzione scegli_k per scegliere i k vicini
+        k=interfaccia_utente.get_k_neighbours() #chiama la funzione scegli_k per scegliere i k vicini
         
         
         
 
-        Metriche_Selezionate =scegli_metriche() #chiama la funzione scegli_metriche 
+        Metriche_Selezionate =interfaccia_utente.get_metrics_to_calculate() #chiama la funzione scegli_metriche 
 
-        modalità=scegli_modalita_calcolo_metriche(num) 
+        modalità=interfaccia_utente.get_mod_calculation_metrics(num) 
         #chiama la funzione scegli_modalita_calcolo_metriche
 
         lista_metriche=[]
+        lista_matrix=[]
         
 
 
@@ -153,6 +121,9 @@ class RandomSubsamplingValidation(validation):
             Metrica= Metriche(lista_label, lista_predizioni)
             #crea un istanza della classe metriche passando
             #le due liste appena assegnate
+            
+            confusion_matrix=Metrica.make_confusion_matrix()
+            lista_matrix.append(confusion_matrix)
 
             Metriche_Calcolate=Metrica.calcola_metriche(Metriche_Selezionate)
             #chiama la funzione calcola_metriche della classe Metriche per calcolare le metriche appena selezionate
@@ -176,11 +147,12 @@ class RandomSubsamplingValidation(validation):
                 #dizionario_metriche[f"Esperimento{i+1}"]=Metriche_Calcolate
                 #aggiunge al dizionario_metriche il dizionario delle metriche dell'esperimenti corrente 
 
-
-        
+        print(lista_matrix)
+        Metrica.plot_all_confusion_matrices(lista_matrix)
 
         if modalità: #uscito dal for questo se modalità è True è un dict di dict
             metriche_raccolte = {}
+            
 
             # Passo 1: Raccogliamo i valori di ogni metrica
             for _, metriche in lista_metriche:
