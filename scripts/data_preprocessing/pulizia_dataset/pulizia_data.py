@@ -99,16 +99,13 @@ class Df_Processor:
         strategy=interfaccia_utente.get_replacement_stretegy()
         
         if strategy == "media":
-            df.fillna(df.mean(),inplace=True)
+            df.fillna(df.mean(numeric_only=True),inplace=True)
         
         elif strategy == "mediana":
-            df.fillna(df.median(),inplace=True)
+            df.fillna(df.median(numeric_only=True),inplace=True)
 
         elif strategy == "moda":
             df.fillna(df.mode().iloc[0],inplace=True)
-
-        elif strategy == "elimina":
-            df = df.dropna()
         
         else:
             raise ValueError(f"Strategia '{strategy}' non riconosciuta.")

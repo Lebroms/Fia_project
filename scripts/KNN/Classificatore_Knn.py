@@ -4,12 +4,21 @@ import pandas as pd
 
 
 
-
-
-
-
 class Classificatore_KNN:
-    def __init__(self, X_train, Y_train,k):
+    """
+    Classe che implementa il classificatore
+    """
+    def __init__(self, X_train, Y_train, k):
+        """
+        Costruttore della classe:
+            istanzia un oggetto della classe classificatore_KNN che prende in ingresso
+            i parametri e li assegna come attributi dell'oggetto istanziato
+                
+            Args:
+                - k (int): numero di vicini per la predizione 
+                - X_train (pandas dataframe): training set
+                - Y_train (pandas dataframe): labels del training
+        """
 
         self.k=k
         self.X_train_set = X_train
@@ -17,11 +26,30 @@ class Classificatore_KNN:
 
     
     def __distanza_euclidea(self,x1, x2):
-        
+
+        """
+        Calcola la distanza euclidea 
+            Args:
+                - x1 (np array)
+                - x2 (np array)
+            Return: distanza (np float64)
+            """
+
         return np.sqrt(sum((x1 - x2) ** 2))
 
 
     def __trova_k_vicini(self,X_train_set, Y_train_set, X_test, k=3):
+        """ 
+        Calcola la lista delle label corrispondenti ai primi k vicini per un record di test
+            Args:
+                - X_train (pandas dataframe): training set
+                - Y_train (pandas dataframe): labels del training
+                - X_test (np array): singola riga delle features del test set
+                - k (int): numero di k più vicini
+            Return:
+                - k_vicini (list): lista di interi
+        
+        """
         distanze = []
 
         for idx, row in X_train_set.iterrows():
@@ -40,6 +68,15 @@ class Classificatore_KNN:
 
 
     def __predici_label(self,k_vicini):
+        """
+        Conta e restituisce quale label (0 o 1) è più presente in k_vicini. In caso di pareggio 
+        sceglie la label randomicamente
+            Args: 
+                - k_vicini (list)
+            Returns:
+                - random.choice(label_candidate) (int): se non c'è pareggio restituisce direttamente
+                                                       il valore della label più presente
+        """
         count = {}
         
         for label in k_vicini:
@@ -57,6 +94,20 @@ class Classificatore_KNN:
         
 
     def predizione(self, X_test):
+        """
+        Calcola la label predetta per ogni campione di test
+
+        Parameters
+        ----------
+        X_test : pandas Dataframe
+            Campioni del test set (solo features).
+
+        Returns
+        -------
+        list
+            lista delle label predette di ogni campione del test set.
+
+        """
         predizione = []
         for x_test in np.array(X_test):
             
