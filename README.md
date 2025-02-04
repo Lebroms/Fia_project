@@ -3,11 +3,16 @@ Il progetto implementa un programma che addestra e valuta un classificatore knn 
 
 
 Per eseguire il progetto bisogna:
-	- fare un clone del repository
-	- installare i requirements nel proprio ambiente python
-	- dal terminale spostarsi nella directory clonata e digitare python main.py, in questo modo l'applicazione prenderà come file di input del dataset il file version_1.csv
-	- se si vuole eseguire con un altro file di input basta salvarlo nella sottodirectory dati/ e digitare sul terminale python main.py --input dati/<nome_file_del_dataset>
-	  l'applicazione legge i file di log con estensione csv, xlsx, txt, json e tsv
-	- digitare gli input richiesti dal terminale
+
+1) Fare un clone del repository
+
+2) Installare i requirements nel proprio ambiente python
+
+3) Dal terminale spostarsi nella directory clonata e digitare python main.py, in questo modo l'applicazione prenderà come file di input del dataset il file version_1.csv
+
+4) Se si vuole eseguire con un altro file di input basta salvarlo nella sottodirectory dati/ e digitare sul terminale python main.py --input dati/<nome_file_del_dataset>
+l'applicazione legge i file di log con estensione csv, xlsx, txt, json e tsv
+
+5) Digitare gli input richiesti dal terminale
 
 (Da aggiornare quando si implementa il dockerfile)
