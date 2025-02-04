@@ -1,37 +1,37 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Feb  1 17:02:29 2025
+Modulo per la pre-elaborazione dei dati in un DataFrame.
 
-@author: emagi
+Contiene funzioni statiche per la gestione delle colonne, la codifica di variabili categoriche,
+la gestione dei valori mancanti e il feature scaling.
+
 """
 import pandas as pd
+from scripts.interfaccia_utente import interfaccia_utente
 
-"""Si è preferito creare dei metodi statici invece che di istanza per evitare di creare 
-    una copia del dataset """
+
 
 class Df_Processor:
+    """
+    Classe per la pre-elaborazione di un DataFrame.
+
+    Tutti i metodi sono statici per evitare la creazione di copie inutili del dataset,
+    ottimizzando l'uso della memoria.
+    """
+    
     @staticmethod
     def elimina_colonne(df):
         """
-        Rimuove dal DataFrame le colonne specificate nella lista columns_to_drop.
-        
+        Rimuove le colonne specificate dall'utente dal DataFrame.
+
         Args:
-            df (pd.DataFrame): Il DataFrame di input.
-            columns_to_drop (list): Lista con i nomi delle colonne da eliminare. Il default sono
-                                   i nomi delle colonne da eliminare del file version_1.csv
-        
+            df (pd.DataFrame): Il DataFrame da cui rimuovere le colonne.
+
         Returns:
-            pd.DataFrame: Lo stesso DataFrame senza le colonne specificate.
-        
+            pd.DataFrame: Il DataFrame senza le colonne specificate.
+
         """
-        print("\nLe colonne del dataframe caricato sono:\n")
-        for col in df.columns:
-            print(col)
-
-        columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da uno spazio): ").split()
-
-        if not columns_to_drop:
-            columns_to_drop=["Blood Pressure","Sample code number","Heart Rate"] #colonne da eliminare di default del version_1.csv
+        columns_to_drop=interfaccia_utente.get_columns_to_drop_input(df)
             
         # Trova le colonne che non esistono nel DataFrame (Differenza tra insiemi)
         missing_columns = list(set(columns_to_drop) - set(df.columns))
@@ -46,14 +46,16 @@ class Df_Processor:
     @staticmethod
     def crea_dummy_variables(df):
         """
-        Converte tutte le colonne con valori stringa in variabili dummy con valori 0 o 1.
-    
+        Converte le colonne categoriche in variabili dummy (one-hot encoding).
+
+        Per ogni colonna categorica, crea nuove colonne binarie rappresentanti le categorie,
+        eliminando la colonna originale.
+
         Args:
             df (pd.DataFrame): Il DataFrame da processare.
-    
+
         Returns:
-            pd.DataFrame: Lo stesso DataFrame con variabili dummy sostitutive per le colonne di
-            tipo stringa.
+            pd.DataFrame: Il DataFrame con variabili dummy al posto delle colonne categoriche.
         """
         # Identifica le colonne con valori stringa. Pandas rinconosce di default le colonne 
         # contenti stringhe con il tipo object o category. Solo nelle nuove versioni di pandas
@@ -78,64 +80,59 @@ class Df_Processor:
     @staticmethod
     def gestisci_valori_mancanti(df):
         """
-        Gestisce i valori mancanti nel DataSet.
+        Gestisce i valori mancanti nel DataFrame in base alla strategia scelta dall'utente.
 
-        Parametri:
-            df (pd.DataFrame): DataFrame da processare.
-            strategy (str): Strategia di gestione ('media', 'mediana', 'moda', 'elimina').
+        Strategie disponibili:
+        - "media": Sostituisce i valori mancanti con la media della colonna.
+        - "mediana": Sostituisce i valori mancanti con la mediana della colonna.
+        - "moda": Sostituisce i valori mancanti con il valore più frequente della colonna.
+        - "elimina": Rimuove tutte le righe contenenti valori mancanti.
 
-        Uscita:
-            pd.DataFrame: stesso DataFrame processato.
+        Args:
+            df (pd.DataFrame): Il DataFrame da processare.
+
+        Returns:
+            pd.DataFrame: Il DataFrame con i valori mancanti gestiti.
+
         """
         
-        strategy=input("\n Scegliere una strategia di sostituzione dei valori mancanti tra le seguenti: \n media \u25CF mediana \u25CF moda \u279C ")
-        
-        if not strategy:
-            strategy="media" #strategia di default
+        strategy=interfaccia_utente.get_replacement_stretegy()
         
         if strategy == "media":
-            df.fillna(df.mean(),inplace=True)
+            df.fillna(df.mean(numeric_only=True),inplace=True)
         
         elif strategy == "mediana":
-            df.fillna(df.median(),inplace=True)
+            df.fillna(df.median(numeric_only=True),inplace=True)
 
         elif strategy == "moda":
             df.fillna(df.mode().iloc[0],inplace=True)
-
-        elif strategy == "elimina":
-            df = df.dropna()
         
         else:
             raise ValueError(f"Strategia '{strategy}' non riconosciuta.")
         
         return df
             
-        """
-        df.mean restituisce una serie che ha come indici i nomi delle colonne e come
-        valori le medie delle rispettive colonne e df.fillna capisce di dover assegnare ad
-        ogni valore Nan che incontra la media della sua colonna. Nel caso la colonna contenesse
-        valori non numerici sia df.mean che df.fillna lascia i valori Nan inalterati
-        """
+        
     
     @staticmethod
     def scala_features(df):
         """
-        Esegue il feature scaling su tutte le colonne numeriche di un DataFrame utilizzando normalizzazione o standardizzazione.
-        Il datframe deve essere già completamente numerico e non deve contenere Nan
+        Normalizza o standardizza le colonne numeriche di un DataFrame.
+
+        - "normalization" (Min-Max Scaling): Scala i valori tra 0 e 1.
+        - "standardization" (Z-Score Scaling): Centra i valori attorno alla media e li scala in base alla deviazione standard.
+
+        Il DataFrame deve essere completamente numerico e non deve contenere valori NaN.
 
         Args:
             df (pd.DataFrame): Il DataFrame da processare.
-            metodo (str): Metodo di scaling, "normalization" o "standardization".
 
         Returns:
-            None: (come sottoprogramma) Viene modificato il DataFrame originale per risparmiare memoria in caso di
-            df molto grandi
+            None: Il DataFrame viene modificato in-place per risparmiare memoria.
+
         """
         
-        metodo=input("\n Scegliere un metodo per lo scaling delle feature: \n normalization \u25CF standardization \u279C")
-        
-        if not metodo:
-            metodo="normalization"
+        metodo=interfaccia_utente.get_scaling_method()
         
         for col in df.columns:
             if str(df[col].dtypes) in ['int64', 'float64']: #Controlla il tipo complessivo della colonna (se la colonna

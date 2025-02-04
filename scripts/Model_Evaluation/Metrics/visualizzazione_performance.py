@@ -1,49 +1,31 @@
 import pandas as pd
+from scripts.interfaccia_utente import interfaccia_utente
+
 
 def salva_metriche_su_excel(lista_dizionari):
     """
-    Chiede all'utente il nome del file Excel e salva una lista di dizionari di metriche
-    nella cartella 'results' dentro 'Fia_project'.
-    Se l'utente preme Invio senza inserire un nome, viene usato un nome di default.
+    Salva una lista di dizionari di metriche in un file Excel.  
 
     Args:
-        lista_dizionari (list): Lista di dizionari contenenti metriche.
+        lista_dizionari (list): Lista di dizionari contenenti metriche calcolate.
+
+    Struttura del file Excel salvato:
+        - Se è presente un solo dizionario, le metriche sono salvate in due colonne: 
+          la prima per il nome della metrica e la seconda per il valore.
+        - Se ci sono più dizionari (uno per ogni esperimento), il file avrà una struttura con:
+          - Le metriche disposte sulle righe.
+          - Ogni esperimento in una colonna separata.
 
     Returns:
-        None: Il file Excel viene salvato nella cartella 'results' dentro 'Fia_project'.
+        None: Il file viene salvato e non viene restituito alcun valore.
+
+    Output:
+        - Il file Excel viene generato e salvato nel percorso specificato.
+        - Un messaggio di conferma viene stampato a schermo con il percorso del file salvato.
     """
 
     # Chiede il nome del file all'utente
-    nome_file = input("Inserire il nome del file in cui salvare le performance (Invio per usare 'performance_model.xlsx'): ").strip()
-    
-    # Se l'utente preme solo Invio, usa il nome di default
-    if nome_file == "":
-        nome_file = "performance_model.xlsx"
-        print(f"Nessun file inserito. Carico i risultati nel file {nome_file}")
-
-    # Assicuriamoci che il nome del file abbia l'estensione corretta
-    if not nome_file.endswith(".xlsx"):
-        nome_file += ".xlsx"
-
-    # **Percorso fisso della cartella 'results' dentro 'Fia_project'**
-    percorso_completo = f"results/{nome_file}"  # Salva direttamente in 'results/'
-
-    try:
-        # Controlliamo se il file esiste
-        pd.read_excel(percorso_completo)
-        file_esiste = True
-    except FileNotFoundError:
-        file_esiste = False
-
-    # Se il file esiste, chiediamo all'utente cosa fare
-    if file_esiste:
-        scelta = input(f"Il file '{percorso_completo}' esiste già. Vuoi sovrascriverlo? (s/n): ").strip().lower()
-        
-        if scelta == "n":
-            nuovo_nome = input("Inserisci il nuovo nome del file (es. nuovo_file.xlsx): ").strip()
-            if not nuovo_nome.endswith(".xlsx"):
-                nuovo_nome += ".xlsx"  # Assicuriamoci che il file abbia l'estensione giusta
-            percorso_completo = f"results/{nuovo_nome}"  # Usa il nuovo nome scelto
+    percorso_completo=interfaccia_utente.get_file()
     
 
     if len(lista_dizionari) == 1:
@@ -59,5 +41,5 @@ def salva_metriche_su_excel(lista_dizionari):
     df.to_excel(percorso_completo, index=True)
 
     print(f"Le metriche sono state salvate in '{percorso_completo}'\n")
-    print(f"Il file si trova nella cartella 'results' dentro 'Fia_project'.")
+    print(f"Il file si trova nella cartella 'risultati' dentro 'Fia_project'.")
 

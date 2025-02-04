@@ -1,4 +1,5 @@
 import pandas as pd
+from scripts.interfaccia_utente import interfaccia_utente
 
 
 # Disabilita il warning SettingWithCopyWarning che veniva generato dalla riga 44 (.replace) perchè non 
@@ -7,20 +8,26 @@ pd.set_option('mode.chained_assignment', None)
 
 def classlabel_selector(df):
     """
-    Questa funzione divide un dataframe in colonne features e target.
-    Il dataframe in ingresso viene sovrascritto dal nuovo dataframe features, mentre
-    viene creato un nuovo dataframe target.
+    Suddivide un DataFrame in due parti: feature set (X) e target (y).
 
-    args: DataFrame da dividere.
-          colonna_target: lista delle colonne target nel Dataframe.
+    La funzione:
+    1. Chiede all'utente di selezionare una o più colonne target.
+    2. Rimuove eventuali righe con valori NaN nelle colonne target.
+    3. Estrae le colonne target in un nuovo DataFrame.
+    4. Se il target contiene solo i valori {2,4}, li converte rispettivamente in {0,1} per una classificazione binaria.
+    5. Rimuove le colonne target dal DataFrame originale, restituendo solo le feature.
 
-    return: due dataframe: features, target
+    Args:
+        df (pd.DataFrame): Il DataFrame da suddividere.
+
+    Returns:
+        tuple: Due DataFrame:
+            - **features (pd.DataFrame)**: Il DataFrame con le colonne delle feature.
+            - **target (pd.DataFrame)**: Il DataFrame contenente le colonne target.
+
     """
 
-    colonne_target = input("\n Quali colonne sono il target (separate da uno spazio): ").split()
-
-    if not colonne_target:
-        colonne_target=["classtype_v1"] #colonne target di default del version_1.csv
+    colonne_target = interfaccia_utente.get_target_columns()
 
     for i in colonne_target:
         if i not in df.columns:
@@ -28,11 +35,7 @@ def classlabel_selector(df):
             return
 
     df.dropna(subset=colonne_target, inplace=True)
-    """
-    Questo comando viene aggiunto per agevolare l'utilizzo di funzioni che vengono implementate 
-    successivamente. Vengono rimosse tutte le righe contenenti valori NaN all'interno delle
-    colonne_target.
-    """
+    
 
 
     target = df[colonne_target]

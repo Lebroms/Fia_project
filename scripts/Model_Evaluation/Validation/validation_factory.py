@@ -4,13 +4,42 @@ from .Kfold_Class import KfoldValidation
 
 from .classe_validation import validation
 
-
+from scripts.interfaccia_utente import interfaccia_utente
 class validation_factory:
+    """
+    Factory per la creazione di strategie di validazione.
+
+    Questa classe fornisce un metodo statico per selezionare e restituire un'istanza 
+    della strategia di validazione scelta dall'utente. 
+
+    Methods:
+        getvalidationstrategy():
+            Richiede all'utente di scegliere una strategia di validazione tra quelle disponibili
+            e restituisce l'istanza corrispondente.
+
+    """
+
     @staticmethod
     def getvalidationstrategy():
         """
-        Permette all'utente di scegliere una strategia di validazione, ripetendo la richiesta in caso di errore.
+        Permette all'utente di scegliere una strategia di validazione.
+
+        Il metodo richiede all'utente di selezionare una delle strategie disponibili e restituisce
+        un'istanza della classe corrispondente. Se l'input non è valido, viene richiesto nuovamente.
+
+        Strategie disponibili:
+            1 → HoldoutValidation
+            2 → RandomSubsamplingValidation
+            3 → KfoldValidation
+
+        Returns:
+            validation: Un'istanza della classe di validazione scelta.
+
+        Note:
+            - Il metodo utilizza `interfaccia_utente.get_validation_method()` per ottenere l'input dell'utente.
+            - Se l'utente inserisce un valore non valido, viene mostrato un messaggio di errore e la richiesta viene ripetuta.
         """
+
 
         validators = {
             '1': HoldoutValidation,
@@ -18,13 +47,8 @@ class validation_factory:
             '3': KfoldValidation,
         }
 
-        while True:  # 🔄 Continua a chiedere finché l'utente non sceglie un'opzione valida
-            print("\n Scegliere quale delle seguenti strategia di validazione usare: \n")
-            print("\u25BA Premi \U00000031\U0000FE0F\U000020E3 per Holdout \n")
-            print("\u25BA Premi \U00000032\U0000FE0F\U000020E3 per Random Sub Sampling \n")
-            print("\u25BA Premi \U00000033\U0000FE0F\U000020E3 per K-fold Cross Validation \n")
-
-            strategy = input("Inserisci il numero della strategia scelta: ").strip()
+        while True:  
+            strategy=interfaccia_utente.get_validation_method()
 
             validator_class = validators.get(strategy)
 
