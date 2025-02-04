@@ -4,10 +4,26 @@ import pandas as pd
 
 class interfaccia_utente():
 
+    """
+    Classe che fornisce metodi statici per interagire con l'utente, consentendo di selezionare
+    parametri per la pulizia dei dati, la validazione e la valutazione del modello.
+    """
+
 
 
     @staticmethod    
     def get_columns_to_drop_input(df):
+
+        """
+        Mostra le colonne disponibili nel DataFrame e chiede all'utente quali eliminare.
+        Se non viene inserito alcun input, vengono rimosse le colonne di default.
+
+        Args:
+            df (pd.DataFrame): Il DataFrame da cui selezionare le colonne da eliminare.
+
+        Returns:
+            list: Lista delle colonne da eliminare.
+        """
         print("\nLe colonne del dataframe caricato sono:\n")
         for col in df.columns:
             print(col)
@@ -21,6 +37,13 @@ class interfaccia_utente():
     
     @staticmethod
     def get_replacement_stretegy():
+        """
+        Chiede all'utente di scegliere una strategia per la sostituzione dei valori mancanti.
+        Se non viene inserito alcun input, utilizza la strategia "media" di default.
+
+        Returns:
+            str: Strategia scelta ("media", "mediana" o "moda").
+        """
         strategy=input("\n Scegliere una strategia di sostituzione dei valori mancanti tra le seguenti: \n media \u25CF mediana \u25CF moda \u279C ")
         
         if not strategy:
@@ -29,6 +52,13 @@ class interfaccia_utente():
     
     @staticmethod
     def get_scaling_method():
+        """
+        Chiede all'utente di scegliere un metodo per lo scaling delle feature.
+        Se non viene inserito alcun input, utilizza "normalization" di default.
+
+        Returns:
+            str: Metodo di scaling scelto ("normalization" o "standardization").
+        """
         method=input("\n Scegliere un metodo per lo scaling delle feature: \n normalization \u25CF standardization \u279C")
         
         if not method:
@@ -37,6 +67,13 @@ class interfaccia_utente():
     
     @staticmethod
     def get_target_columns():
+        """
+        Chiede all'utente quali colonne sono il target.
+        Se non viene inserito alcun input, utilizza "classtype_v1" di default.
+
+        Returns:
+            list: Lista delle colonne target selezionate.
+        """
         colonne_target = input("\n Quali colonne sono il target (separate da uno spazio): ").split()
 
         if not colonne_target:
@@ -47,11 +84,17 @@ class interfaccia_utente():
 
     @staticmethod
     def get_validation_method():
+        """
+        Chiede all'utente quale strategia di validazione utilizzare.
+
+        Returns:
+            str: Numero della strategia scelta dall'utente.
+        """
         
         print("\n Scegliere quale delle seguenti strategia di validazione usare: \n")
-        print("\u25BA Premi \U00000031\U0000FE0F\U000020E3 per Holdout \n")
-        print("\u25BA Premi \U00000032\U0000FE0F\U000020E3 per Random Sub Sampling \n")
-        print("\u25BA Premi \U00000033\U0000FE0F\U000020E3 per K-fold Cross Validation \n")
+        print("\u25BA Premi \U00000031\U0000FE0F\U000020E3  per Holdout \n")
+        print("\u25BA Premi \U00000032\U0000FE0F\U000020E3  per Random Sub Sampling \n")
+        print("\u25BA Premi \U00000033\U0000FE0F\U000020E3  per K-fold Cross Validation \n")
 
         strategy = input("Inserisci il numero della strategia scelta: ").strip()
 
@@ -59,6 +102,13 @@ class interfaccia_utente():
     
     @staticmethod
     def get_size_of_test():
+        """
+        Chiede all'utente la percentuale di dati da destinare al test set.
+        Se non viene inserito alcun valore, imposta di default 0.2.
+
+        Returns:
+            float: Percentuale del dataset assegnata al test set.
+        """
         while True:  # Ciclo per chiedere il valore di test_size finché non è valido
             test_size = input(
                 "Imposta la percentuale di campioni del dataset da assegnare al test set (valore tra 0 e 1): ").strip()
@@ -83,14 +133,13 @@ class interfaccia_utente():
     @staticmethod
 
     def get_k_neighbours():
-        '''
-        Funzione che permette all'utente di scegliere il numero di k vicini da utilizzare per il 
-        Classificatore. Gestisce vari casi di input stampando messaggi di errore e chiedendo di reinserire 
-        k nei casi in cui il valore di k inserito non vada bene.
+        """
+        Chiede all'utente di selezionare il numero di vicini per il classificatore KNN.
+        Se non viene inserito alcun valore, imposta di default k=3.
 
-        Return:
-        k= intero che rappresenta il numero di vicini da usare per il Classificatore
-        '''
+        Returns:
+            int: Numero di vicini da usare nel KNN.
+        """
 
 
         while True:
@@ -120,6 +169,14 @@ class interfaccia_utente():
     
     @staticmethod
     def get_num_experiments():
+        """
+        Chiede all'utente il numero di esperimenti da eseguire per la validazione.
+        Se non viene inserito alcun valore, imposta il valore di default a 10.
+
+        Returns:
+            int: Numero di esperimenti da eseguire.
+        """
+        
         while True:  # Ciclo per chiedere il valore di num_experiments finché non è valido
             num_experiments = input("Imposta il numero di esperimenti da eseguire (numero intero positivo)")
 
@@ -139,6 +196,13 @@ class interfaccia_utente():
         return int(num_experiments)
     
     def get_num_folds():
+        """
+        Chiede all'utente il numero di fold per la validazione K-Fold.
+        Se non viene inserito alcun valore, imposta il valore di default a 10.
+
+        Returns:
+            int: Numero di fold da utilizzare per la validazione.
+        """
         while True:  # Ciclo per chiedere il valore di num_folds finché non è valido
             n_folds = input(
                 "Imposta il numero di fold in cui dividere il dataset (numero intero ≥ 2): ").strip()
@@ -160,10 +224,11 @@ class interfaccia_utente():
     @staticmethod
     def get_metrics_to_calculate():
         """
-        Funzione che chiede all'utente di selezionare le metriche da calcolare e restituisce la lista delle scelte.
+        Chiede all'utente di selezionare le metriche da calcolare.
+        Se non viene inserito alcun valore, seleziona tutte le metriche di default.
 
-        Return:
-        metriche_scelte= lista numerica delle metriche selezionate 
+        Returns:
+            list: Lista delle metriche selezionate dall'utente.
         """
         lista_metriche = [
         "Accuracy", "Error Rate", "Sensitivity", "Specificity",
@@ -191,18 +256,16 @@ class interfaccia_utente():
 
     
     def get_mod_calculation_metrics(num):
-        '''
-        Funzione che permette di scegliere la modalità di calcolo:fare la media delle singole metriche 
-        calcolate per il numero di esperimenti selezionato, oppure restituire le  metriche per i singoli 
-        esperimenti 
+        """
+        Chiede all'utente la modalità di calcolo delle metriche per gli esperimenti.
+        L'utente può scegliere tra il calcolo delle metriche singole o la media delle metriche.
 
-        Parametri: 
-        num= intero che rappresenta il numero di esperimenti 
+        Args:
+            num (int): Numero di esperimenti eseguiti.
 
-        Return:
-        Modalità= variabile booleana che viene impostata su True se si vuole fare la media 
-        delle varie metriche su tutti gli esperimenti 
-        '''
+        Returns:
+            bool: True se l'utente sceglie di calcolare la media delle metriche, False altrimenti.
+        """
 
         while True:
             print("Scegli la modalità di calcolo delle metriche:")
@@ -225,6 +288,13 @@ class interfaccia_utente():
 
     @staticmethod
     def get_file():
+        """
+        Chiede all'utente il nome del file Excel in cui salvare i risultati delle metriche.
+        Se non viene inserito alcun nome, usa il valore di default "performance_model.xlsx".
+
+        Returns:
+            str: Percorso completo del file in cui salvare i risultati.
+        """
         nome_file = input("Inserire il nome del file in cui salvare le performance (Invio per usare 'performance_model.xlsx'): ").strip()
     
         # Se l'utente preme solo Invio, usa il nome di default
