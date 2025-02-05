@@ -5,9 +5,6 @@ import matplotlib.gridspec as gridspec
 
 from scripts.interfaccia_utente import interfaccia_utente
 
-
-
-
 class Metriche:
     """
     Classe per il calcolo delle metriche di valutazione di un modello di classificazione binaria.

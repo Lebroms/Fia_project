@@ -131,7 +131,6 @@ class interfaccia_utente():
     
 
     @staticmethod
-
     def get_k_neighbours():
         """
         Chiede all'utente di selezionare il numero di vicini per il classificatore KNN.
@@ -192,7 +191,6 @@ class interfaccia_utente():
             except ValueError:
                 print("Errore: Inserisci un numero valido (es. 10). Riprova.")
         return int(num_experiments)
-    
     @staticmethod
     def get_num_folds():
         """
