@@ -28,9 +28,9 @@ class interfaccia_utente():
         for col in df.columns:
             print(col)
 
-        columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da uno spazio): ").split()
+        columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da un trattino): ").split("//")
 
-        if not columns_to_drop:
+        if columns_to_drop == ['']:
             columns_to_drop=["Blood Pressure","Sample code number","Heart Rate"] #colonne da eliminare di default del version_1.csv
         
         return columns_to_drop
@@ -144,11 +144,11 @@ class interfaccia_utente():
 
         while True:
             k = input(
-                "Inserire il valore dei k vicini da voler usare per costruire il Classificatore KNN (default: 3): ").strip()
+                "Inserire il valore dei k vicini da voler usare per costruire il Classificatore KNN (default: 10): ").strip()
 
             if k == "":  # Se l'utente non inserisce nulla
-                k = 3  # Imposta il valore di default
-                print("Nessun valore inserito. Impostato k = 3 di default.")
+                k = 10  # Imposta il valore di default
+                print("Nessun valore inserito. Impostato k = 10 di default.")
                 break
 
             try:
@@ -161,9 +161,7 @@ class interfaccia_utente():
             except ValueError:
                 print("Errore: Inserisci un numero intero valido. Riprova.")
 
-        print(f"Impostato il numero di vicini k = {k}")
-
-        print("\nCalcolando la predizione...")
+        
 
         return k
     
@@ -195,6 +193,7 @@ class interfaccia_utente():
                 print("Errore: Inserisci un numero valido (es. 10). Riprova.")
         return int(num_experiments)
     
+    @staticmethod
     def get_num_folds():
         """
         Chiede all'utente il numero di fold per la validazione K-Fold.
@@ -232,7 +231,7 @@ class interfaccia_utente():
         """
         lista_metriche = [
         "Accuracy", "Error Rate", "Sensitivity", "Specificity",
-        "Geometric Mean", "Area Under the Curve", "Tutte le metriche"]
+        "Geometric Mean", "Tutte le metriche"]
 
         n = len(lista_metriche)
         numeri_validi = {str(i) for i in range(1, n+1)}  # Numeri validi (da "1" a "7")
@@ -246,7 +245,7 @@ class interfaccia_utente():
 
             # Se l'utente non inserisce nulla, seleziona tutte le metriche
             if not metriche_scelte:
-                metriche_scelte = ["7"] 
+                metriche_scelte = ["6"] 
 
             # Controlla se tutte le metriche scelte sono valide
             if all(el in numeri_validi for el in metriche_scelte):
@@ -254,7 +253,7 @@ class interfaccia_utente():
             else:
                 print("\nErrore: Alcuni numeri inseriti non sono validi. Riprova.")
 
-    
+    @staticmethod
     def get_mod_calculation_metrics(num):
         """
         Chiede all'utente la modalità di calcolo delle metriche per gli esperimenti.
@@ -284,6 +283,22 @@ class interfaccia_utente():
                 print("Scelta non valida. Per favore, inserisci 1 o 2.")
         
         return modalita
+    
+    @staticmethod
+    def want_auc_value():
+        scelta = input(f"Si desidera visualizzare il valore di 'Area Under The Curve'.(s/n): ").strip().lower()
+        mod=False
+        if scelta=="":
+            print("Nessuna opzione inserita. Impostato di default la non visualizzazione dell'Area Under The Curve")
+            return mod
+        
+        if scelta == "s":
+            mod=True
+
+        return mod
+        
+        
+
                     
 
     @staticmethod

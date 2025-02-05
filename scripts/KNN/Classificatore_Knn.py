@@ -34,8 +34,10 @@ class Classificatore_KNN:
                 - x2 (np array)
             Return: distanza (np float64)
             """
+        
 
-        return np.sqrt(sum((x1 - x2) ** 2))
+        return np.sum((x1 - x2) ** 2)
+
 
 
     def __trova_k_vicini(self,X_train_set, Y_train_set, X_test, k=3):
@@ -67,7 +69,7 @@ class Classificatore_KNN:
         return k_vicini
 
 
-    def __predici_label(self,k_vicini):
+    def __predici_label_max(self,k_vicini):
         """
         Conta e restituisce quale label (0 o 1) è più presente in k_vicini. In caso di pareggio 
         sceglie la label randomicamente
@@ -91,9 +93,21 @@ class Classificatore_KNN:
         label_candidate = [label for label, counter in count.items() if counter == max_count]
 
         return random.choice(label_candidate)
+    
+    def __calc_perc_pos_in_k_neighbours(self,k_vicini):
+        count_of_pos=0
+        list_of_perc_pos=[]
+        
+        for label in k_vicini:
+            if label==1:
+                count_of_pos+=1
+        
+        perc_of_pos=(count_of_pos/len(k_vicini))*100
+
+        return perc_of_pos
         
 
-    def predizione(self, X_test):
+    def predizione_max(self, X_test):
         """
         Calcola la label predetta per ogni campione di test
 
@@ -109,14 +123,44 @@ class Classificatore_KNN:
 
         """
         predizione = []
+        list_of_perc_pos=[]
         for x_test in np.array(X_test):
             
             
             k_vicini = self.__trova_k_vicini(self.X_train_set, self.Y_train_set, x_test, self.k)
-            label = self.__predici_label(k_vicini)
+            perc_of_pos=self.__calc_perc_pos_in_k_neighbours(k_vicini)
+            list_of_perc_pos.append(perc_of_pos)
+            label = self.__predici_label_max(k_vicini)
             predizione.append(label)
+        
+        return [float(x) for x in predizione],list_of_perc_pos
+        
+        
+        
+    def predict_label_by_threshold(self,list_of_perc_pos):
+        dict_di_liste={}
+        
+        for threshold in list(range(0, 111, 10)):
+            
+            lista_label_con_threshold=[]
+            
+            
+            for perc in list_of_perc_pos:
+                
+                if perc>=threshold:
+                    lista_label_con_threshold.append(1)
+                    
+                    
+                else:
+                    lista_label_con_threshold.append(0)
+            
+                
+            dict_di_liste[f"threshold:{threshold}%"]=lista_label_con_threshold
+            
+            
 
-        return [float(x) for x in predizione]
+
+        return dict_di_liste
 
 
 

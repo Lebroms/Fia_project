@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec 
 
+from scripts.interfaccia_utente import interfaccia_utente
 
 
 
@@ -72,6 +73,7 @@ class Metriche:
             float: Il valore della sensitivity (da 0 a 1). Restituisce 0 se il denominatore è = 0
         """
         true_positive,true_negative,false_positive,false_negative,_=self.confusion_matrix()
+        
 
         
         #cambiare dataframe da 2 e 4 , a 0 e 1 con funzione
@@ -95,7 +97,9 @@ class Metriche:
         Returns:
             float: Il valore della specificity (da 0 a 1). Restituisce 0 se il denominatore è = 0
         """
-        true_positive,true_negative,false_positive,false_negative,_=self.confusion_matrix()
+        confusion_matrix = self.make_confusion_matrix()
+        true_negative, false_positive = confusion_matrix[0]
+        true_positive, false_negative = confusion_matrix[1]
         specificity=true_negative/(true_negative+false_positive) if (true_negative + false_positive) != 0 else 0
 
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
@@ -117,40 +121,7 @@ class Metriche:
         specificity = self.specificity()
         return np.sqrt(sensitivity * specificity)
 
-    '''def auc(self):
-        """
-        Calcola l'Area Under the Curve (AUC) come la media di Sensitivity e Specificity.
-        """
-        # Ordina le predizioni in ordine decrescente
-        sorted_indices = np.argsort(self.y_pred)[::-1]
-        y_real_sorted = self.y_real[sorted_indices]
-        y_pred_sorted = self.y_pred[sorted_indices]
 
-        # Calcola TPR e FPR per ogni soglia
-        tpr = []
-        fpr = []
-        num_positive = np.sum(y_real_sorted == 1)
-        num_negative = np.sum(y_real_sorted == 0)
-
-        # Inizializza i conteggi
-        tp = 0
-        fp = 0
-
-        for i in range(len(y_pred_sorted)):
-            if y_real_sorted[i] == 1:
-                tp += 1
-            else:
-                fp += 1
-            tpr.append(tp / num_positive if num_positive != 0 else 0)
-            fpr.append(fp / num_negative if num_negative != 0 else 0)
-
-        # Calcola l'area sotto la curva ROC usando la regola del trapezio
-        auc_value = 0
-        for i in range(1, len(fpr)):
-            auc_value += (fpr[i] - fpr[i - 1]) * (tpr[i] + tpr[i - 1]) / 2
-
-        return auc_value'''
-    
 
     def all_the_above(self):
         """
@@ -167,6 +138,12 @@ class Metriche:
             "Geometric Mean": self.geometric_mean()
             
         }
+    
+    
+    @staticmethod
+    def auc(fpr_values,tpr_values):
+        auc_value= np.trapz(tpr_values, fpr_values)
+        return auc_value
 
 
     
@@ -193,12 +170,13 @@ class Metriche:
             "3": self.sensitivity,
             "4": self.specificity,
             "5": self.geometric_mean,
-            "7": self.all_the_above
+            "6": self.all_the_above
         }
 
         metriche_calcolate = {}
-        if "7" in metriche_scelte:
+        if "6" in metriche_scelte:
             return self.all_the_above()
+        
         else:
             for key in metriche_scelte:
                 nome_chiave = lista_metriche[int(key)-1]  # Usa key come indice per ottenere la stringa
@@ -228,6 +206,8 @@ class Metriche:
         false_negative=np.sum((self.y_pred == 0) & (self.y_real == 1)) 
         total=true_positive+true_negative+false_positive+false_negative
 
+
+
         
         
 
@@ -248,6 +228,10 @@ class Metriche:
         # Ottieni i valori dalla funzione confusion_matrix
         true_positive, true_negative, false_positive, false_negative, _ = self.confusion_matrix()
 
+        
+        
+
+
         # Definisci la matrice di confusione correttamente
         confusion_matrix = np.array([[true_negative, false_positive],[false_negative, true_positive]])
 
@@ -256,8 +240,8 @@ class Metriche:
         
 
 
-
-    def plot_all_confusion_matrices(self, conf_matrices):
+    @staticmethod
+    def plot_all_confusion_matrices(conf_matrices):
         """
         Plotta più matrici di confusione in un'unica immagine, organizzandole in una griglia.
 
@@ -319,3 +303,97 @@ class Metriche:
         # **Ottimizza la spaziatura tra i subplot**
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
         plt.show()
+
+
+
+    def costruzione_punti_roc_curve(self,dict_predizioni_con_threshold):
+        lista_punti=[]
+        
+        for valore in dict_predizioni_con_threshold.values():
+            
+            self.y_pred=np.array(valore)
+            
+            
+            true_positive_rate=self.sensitivity()
+            false_positive_rate=1-self.specificity()
+            lista_punti.append((false_positive_rate,true_positive_rate))
+        return lista_punti
+    
+    
+
+
+
+    @staticmethod
+    def plot_roc_curves(liste_punti,auc):
+
+        """
+        Disegna più ROC Curve in un'unica immagine, organizzandole in una griglia.
+
+        Args:
+            liste_punti (list of list): Lista contenente più liste di punti ROC.
+        """
+
+
+        # Controllo se la lista è vuota
+        if not liste_punti:
+            print("Errore: Nessuna ROC Curve fornita.")
+            return
+
+        num_plot = len(liste_punti)  # Numero totale di curve
+
+        # **Limitiamo a 9 esperimenti massimo**
+        if num_plot > 9:
+            print("Errore: Sono supportati al massimo 9 esperimenti per il plot.")
+            return
+
+        cols = min(3, num_plot)  # Al massimo 3 colonne per riga
+        rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie
+
+        # **Figura di dimensione fissa per una buona leggibilità**
+        figsize = (15, 10)
+        fig = plt.figure(figsize=figsize)
+
+        # **Usiamo un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione**
+        gs = gridspec.GridSpec(rows, cols, figure=fig, wspace=0.4, hspace=0.4)
+        
+        
+
+        for idx, lista_punti in enumerate(liste_punti):
+            ax = fig.add_subplot(gs[idx])  # Assegna il subplot a una posizione nella griglia
+            ax.set_aspect('equal')
+            lista_punti.sort(key=lambda x: x[0])  # Ordina per FPR
+            fpr_values = [punto[0] for punto in lista_punti]
+            tpr_values = [punto[1] for punto in lista_punti]
+            
+            ax.plot(fpr_values, tpr_values, marker='o', linestyle='-', color='b', label=f'ROC Curve {idx + 1}')
+            
+            # Linea diagonale che rappresenta il caso casuale
+            ax.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Random Classifier')
+            
+            ax.set_xlabel('False Positive Rate (FPR)')
+            ax.set_ylabel('True Positive Rate (TPR)')
+            ax.set_title(f'ROC Curve {idx + 1}')
+            ax.legend()
+            ax.grid(True)
+            
+            if auc == True:
+                auc_values =Metriche.auc(fpr_values, tpr_values)
+                # Evidenzia l'area sotto la curva
+                ax.fill_between(fpr_values, tpr_values, alpha=0.3, color='blue')
+                # Testo con il valore di AUC al centro del grafico
+                ax.text(0.5, 0.5, f'AUC = {auc_values:.3f}', fontsize=12, fontweight='bold', ha='center', bbox=dict(facecolor='white', alpha=0.6))
+            
+            
+            
+
+        # **Ottimizza la spaziatura tra i subplot**
+        plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
+        plt.show()
+
+
+
+
+    
+
+
+
