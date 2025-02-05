@@ -9,8 +9,6 @@ class interfaccia_utente():
     parametri per la pulizia dei dati, la validazione e la valutazione del modello.
     """
 
-
-
     @staticmethod    
     def get_columns_to_drop_input(df):
 

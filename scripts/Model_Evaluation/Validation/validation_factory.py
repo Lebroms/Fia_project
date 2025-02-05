@@ -20,7 +20,7 @@ class validation_factory:
     """
 
     @staticmethod
-    def getvalidationstrategy():
+    def get_validation_class(strategy):
         """
         Permette all'utente di scegliere una strategia di validazione.
 
@@ -48,7 +48,6 @@ class validation_factory:
         }
 
         while True:  
-            strategy=interfaccia_utente.get_validation_method()
 
             validator_class = validators.get(strategy)
 

@@ -17,7 +17,7 @@ class MockInterfacciaUtente:
 
     @staticmethod
     def get_scaling_method():
-        return "normalization"  # Simula il comportamento della normalizzazione
+        return "normalization"  
 
 
 
