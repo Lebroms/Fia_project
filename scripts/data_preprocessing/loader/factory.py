@@ -89,7 +89,7 @@ def load_data():
 
         dataset=convert_comma_to_dot(dataset)
         print("\n \U00002705 Dataset caricato con successo. \n")
-        print(type(dataset))
+        
         return dataset
     except ValueError as e:
         print(f"Errore: {e}")

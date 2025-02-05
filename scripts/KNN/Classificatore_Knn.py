@@ -49,7 +49,7 @@ class Classificatore_KNN:
                 - X_test (np array): singola riga delle features del test set
                 - k (int): numero di k più vicini
             Return:
-                - k_vicini (list): lista di interi
+                - k_vicini (list): lista di interi con le label dei k_vicini di X_test
         
         """
         distanze = []
@@ -95,6 +95,15 @@ class Classificatore_KNN:
         return random.choice(label_candidate)
     
     def __calc_perc_pos_in_k_neighbours(self,k_vicini):
+        """
+        Conta e restituisce quale label (0 o 1) è più presente in k_vicini. In caso di pareggio 
+        sceglie la label randomicamente
+            Args: 
+                - k_vicini (list): le label dei k_vicini del campione di test
+            Returns:
+                - perc_of_pos (float): la percentuale di positivi (1) presenti tra i k_vicini scelti per il singolo campione di test
+        """
+
         count_of_pos=0
         list_of_perc_pos=[]
         
@@ -111,15 +120,16 @@ class Classificatore_KNN:
         """
         Calcola la label predetta per ogni campione di test
 
-        Parameters
-        ----------
-        X_test : pandas Dataframe
-            Campioni del test set (solo features).
+            Parameters:
+        
+                -X_test : pandas Dataframe, 
+                    Campioni del test set (solo features).
 
-        Returns
-        -------
-        list
-            lista delle label predette di ogni campione del test set.
+            Returns:
+        
+                - [float(x) for x in predizione] : lista delle label predette di ogni campione del test set.
+                - list_of_perc_pos : lista di interi
+                    lista con elementi che sono la percentuale di positivi tra i k vicini per i singoli campioni di test del testset
 
         """
         predizione = []
@@ -138,6 +148,31 @@ class Classificatore_KNN:
         
         
     def predict_label_by_threshold(self,list_of_perc_pos):
+        """
+        Genera etichette predette in base a soglie di decisione variabili.
+
+        Questo metodo prende in input una lista di percentuali associate alle predizioni 
+        e assegna etichette binarie (0 o 1) in base a soglie di decisione che variano 
+        da 0% a 100% con step di 10%.
+        - Per ogni soglia di decisione (0%, 10%, ..., 100%), assegna `1` se la percentuale è 
+          maggiore o uguale alla soglia, altrimenti assegna `0`.
+        - Crea un dizionario che associa ogni soglia alle etichette generate con essa.
+        - Il risultato può essere usato per costruire una ROC Curve o per testare diverse soglie di classificazione.
+
+
+        Args:
+            list_of_perc_pos (list of float): 
+                Lista di percentuali che rappresentano la probabilità di appartenere alla classe positiva (1) 
+                per ciascun esempio.
+
+        Returns:
+            dict: 
+                Dizionario in cui:
+                - Le chiavi sono stringhe che rappresentano le soglie di decisione (es. `"threshold:30%"`).
+                - I valori sono liste di etichette predette (0 o 1) ottenute applicando la soglia corrispondente sulla percentuale di vicini positivi.
+
+        """
+
         dict_di_liste={}
         
         for threshold in list(range(0, 111, 10)):
