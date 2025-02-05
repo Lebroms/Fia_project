@@ -49,22 +49,23 @@ class TestClassificatoreKNN(unittest.TestCase):
         self.assertIsInstance(k_vicini, list)  # La lista dei k più vicini deve restituire una lista
 
 
-    def test_predici_label(self):
+    def test_predici_label_max(self):
         """
         Test sulla funzione predici_label per verificare che restituisca il valore più frequente tra i vicini.
         """
         k_vicini = [0, 1, 1]  # Il valore più frequente è 1
-        label_predetta = self.knn._Classificatore_KNN__predici_label(k_vicini)
+        label_predetta = self.knn._Classificatore_KNN__predici_label_max(k_vicini)
         self.assertEqual(label_predetta, 1)
 
-    def test_predizione(self):
+    def test_predizione_max(self):
         """
         Test sul metodo predizione() della classe Classificatore_KNN.
         """
-        prediction = self.knn.predizione(self.X_test)
-        self.assertIsInstance(prediction, list)  # La predizione deve restituire una lista
-        self.assertEqual(len(prediction), len(self.X_test))  # Il numero di predizioni deve corrispondere al numero di dati di test
-        self.assertIn(prediction[0], [0.0, 1.0])  # La classe prevista deve essere 0 o 1
+        prediction = self.knn.predizione_max(self.X_test)
+        self.assertIsInstance(prediction, tuple)  # La predizione deve restituire una tupla di due liste, la prima contiente le label predette per magg. la seconda contiene le percentuali di pos
+        self.assertEqual(len(prediction[0]), len(self.X_test))  # Il numero di predizioni per magg deve corrispondere al numero di dati di test
+        self.assertEqual(len(prediction[1]), len(self.X_test))  # Il numero di percentuali deve corrispondere al numero di dati di test
+        self.assertIn(prediction[0][0], [0.0, 1.0])  # La classe prevista per magg deve essere 0 o 1
 
 if __name__ == '__main__':
     unittest.main()
