@@ -95,7 +95,11 @@ class Metriche:
         Returns:
             float: Il valore della specificity (da 0 a 1). Restituisce 0 se il denominatore è = 0
         """
-        true_positive,true_negative,false_positive,false_negative,_=self.confusion_matrix()
+
+
+        confusion_matrix = self.make_confusion_matrix()
+        true_negative, false_positive = confusion_matrix[0]
+        true_positive, false_negative = confusion_matrix[1]
         specificity=true_negative/(true_negative+false_positive) if (true_negative + false_positive) != 0 else 0
 
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
