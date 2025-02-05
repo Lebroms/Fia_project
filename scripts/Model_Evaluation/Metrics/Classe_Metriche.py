@@ -261,19 +261,19 @@ class Metriche:
 
         num_plot = len(conf_matrices)  # Numero totale di matrici
 
-        # **Limitiamo a 9 esperimenti massimo**
+        # Limitazione al plot solo di un massimo di 9 esperimenti
         if num_plot > 9:
             print("Errore: Sono supportati al massimo 9 esperimenti per il plot.")
             return
 
         cols = min(3, num_plot)  # Al massimo 3 colonne per riga
-        rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie
+        rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie in cui inserire i vari plot
 
-        # **Figura di dimensione fissa per una buona leggibilità**
+        
         figsize = (15, 10)  # Dimensione della figura in pollici
         fig = plt.figure(figsize=figsize)
 
-        # **Usiamo un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione**
+        # un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione
         gs = gridspec.GridSpec(rows, cols, figure=fig, wspace=0.4, hspace=0.4)
 
         labels = ["Negativo", "Positivo"]
@@ -282,7 +282,7 @@ class Metriche:
             ax = fig.add_subplot(gs[idx])  # Assegna il subplot a una posizione nella griglia
             ax.imshow(cm, cmap="coolwarm")
 
-            # Aggiunge i numeri nelle celle
+            # Aggiunge i numeri nelle celle del singolo subplot
             for i in range(2):
                 for j in range(2):
                     ax.text(j, i, str(cm[i, j]), ha='center', va='center', fontsize=14, color='black')
@@ -297,18 +297,40 @@ class Metriche:
 
             ax.set_title(f"Esperimento {idx + 1}")
 
-        # **Ottimizza la spaziatura tra i subplot**
+        # Regolazione della spaziatura tra i subplot**
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
         plt.show()
 
 
 
     def costruzione_punti_roc_curve(self,dict_predizioni_con_threshold):
+
+        """
+        Costruisce una lista di punti ROC (Receiver Operating Characteristic) 
+        basandosi sulle predizioni ottenute con diverse soglie di decisione.
+
+        Args:
+            dict_predizioni_con_threshold (dict): 
+                Dizionario in cui le chiavi rappresentano le soglie di decisione e 
+                i valori sono liste di etichette predette (0 o 1) con quella soglia.
+
+        Returns:
+            list of tuple: 
+                Lista di punti ROC, dove ogni elemento è una tupla (FPR, TPR):
+                - False Positive Rate (FPR)
+                - True Positive Rate (TPR)
+
+        Comportamento:
+            - Per ogni lista di predizioni nel dizionario, calcola la sensibilità (TPR) 
+            e la specificità per determinare il False Positive Rate (FPR).
+            - Il valore di FPR è calcolato come `1 - Specificity`.
+            - Ogni coppia (FPR, TPR) viene aggiunta alla lista dei punti ROC.
+        """
         lista_punti=[]
         
         for valore in dict_predizioni_con_threshold.values():
             
-            self.y_pred=np.array(valore)
+            self.y_pred=np.array(valore) #modifica dell'attributo della classe con la predizione basata sulla soglia i-esima che entra nel ciclo
             
             
             true_positive_rate=self.sensitivity()
@@ -327,7 +349,7 @@ class Metriche:
         Disegna più ROC Curve in un'unica immagine, organizzandole in una griglia.
 
         Args:
-            liste_punti (list of list): Lista contenente più liste di punti ROC.
+            liste_punti (list of list): Lista contenente più liste di punti della curva roc una per ogni esperimento.
         """
 
 
@@ -338,7 +360,7 @@ class Metriche:
 
         num_plot = len(liste_punti)  # Numero totale di curve
 
-        # **Limitiamo a 9 esperimenti massimo**
+        # Limitazione al plot solo di un massimo di 9 esperimenti
         if num_plot > 9:
             print("Errore: Sono supportati al massimo 9 esperimenti per il plot.")
             return
@@ -346,11 +368,11 @@ class Metriche:
         cols = min(3, num_plot)  # Al massimo 3 colonne per riga
         rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie
 
-        # **Figura di dimensione fissa per una buona leggibilità**
+        
         figsize = (15, 10)
         fig = plt.figure(figsize=figsize)
 
-        # **Usiamo un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione**
+        # un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione
         gs = gridspec.GridSpec(rows, cols, figure=fig, wspace=0.4, hspace=0.4)
         
         
@@ -383,7 +405,7 @@ class Metriche:
             
             
 
-        # **Ottimizza la spaziatura tra i subplot**
+        # Regola la spaziatura tra i subplot
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
         plt.show()
 

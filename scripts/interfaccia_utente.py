@@ -173,7 +173,7 @@ class interfaccia_utente():
         """
         
         while True:  # Ciclo per chiedere il valore di num_experiments finché non è valido
-            num_experiments = input("Imposta il numero di esperimenti da eseguire (numero intero positivo)")
+            num_experiments = input("Imposta il numero di esperimenti da eseguire (numero intero positivo): ")
 
             if not num_experiments:  # Se l'utente preme Invio senza inserire nulla
                 num_experiments = "10"  # Imposta il valore predefinito
@@ -282,6 +282,15 @@ class interfaccia_utente():
     
     @staticmethod
     def want_auc_value():
+        """
+        Chiede all'utente se desidera visualizzare il valore dell'Area Under the Curve (AUC).
+
+        L'utente deve inserire 's' per confermare la visualizzazione dell'AUC o 'n' per non mostrarlo.
+        Se l'input è vuoto, viene impostato di default su 'False' con un messaggio informativo.
+
+        Returns:
+        bool: True se l'utente vuole visualizzare l'AUC, False altrimenti.
+        """
         scelta = input("Si desidera visualizzare il valore di 'Area Under The Curve'.(s/n): ").strip().lower()
         mod=False
         if scelta=="":
