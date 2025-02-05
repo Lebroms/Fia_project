@@ -12,7 +12,7 @@ class validation(ABC):
     forzando l'implementazione del metodo `validation` nelle classi derivate.
 
     Methods:
-        validation(features, target):
+        validation(features, target, metriche_selezionate):
             Metodo astratto che deve essere implementato nelle sottoclassi. 
             Definisce la logica di validazione su un dataset.
     
