@@ -19,7 +19,7 @@ class validation(ABC):
     """
 
     @abstractmethod
-    def validation(self, features, target):
+    def validation(self, features, target, metriche_selezionate):
         """
         Metodo astratto per eseguire la validazione del modello.
 
