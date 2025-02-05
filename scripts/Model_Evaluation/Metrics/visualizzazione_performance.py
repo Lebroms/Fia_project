@@ -2,7 +2,7 @@ import pandas as pd
 from scripts.interfaccia_utente import interfaccia_utente
 
 
-def salva_metriche_su_excel(lista_dizionari):
+def salva_metriche_su_excel(lista_dizionari,percorso_completo):
     """
     Salva una lista di dizionari di metriche in un file Excel.  
 
@@ -23,9 +23,7 @@ def salva_metriche_su_excel(lista_dizionari):
         - Il file Excel viene generato e salvato nel percorso specificato.
         - Un messaggio di conferma viene stampato a schermo con il percorso del file salvato.
     """
-
-    # Chiede il nome del file all'utente
-    percorso_completo=interfaccia_utente.get_file()
+    
     
 
     if len(lista_dizionari) == 1:
