@@ -5,8 +5,6 @@ from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-
-
 from ..Metrics.Classe_Metriche import Metriche
 
 
@@ -87,26 +85,6 @@ class KfoldValidation(validation):
 
 
 
-        k = interfaccia_utente.get_k_neighbours() #chiama la classe interfaccia_utente per far scegliere k
-        
-         
-
-        num=self.n_folds #assegna l'attributo n_folds a num
-        
-
-        Metriche_Selezionate =interfaccia_utente.get_metrics_to_calculate()
-        #chiama la classe interfaccia_utente per scegliere le metriche da calcolare 
-
-
-        modalità = interfaccia_utente.get_mod_calculation_metrics(num)
-        #chiama la classe interfaccia_utente per scegliere le modalità con cui calcolare le metriche
-
-
-
-        lista_metriche=[]#crea un dizionario vuoto in cui salvare le metriche dei vari esperimenti
-        lista_matrix=[]#crea una lista vuota in cui mettere le matrici di confusione dei vari esperimenti
-
-
 
         current = 0
         for index, i in enumerate(fold_sizes):
@@ -160,10 +138,6 @@ class KfoldValidation(validation):
             #selezionate e come valori le i valori delle metriche sul fold corrente
             #alla fine del for sarà una lista di tuple 
 
-
-
-        Metrica.plot_all_confusion_matrices(lista_matrix)
-        #chiama la funzione plot_all_confusion_matrices 
 
         if self.modalità:
 

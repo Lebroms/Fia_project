@@ -75,6 +75,7 @@ class RandomSubsamplingValidation(validation):
             - Viene generata e plottata la matrice di confusione.
             - Vengono calcolate le metriche selezionate dall'utente.
         Se l'utente sceglie di aggregare le metriche, il metodo restituisce la media delle metriche sui vari esperimenti.
+        :param metriche_selezionate:
         """
 
         lista_metriche=[]#crea un dizionario vuoto in cui salvare le metriche dei vari esperimenti
