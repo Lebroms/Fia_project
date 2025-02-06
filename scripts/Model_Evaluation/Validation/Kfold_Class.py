@@ -8,9 +8,6 @@ from .classe_validation import validation
 from ..Metrics.Classe_Metriche import Metriche
 
 
-
-
-
 class KfoldValidation(validation):
     """
     Implementazione della validazione K-Fold.

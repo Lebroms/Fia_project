@@ -1,15 +1,10 @@
 import pandas as pd
 
-
-
 class interfaccia_utente():
-
     """
     Classe che fornisce metodi statici per interagire con l'utente, consentendo di selezionare
     parametri per la pulizia dei dati, la validazione e la valutazione del modello.
     """
-
-
 
     @staticmethod    
     def get_columns_to_drop_input(df):
@@ -175,7 +170,7 @@ class interfaccia_utente():
         """
         
         while True:  # Ciclo per chiedere il valore di num_experiments finché non è valido
-            num_experiments = input("Imposta il numero di esperimenti da eseguire (numero intero positivo)")
+            num_experiments = input("Imposta il numero di esperimenti da eseguire (numero intero positivo): ")
 
             if not num_experiments:  # Se l'utente preme Invio senza inserire nulla
                 num_experiments = "10"  # Imposta il valore predefinito
@@ -191,6 +186,7 @@ class interfaccia_utente():
             except ValueError:
                 print("Errore: Inserisci un numero valido (es. 10). Riprova.")
         return int(num_experiments)
+
 
     @staticmethod
     def get_num_folds():
@@ -285,7 +281,16 @@ class interfaccia_utente():
     
     @staticmethod
     def want_auc_value():
-        scelta = input(f"Si desidera visualizzare il valore di 'Area Under The Curve'.(s/n): ").strip().lower()
+        """
+        Chiede all'utente se desidera visualizzare il valore dell'Area Under the Curve (AUC).
+
+        L'utente deve inserire 's' per confermare la visualizzazione dell'AUC o 'n' per non mostrarlo.
+        Se l'input è vuoto, viene impostato di default su 'False' con un messaggio informativo.
+
+        Returns:
+        bool: True se l'utente vuole visualizzare l'AUC, False altrimenti.
+        """
+        scelta = input("Si desidera visualizzare il valore di 'Area Under The Curve'.(s/n): ").strip().lower()
         mod=False
         if scelta=="":
             print("Nessuna opzione inserita. Impostato di default la non visualizzazione dell'Area Under The Curve")
@@ -296,9 +301,6 @@ class interfaccia_utente():
 
         return mod
         
-        
-
-                    
 
     @staticmethod
     def get_file():

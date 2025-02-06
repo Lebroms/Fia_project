@@ -6,19 +6,14 @@ Created on Tue Feb  4 19:53:35 2025
 """
 
 from scripts.data_preprocessing.pulizia_dataset.pulizia_data import Df_Processor
-import scripts.data_preprocessing.pulizia_dataset.pulizia_data  # Importiamo il modulo dove si trova interfaccia_utente
-from mock_standardization import MockInterfaccia_Standardization  # Importiamo il nostro mock
+from mock_standardization import MockInterfaccia_Standardization  
 import unittest
 import pandas as pd
 
-#  Sovrascriviamo interfaccia_utente dentro il modulo pulizia_data.py con il mock
-scripts.data_preprocessing.pulizia_dataset.pulizia_data.interfaccia_utente = MockInterfaccia_Standardization
-
-
-
-class TestDfProcessor(unittest.TestCase): 
-    """Classe per testare la classe Df_Processor con un mock di interfaccia_utente"""
-    
+class TestDf_Standardization(unittest.TestCase): 
+    """Classe per testare il metodo scala_features della classe Df_Processor
+        quando l'utente sceglie il metodo standardization"""
+        
     def setUp(self):
 
         self.df = pd.DataFrame({
@@ -31,13 +26,17 @@ class TestDfProcessor(unittest.TestCase):
             'Heart Rate': [65, 66, 95, 97, 63],
         })
         
-    def test_scalare_features_standardization(self):
-         Df_Processor.scala_features(self.df)
-         for col in self.df:
-             self.assertAlmostEqual(self.df[col].mean(), 0, delta=0.1)
-             self.assertAlmostEqual(self.df[col].std(), 1, delta=0.1)
-             self.assertTrue(self.df[col].max() <= 3.5 and self.df[col].min() >= -3)
-             
+    def test_scala_features_standardization(self):
+        """
+        Verifica che il metodo applichi la standardizzazione per ogni colonna del df
+        """
+        metodo=MockInterfaccia_Standardization.get_scaling_method()
+        Df_Processor.scala_features(self.df, metodo)
+        for col in self.df:
+             self.assertAlmostEqual(self.df[col].mean(), 0, delta=0.1) # verifica che i valori di ogni colonna hanno media nulla
+             self.assertAlmostEqual(self.df[col].std(), 1, delta=0.1)  # verifica che i valori di ogni colonna hanno std=1
+             self.assertTrue(self.df[col].max() <= 3.5 and self.df[col].min() >= -3)  
+             # verifica che i valori di ogni colonna sono compresi tra -3 e 3 ma con un possibile delta=0.5 dovuto agli outlier
              
 if __name__ == '__main__':
     unittest.main()             

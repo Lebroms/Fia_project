@@ -54,9 +54,6 @@ class Factory:
             # Solleva un'eccezione se l'estensione non è supportata
             raise ValueError(f"Formato file non supportato: {file_path}")
 
-import json
-
-
 #funzione per il caricamento del file tramite l'uso di un file di configurazione in cui è salvato 
 #il file di partenza
 
@@ -89,7 +86,7 @@ def load_data():
 
         dataset=convert_comma_to_dot(dataset)
         print("\n \U00002705 Dataset caricato con successo. \n")
-        print(type(dataset))
+        
         return dataset
     except ValueError as e:
         print(f"Errore: {e}")
@@ -145,8 +142,8 @@ def parse_arguments():
 
     # Argomento obbligatorio: percorso del file di input
     parser.add_argument("-i","--input", type=str, default="dati/version_1.csv", help="Nome del file di input")
-
-
-    
+  
 
     return parser.parse_args()
+
+

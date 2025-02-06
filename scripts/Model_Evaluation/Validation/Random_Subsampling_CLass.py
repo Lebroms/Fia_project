@@ -1,19 +1,13 @@
-import pandas as pd
 
 import numpy as np
 
 import random 
+
 from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-
 from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
-
-
-
-
-
 
 
 class RandomSubsamplingValidation(validation):
@@ -40,15 +34,10 @@ class RandomSubsamplingValidation(validation):
         self.test_size = test_size
         self.k=k
         self.modalità=modalità
-        
 
 
-
-
-        
 
     def validation(self, features, target,metriche_selezionate):
-
 
         """
         Esegue la validazione Random Subsampling suddividendo il dataset e calcolando le metriche.
@@ -129,8 +118,6 @@ class RandomSubsamplingValidation(validation):
 
             lista_punti=Metrica.costruzione_punti_roc_curve(dict_predizioni_con_threshold)
             liste_di_punti.append(lista_punti)
-
-
             
             
             lista_metriche.append((f"Esperimento{i+1}",Metriche_Calcolate))
@@ -139,10 +126,6 @@ class RandomSubsamplingValidation(validation):
             #selezionate e come valori le i valori delle metriche sul fold corrente
             #alla fine del for sarà una lista di tuple
             
-            
-
-        
-        
 
         if self.modalità: 
             metriche_raccolte = {}
@@ -160,9 +143,6 @@ class RandomSubsamplingValidation(validation):
             #la lista di numpy array (2x2) rappresentanti le confusion matrix per ognuno degli esperimenti usato come test
             #una lista di liste di tuple: ogni tupla è composte da due elementi
             #coordinate x e y di un punto sul grafico della roc curve
-
-        
-
 
         else:
             metriche_per_esperimento=[]

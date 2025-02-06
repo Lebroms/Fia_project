@@ -1,3 +1,10 @@
+"""
+Created on Wed Feb  5 19:47:59 2025
+
+@author: emagi
+"""
+
+
 import unittest
 import numpy as np
 from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
@@ -89,3 +96,5 @@ class TestMetriche(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+

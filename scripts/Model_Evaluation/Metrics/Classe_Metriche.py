@@ -3,8 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec 
 
-from scripts.interfaccia_utente import interfaccia_utente
-
 class Metriche:
     """
     Classe per il calcolo delle metriche di valutazione di un modello di classificazione binaria.
@@ -25,6 +23,7 @@ class Metriche:
         """
         self.y_real = np.array(y_real)  # Converti in array NumPy
         self.y_pred = np.array(y_pred)  # Converti in array NumPy
+        
     def accuracy(self):
         """
         Calcola l'Accuracy Rate.
@@ -80,6 +79,7 @@ class Metriche:
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 1; se sia il valore reale che quello predetto sono uguali a 1, allora verrà aggiunto 1
         # al conteggio dei true positive, altrimenti viene aggiunto 1 al conteggio dei falsi negativi
+        
         return sensitivity
 
     def specificity(self):
@@ -103,6 +103,7 @@ class Metriche:
         # vengono iterati simultaneamente i valori reali e le predizioni del modello nel caso in cui i valori reali
         # siano uguali a 0; se sia il valore reale che quello predetto sono uguali a 0, allora verrà aggiunto 1
         # al conteggio dei true negative, altrimenti viene aggiunto 1 al conteggio dei false positive
+        
         return specificity
 
     def geometric_mean(self):
@@ -117,8 +118,8 @@ class Metriche:
         """
         sensitivity = self.sensitivity()
         specificity = self.specificity()
+        
         return np.sqrt(sensitivity * specificity)
-
 
 
     def all_the_above(self):
@@ -142,9 +143,6 @@ class Metriche:
     def auc(fpr_values,tpr_values):
         auc_value= np.trapz(tpr_values, fpr_values)
         return auc_value
-
-
-    
 
 
     def calcola_metriche(self, metriche_scelte):
@@ -204,11 +202,6 @@ class Metriche:
         false_negative=np.sum((self.y_pred == 0) & (self.y_real == 1)) 
         total=true_positive+true_negative+false_positive+false_negative
 
-
-
-        
-        
-
         return true_positive,true_negative,false_positive,false_negative,total
 
 
@@ -226,16 +219,10 @@ class Metriche:
         # Ottieni i valori dalla funzione confusion_matrix
         true_positive, true_negative, false_positive, false_negative, _ = self.confusion_matrix()
 
-        
-        
-
-
         # Definisci la matrice di confusione correttamente
         confusion_matrix = np.array([[true_negative, false_positive],[false_negative, true_positive]])
 
         return confusion_matrix
-
-        
 
 
     @staticmethod
@@ -262,19 +249,19 @@ class Metriche:
 
         num_plot = len(conf_matrices)  # Numero totale di matrici
 
-        # **Limitiamo a 9 esperimenti massimo**
+        # Limitazione al plot solo di un massimo di 9 esperimenti
         if num_plot > 9:
             print("Errore: Sono supportati al massimo 9 esperimenti per il plot.")
             return
 
         cols = min(3, num_plot)  # Al massimo 3 colonne per riga
-        rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie
+        rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie in cui inserire i vari plot
 
-        # **Figura di dimensione fissa per una buona leggibilità**
+        
         figsize = (15, 10)  # Dimensione della figura in pollici
         fig = plt.figure(figsize=figsize)
 
-        # **Usiamo un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione**
+        # un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione
         gs = gridspec.GridSpec(rows, cols, figure=fig, wspace=0.4, hspace=0.4)
 
         labels = ["Negativo", "Positivo"]
@@ -283,7 +270,7 @@ class Metriche:
             ax = fig.add_subplot(gs[idx])  # Assegna il subplot a una posizione nella griglia
             ax.imshow(cm, cmap="coolwarm")
 
-            # Aggiunge i numeri nelle celle
+            # Aggiunge i numeri nelle celle del singolo subplot
             for i in range(2):
                 for j in range(2):
                     ax.text(j, i, str(cm[i, j]), ha='center', va='center', fontsize=14, color='black')
@@ -298,28 +285,47 @@ class Metriche:
 
             ax.set_title(f"Esperimento {idx + 1}")
 
-        # **Ottimizza la spaziatura tra i subplot**
+        # Regolazione della spaziatura tra i subplot**
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
         plt.show()
 
 
-
     def costruzione_punti_roc_curve(self,dict_predizioni_con_threshold):
+
+        """
+        Costruisce una lista di punti ROC (Receiver Operating Characteristic) 
+        basandosi sulle predizioni ottenute con diverse soglie di decisione.
+
+        Args:
+            dict_predizioni_con_threshold (dict): 
+                Dizionario in cui le chiavi rappresentano le soglie di decisione e 
+                i valori sono liste di etichette predette (0 o 1) con quella soglia.
+
+        Returns:
+            list of tuple: 
+                Lista di punti ROC, dove ogni elemento è una tupla (FPR, TPR):
+                - False Positive Rate (FPR)
+                - True Positive Rate (TPR)
+
+        Comportamento:
+            - Per ogni lista di predizioni nel dizionario, calcola la sensibilità (TPR) 
+            e la specificità per determinare il False Positive Rate (FPR).
+            - Il valore di FPR è calcolato come `1 - Specificity`.
+            - Ogni coppia (FPR, TPR) viene aggiunta alla lista dei punti ROC.
+        """
         lista_punti=[]
         
         for valore in dict_predizioni_con_threshold.values():
             
-            self.y_pred=np.array(valore)
+            self.y_pred=np.array(valore) #modifica dell'attributo della classe con la predizione basata sulla soglia i-esima che entra nel ciclo
             
             
             true_positive_rate=self.sensitivity()
             false_positive_rate=1-self.specificity()
             lista_punti.append((false_positive_rate,true_positive_rate))
+            
         return lista_punti
     
-    
-
-
 
     @staticmethod
     def plot_roc_curves(liste_punti,auc):
@@ -328,7 +334,7 @@ class Metriche:
         Disegna più ROC Curve in un'unica immagine, organizzandole in una griglia.
 
         Args:
-            liste_punti (list of list): Lista contenente più liste di punti ROC.
+            liste_punti (list of list): Lista contenente più liste di punti della curva roc una per ogni esperimento.
         """
 
 
@@ -339,7 +345,7 @@ class Metriche:
 
         num_plot = len(liste_punti)  # Numero totale di curve
 
-        # **Limitiamo a 9 esperimenti massimo**
+        # Limitazione al plot solo di un massimo di 9 esperimenti
         if num_plot > 9:
             print("Errore: Sono supportati al massimo 9 esperimenti per il plot.")
             return
@@ -347,11 +353,11 @@ class Metriche:
         cols = min(3, num_plot)  # Al massimo 3 colonne per riga
         rows = (num_plot + cols - 1) // cols  # Calcola il numero di righe necessarie
 
-        # **Figura di dimensione fissa per una buona leggibilità**
+        
         figsize = (15, 10)
         fig = plt.figure(figsize=figsize)
 
-        # **Usiamo un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione**
+        # un layout `gridspec` per garantire che ogni subplot abbia la stessa dimensione
         gs = gridspec.GridSpec(rows, cols, figure=fig, wspace=0.4, hspace=0.4)
         
         
@@ -380,11 +386,8 @@ class Metriche:
                 ax.fill_between(fpr_values, tpr_values, alpha=0.3, color='blue')
                 # Testo con il valore di AUC al centro del grafico
                 ax.text(0.5, 0.5, f'AUC = {auc_values:.3f}', fontsize=12, fontweight='bold', ha='center', bbox=dict(facecolor='white', alpha=0.6))
-            
-            
-            
 
-        # **Ottimizza la spaziatura tra i subplot**
+        # Regola la spaziatura tra i subplot
         plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05)
         plt.show()
 

@@ -4,12 +4,7 @@ from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-
 from ..Metrics.Classe_Metriche import Metriche
-
-
-
-
 
 class HoldoutValidation(validation):
     """
@@ -18,7 +13,6 @@ class HoldoutValidation(validation):
     Questa classe suddivide il dataset in training set e test set e utilizza un 
     classificatore KNN per effettuare le predizioni e calcolare le metriche di valutazione.
     """
-
 
     def __init__(self,test_size,k):
 
@@ -60,8 +54,7 @@ class HoldoutValidation(validation):
             - Viene generata e plottata la matrice di confusione.
             - Vengono calcolate le metriche selezionate dall'utente.
         """
-
-        
+       
         lista_matrix=[]#lista vuota per inserire la matrice di confusione
         liste_di_punti=[]
 
@@ -85,8 +78,7 @@ class HoldoutValidation(validation):
         Y_training, Y_test = target.iloc[indici_training], target.iloc[indici_test]
         #individua in target le righe aventi indici del training e aventi gli indici del test
         #e le assegna ai dataframe X_training e X_test che contengono
-        
-        
+               
         
         knn = Classificatore_KNN(X_training, Y_training,self.k) #crea un istanza di Classificatore
         
@@ -118,8 +110,6 @@ class HoldoutValidation(validation):
         lista_punti=Metrica.costruzione_punti_roc_curve(dict_predizioni_con_threshold)
         liste_di_punti.append(lista_punti)
         
-
-
         
         return [Metriche_Calcolate],lista_matrix,liste_di_punti 
         #restituisce una lista contenente il dizionario, una lista contenente una sola matrice 

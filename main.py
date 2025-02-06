@@ -3,8 +3,6 @@ from scripts.data_preprocessing.loader.factory import load_data
 from scripts.data_preprocessing.Target_Features.ClassLabel_Selector import Class_label_selector
 from scripts.data_preprocessing.pulizia_dataset.pulizia_data import Df_Processor
 
-import pandas as pd
-
 from scripts.interfaccia_utente import interfaccia_utente
 
 from scripts.Model_Evaluation.Validation.Holdout_Class import HoldoutValidation
@@ -15,13 +13,10 @@ from scripts.Model_Evaluation.Validation.Kfold_Class import KfoldValidation
 from scripts.Model_Evaluation.Metrics.Classe_Metriche import Metriche
 from scripts.Model_Evaluation.Metrics.visualizzazione_performance import salva_metriche_su_excel
 
-
 if __name__ == "__main__":
-    
-    
 
     dataset = load_data()  # Carica i dati assegnandoli a un pandas dataframe
-   
+
     columns_to_drop=interfaccia_utente.get_columns_to_drop_input(dataset)  
     dataset = Df_Processor.elimina_colonne(dataset, columns_to_drop) # elimina le colonne che non si desiderano
     
@@ -36,15 +31,9 @@ if __name__ == "__main__":
     metodo=interfaccia_utente.get_scaling_method()    
     Df_Processor.scala_features(Features, metodo) # scala i valori nelle features
 
-    print(Features.dtypes)
     print(Features)
     print(colonne_label)
-
-
-    
-
-
-    
+ 
     validation_strategy=interfaccia_utente.get_validation_method()
 
     if validation_strategy=='1':
@@ -60,8 +49,7 @@ if __name__ == "__main__":
 
         
         lista_metriche,lista_matrici,liste_di_punti=Holdout.validation(Features,colonne_label,metriche_selezionate)
-
-
+        
 
     elif validation_strategy=='2':
         num_exp=interfaccia_utente.get_num_experiments()
@@ -82,10 +70,6 @@ if __name__ == "__main__":
 
         Random=RandomSubsamplingValidation(num_exp,test_size,k,modalità)
         lista_metriche,lista_matrici,liste_di_punti=Random.validation(Features,colonne_label,metriche_selezionate)
-
-        
-
-
 
     
     
