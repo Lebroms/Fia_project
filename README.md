@@ -5,33 +5,33 @@ Il progetto implementa un programma che addestra e valuta un classificatore knn 
 
 
 # Funzionalità principali
-L'utente:
-1) può caricare qualsiasi tipo di file purchè l'estensione sia supportata. 
-2) può effettuare la pulizia del dataset scegliendo diverse opzioni:(media,mediana,moda) per la        sostituzione di valori NaN, (normalization,standardization) per lo scaling delle feature e inoltre le colonne che si desiderano eliminare
-3) può scegliere il metodo di validazione da adottare tra quelli supportati e scegliere i parametri relativi a ognuno di essi, tra cui il numero di k vicini da usare nel classificatore
-4) può visualizzare la matrice di confusione e la ROC curve costruita basandosi su un livello di soglia che aumenta da 0 a 100%
-5) può scegliere quali metriche calcolare per valutare le performance del classificatore e nel caso ci siano più esperimenti effettuati, si possono calcolare la media per ogni metrica o le singole metriche per ogni esperimento
+L'utente può:
+1) caricare qualsiasi tipo di file purchè l'estensione sia supportata. 
+2) effettuare la pulizia del dataset scegliendo diverse opzioni:(media,mediana,moda) per la        sostituzione di valori NaN, (normalization,standardization) per lo scaling delle feature e inoltre le colonne che si desiderano eliminare.
+3) scegliere il metodo di validazione da adottare tra quelli supportati e scegliere i parametri relativi a ognuno di essi, tra cui il numero di k vicini da usare nel classificatore.
+4) visualizzare la matrice di confusione e la ROC curve costruita basandosi su un livello di soglia che aumenta da 0 a 100%.
+5) scegliere quali metriche calcolare per valutare le performance del classificatore. Nel caso ci siano più esperimenti effettuati, si possono calcolare la media per ogni metrica o le singole metriche per ogni esperimento. 
 
 
 
 # Struttura del Progetto  
-\U0001F4C2 Fia_project
+📂 Fia_project
 |
 |
-├── \U0001F4C2 dati
+├── 📂 dati
 |   ├── version_1.csv
 |   ├── version_2.xlsx
 |   ├── version_3.txt
 |   ├── version_4.json
 |   ├── version_5.tsv
 |
-├── \U0001F4C2 risultati
+├── 📂 risultati
 |   ├── perfromance_model.xlsx
 |
-├── \U0001F4C2 scripts
+├── 📂 scripts
 |
-|   ├── \U0001F4C2 data_preprocessing 
-|   |   ├── \U0001F4C2 loader
+|   ├── 📂 data_preprocessing 
+|   |   ├── 📂 loader
 |   |   |   ├── classe_loader.py
 |   |   |   ├── csv_loader.py
 |   |   |   ├── Excel_loader.py
@@ -39,26 +39,26 @@ L'utente:
 |   |   |   ├── json_loader.py
 |   |   |   ├── txt_loader.py
 |   |   |   ├── xml_loader.py
-|   |   ├── \U0001F4C2 pulizia_dataset
+|   |   ├── 📂 pulizia_dataset
 |   |   |   ├── pulizia_dataset.py
-|   |   ├── \U0001F4C2 Target_Features
+|   |   ├── 📂 Target_Features
 |   |   |   ├── ClassLabel_Selector.py
 |   |   
-|   ├── \U0001F4C2 KNN
+|   ├── 📂 KNN
 |       ├── Classificatore_Knn.py
 |
-|   ├── \U0001F4C2 Model_Evaluation
-|   |   ├── \U0001F4C2 Metrics
+|   ├── 📂 Model_Evaluation
+|   |   ├── 📂 Metrics
 |   |   |   ├── Classe_Metriche.py
 |   |   |   ├── visualizzazione_performance.py
 |   |   
-|   |   ├── \U0001F4C2 Validation
+|   |   ├── 📂 Validation
 |   |   |   ├── classe_validation.py
 |   |   |   ├── Holdout_Class.py
 |   |   |   ├── Kfold_Class.py
 |   |   |   ├── Random_Subsampling_Class.py 
 |
-├── \U0001F4C2 tests
+├── 📂 tests
 |   ├── mock_interfaccia_utente.py
 |   ├── mock_standardization.py
 |   ├── test_Classificatore_KNN.py
