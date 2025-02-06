@@ -1,6 +1,6 @@
 import pandas as pd
 
-# Disabilita il warning SettingWithCopyWarning che veniva generato dalla riga 44 (.replace) perchè non 
+# Disabilita il warning SettingWithCopyWarning che veniva generato dal metodo pd.replace (riga 45) perchè non 
 # facciamo una copia del df target
 pd.set_option('mode.chained_assignment', None)
 
@@ -20,11 +20,12 @@ class Class_label_selector:
     
         Args:
             df (pd.DataFrame): Il DataFrame da suddividere.
+            colonne_target (list): Lista delle colonne target (lista di stringhe)
     
         Returns:
              Due DataFrame:
-                - **features (pd.DataFrame)**: Il DataFrame con le colonne delle feature.
-                - **target (pd.DataFrame)**: Il DataFrame contenente le colonne target.
+                - features (pd.DataFrame): Il DataFrame con le colonne delle feature.
+                - target (pd.DataFrame): Il DataFrame contenente le colonne target.
     
         """
     

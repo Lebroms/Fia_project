@@ -15,12 +15,18 @@ class KfoldValidation(validation):
     utilizzando ogni fold come test set una volta, mentre gli altri servono da training set.
     Dopo aver effettuato le predizioni con KNN, calcola e restituisce le metriche.
     """
-    def __init__(self,num_folds,k,modalità):
+    def __init__(self, num_folds, k, modalità):
         """
         Inizializza un'istanza di KfoldValidation e imposta il numero di fold.
 
         Attributi:
-            n_folds (int): Numero di sottogruppi in cui dividere il dataset, scelto dall'utente.
+            
+            num_folds (int): Numero di sottogruppi in cui dividere il dataset, scelto dall'utente.
+            
+            k (int): numero di vicini da usare nel Classificatore.
+            
+            modalità (boolean): True se l'utente vuole visualizzare la media delle metriche selezionate,
+                                False se l'utente vuole visualizzare le metriche selezionate per ogni esperimento.
         """
         
 
@@ -37,6 +43,8 @@ class KfoldValidation(validation):
         Args:
             features (pd.DataFrame): DataFrame contenente solo le feature del dataset.
             target (pd.DataFrame): DataFrame contenente la classe target.
+            metriche_selezionate (list of str): Lista di stringhe numeriche corrispondenti alle metriche
+                                                da calcolare
 
         Returns:
             list[dict]: Una lista di dizionari contenenti le metriche calcolate per ogni fold.
@@ -58,9 +66,9 @@ class KfoldValidation(validation):
         Se l'utente sceglie di aggregare le metriche, il metodo restituisce la media delle metriche sui vari fold.
         """
 
-        lista_metriche=[]#crea un dizionario vuoto in cui salvare le metriche dei vari esperimenti
-        lista_matrix=[]#crea una lista vuota in cui mettere le matrici di confusione dei vari esperimenti
-        liste_di_punti=[]#crea una lista vuota in cui mettere le liste di punti per costruire una roc curve per ogni fold
+        lista_metriche=[] #crea un dizionario vuoto in cui salvare le metriche dei vari esperimenti
+        lista_matrix=[] #crea una lista vuota in cui mettere le matrici di confusione dei vari esperimenti
+        liste_di_punti=[] #crea una lista vuota in cui mettere le liste di punti per costruire una roc curve per ogni fold
 
         num_campioni = len(features) #calcola il numero di campioni (ovvero le righe presenti nel dataframe delle features)
 
@@ -96,7 +104,7 @@ class KfoldValidation(validation):
             current += i
             #Incrementa l'indice per la prossima iterazione. In questo modo ogni iterazione 
             #seleziona un pezzo del dataset come test e il resto come training, e quindi alla
-            #fine ogni campione verrà utilizzato solo una volta come test.
+            #fine ogni fold verrà utilizzato solo una volta come test.
             
             knn=Classificatore_KNN(feature_train_set,label_train_set,self.k)
             lista_predizioni,_ = knn.predizione_max(feature_test_set)
@@ -144,7 +152,7 @@ class KfoldValidation(validation):
 
             #Calcoliamo la media per ogni metrica
             medie_metriche = {metrica: np.mean(valori) for metrica, valori in metriche_raccolte.items()}
-            return [medie_metriche],lista_matrix,liste_di_punti 
+            return [medie_metriche], lista_matrix, liste_di_punti 
             #la lista con un dizionario contenente le medie delle metriche sui fold
             #la lista di numpy array (2x2) rappresentanti le confusion matrix per ognuno dei fold usato come test
             #una lista di liste di tuple: ogni tupla è composte da due elementi

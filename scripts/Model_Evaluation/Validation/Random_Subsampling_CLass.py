@@ -1,4 +1,5 @@
 
+
 import numpy as np
 
 import random 
@@ -25,8 +26,16 @@ class RandomSubsamplingValidation(validation):
         Inizializza un'istanza di RandomSubsamplingValidation.
 
         Attributi:
+            
             num_experiments (int): Numero di esperimenti di validazione da eseguire.
+            
             test_size (float): Percentuale del dataset da assegnare al test set.
+            
+            k (int): numero di vicini da usare nel Classificatore.
+            
+            modalità (boolean): True se l'utente vuole visualizzare la media delle metriche selezionate,
+                                False se l'utente vuole visualizzare le metriche selezionate per ogni esperimentomodalità (boolean): True se l'utente vuole visualizzare la media delle metriche selezionate,
+                                                    False se l'utente vuole visualizzare le metriche selezionate per ogni esperiment           
         """
         self.num_experiments =num_experiments
         self.test_size = test_size
@@ -34,13 +43,15 @@ class RandomSubsamplingValidation(validation):
         self.modalità=modalità
         
 
-    def validation(self, features, target,metriche_selezionate):
+    def validation(self, features, target, metriche_selezionate):
         """
         Esegue la validazione Random Subsampling suddividendo il dataset e calcolando le metriche.
 
         Args:
             features (pd.DataFrame): DataFrame contenente solo le feature del dataset.
             target (pd.DataFrame): DataFrame contenente la classe target.
+            metriche_selezionate (list of str): Lista di stringhe numeriche corrispondenti alle metriche
+                                                da calcolare
 
         Returns:
             list[dict]: Una lista contenente i dizionari con le metriche calcolate per ogni esperimento,

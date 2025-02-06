@@ -14,7 +14,7 @@ class HoldoutValidation(validation):
     classificatore KNN per effettuare le predizioni e calcolare le metriche di valutazione.
     """
 
-    def __init__(self,test_size,k):
+    def __init__(self,test_size, k):
 
         """
         Inizializza un'istanza di HoldoutValidation e imposta la percentuale del dataset da usare come test set.
@@ -30,13 +30,15 @@ class HoldoutValidation(validation):
         self.k=k
 
 
-    def validation(self, features, target,metriche_selezionate):
+    def validation(self, features, target, metriche_selezionate):
         """
         Esegue la validazione Holdout suddividendo il dataset e calcolando le metriche.
 
         Args:
             features (pd.DataFrame): DataFrame contenente solo le feature del dataset.
             target (pd.DataFrame): DataFrame contenente la classe target.
+            metriche_selezionate (list of str): Lista di stringhe numeriche corrispondenti alle metriche
+                                                da calcolare
 
         Returns:
             list[dict]: Una lista contenente un dizionario con le metriche calcolate.
@@ -55,7 +57,7 @@ class HoldoutValidation(validation):
             - Vengono calcolate le metriche selezionate dall'utente.
         """
        
-        lista_matrix=[]#lista vuota per inserire la matrice di confusione
+        lista_matrix=[] #lista vuota per inserire la matrice di confusione
         liste_di_punti=[]
 
         num_campioni = len(features) #calcola il numero di campioni (ovvero le righe presenti nel dataframe delle features)
@@ -111,7 +113,7 @@ class HoldoutValidation(validation):
         liste_di_punti.append(lista_punti)
         
         
-        return [Metriche_Calcolate],lista_matrix,liste_di_punti 
+        return [Metriche_Calcolate], lista_matrix, liste_di_punti 
         #restituisce una lista contenente il dizionario, una lista contenente una sola matrice 
         #(numpy array 2x2), una lista contenente una sola lista di tuple: ogni tupla è composta da due elementi
         #coordinate x e y di un punto sul grafico della roc curve

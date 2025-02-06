@@ -1,11 +1,14 @@
 import pandas as pd
 
-def salva_metriche_su_excel(lista_dizionari,percorso_completo):
+def salva_metriche_su_excel(lista_dizionari, percorso_completo):
     """
     Salva una lista di dizionari di metriche in un file Excel.  
 
     Args:
         lista_dizionari (list): Lista di dizionari contenenti metriche calcolate.
+        
+       percorso_completo (str): Path del file in cui verranno salvate le metriche selezionate.
+        
 
     Struttura del file Excel salvato:
         - Se è presente un solo dizionario, le metriche sono salvate in due colonne: 
@@ -20,9 +23,7 @@ def salva_metriche_su_excel(lista_dizionari,percorso_completo):
     Output:
         - Il file Excel viene generato e salvato nel percorso specificato.
         - Un messaggio di conferma viene stampato a schermo con il percorso del file salvato.
-    """
-    
-    
+    """   
 
     if len(lista_dizionari) == 1:
         df = pd.DataFrame(lista_dizionari[0].items(), columns=["", "Valore"])
