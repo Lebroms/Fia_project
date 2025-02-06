@@ -30,14 +30,14 @@ class Classificatore_KNN:
                 - x1 (np array)
                 - x2 (np array)
             Return: distanza (np float64)
-            """
+        """
         
 
         return np.sum((x1 - x2) ** 2)
 
 
 
-    def __trova_k_vicini(self,X_train_set, Y_train_set, x_test, k):
+    def __trova_k_vicini(self, X_train_set, Y_train_set, x_test, k):
         """ 
         Calcola la lista delle label corrispondenti ai primi k vicini per un record di test
             Args:
@@ -68,7 +68,7 @@ class Classificatore_KNN:
         return k_vicini
 
 
-    def __predici_label_max(self,k_vicini):
+    def __predici_label_max(self, k_vicini):
         """
         Conta e restituisce quale label (0 o 1) è più presente in k_vicini. In caso di pareggio 
         sceglie la label randomicamente
@@ -76,7 +76,7 @@ class Classificatore_KNN:
                 - k_vicini (list)
             Returns:
                 - random.choice(label_candidate) (int): se non c'è pareggio restituisce direttamente
-                                                       il valore della label più presente
+                                                        il valore della label più presente
         """
         count = {}
         
@@ -93,7 +93,7 @@ class Classificatore_KNN:
 
         return random.choice(label_candidate)
     
-    def __calc_perc_pos_in_k_neighbours(self,k_vicini):
+    def __calc_perc_pos_in_k_neighbours(self, k_vicini):
         """
         Conta e restituisce quale label (0 o 1) è più presente in k_vicini. In caso di pareggio 
         sceglie la label randomicamente
@@ -145,7 +145,7 @@ class Classificatore_KNN:
         
         
         
-    def predict_label_by_threshold(self,list_of_perc_pos):
+    def predict_label_by_threshold(self, list_of_perc_pos):
         """
         Genera etichette predette in base a soglie di decisione variabili.
 

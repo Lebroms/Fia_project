@@ -23,7 +23,7 @@ class interfaccia_utente():
         for col in df.columns:
             print(col)
 
-        columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da un trattino): ").split("//")
+        columns_to_drop = input("\n Quali vuoi eliminare dall'elenco (separate da //): ").split("//")
 
         if columns_to_drop == ['']:
             columns_to_drop=["Blood Pressure","Sample code number","Heart Rate"] #colonne da eliminare di default del version_1.csv
