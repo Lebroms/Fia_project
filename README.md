@@ -110,7 +110,7 @@ Inoltre l'applicazione può essere eseguita anche attraverso il Dockerfile da un
 3) Costruire un'immagine dell'applicazione digitando il comando `docker build -t <nome_dell'immagine> `. 
 
 4) Creare ed eseguire il container basato sull'immagine del progetto tramite due Bind Mounts (uno per l'input e uno per l'output) digitando un unico comando:
-` docker run -it -v /percorso_host/Fia_projects/dati:/usr/src/app/dati -v /percorso_host/Fia_projects/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py `
+` docker run -it -v /percorso_host/Fia_project/dati:/usr/src/app/dati -v /percorso_host/Fia_project/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py `
 
 
 
