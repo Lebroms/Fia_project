@@ -1,12 +1,92 @@
 
-Il progetto implementa un programma che addestra e valuta un classificatore knn che classifica i tumori come benigni (0) o maligni (1). Il programma prende in ingresso un file di log dove è presente il dataset e premette all'utente di valutare le performance del modello tramite tre metodi di validazione: Holdout, Random SubSampling e K-fold Cross Validation. Le performance del metodo scelto vengono salvate su un file Excel nella cartella risultati.
 
+# Descrizione del progetto
+Il progetto implementa un programma che addestra e valuta un classificatore knn che classifica i tumori come benigni (0) o maligni (1). Il programma prende in ingresso un file di log dove è presente il dataset e permette all'utente di validare il modello tramite tre metodi: Holdout, Random SubSampling e K-fold Cross Validation. Le performance del Classificatore vengono salvate su un file Excel nella cartella risultati.
+
+
+# Funzionalità principali
+L'utente:
+1) può caricare qualsiasi tipo di file purchè l'estensione sia supportata. 
+2) può effettuare la pulizia del dataset scegliendo diverse opzioni:(media,mediana,moda) per la        sostituzione di valori NaN, (normalization,standardization) per lo scaling delle feature e inoltre le colonne che si desiderano eliminare
+3) può scegliere il metodo di validazione da adottare tra quelli supportati e scegliere i parametri relativi a ognuno di essi, tra cui il numero di k vicini da usare nel classificatore
+4) può visualizzare la matrice di confusione e la ROC curve costruita basandosi su un livello di soglia che aumenta da 0 a 100%
+5) può scegliere quali metriche calcolare per valutare le performance del classificatore e nel caso ci siano più esperimenti effettuati, si possono calcolare la media per ogni metrica o le singole metriche per ogni esperimento
+
+
+
+# Struttura del Progetto  
+\U0001F4C2 Fia_project
+|
+|
+├── \U0001F4C2 dati
+|   ├── version_1.csv
+|   ├── version_2.xlsx
+|   ├── version_3.txt
+|   ├── version_4.json
+|   ├── version_5.tsv
+|
+├── \U0001F4C2 risultati
+|   ├── perfromance_model.xlsx
+|
+├── \U0001F4C2 scripts
+|
+|   ├── \U0001F4C2 data_preprocessing 
+|   |   ├── \U0001F4C2 loader
+|   |   |   ├── classe_loader.py
+|   |   |   ├── csv_loader.py
+|   |   |   ├── Excel_loader.py
+|   |   |   ├── factory_loader.py
+|   |   |   ├── json_loader.py
+|   |   |   ├── txt_loader.py
+|   |   |   ├── xml_loader.py
+|   |   ├── \U0001F4C2 pulizia_dataset
+|   |   |   ├── pulizia_dataset.py
+|   |   ├── \U0001F4C2 Target_Features
+|   |   |   ├── ClassLabel_Selector.py
+|   |   
+|   ├── \U0001F4C2 KNN
+|       ├── Classificatore_Knn.py
+|
+|   ├── \U0001F4C2 Model_Evaluation
+|   |   ├── \U0001F4C2 Metrics
+|   |   |   ├── Classe_Metriche.py
+|   |   |   ├── visualizzazione_performance.py
+|   |   
+|   |   ├── \U0001F4C2 Validation
+|   |   |   ├── classe_validation.py
+|   |   |   ├── Holdout_Class.py
+|   |   |   ├── Kfold_Class.py
+|   |   |   ├── Random_Subsampling_Class.py 
+|
+├── \U0001F4C2 tests
+|   ├── mock_interfaccia_utente.py
+|   ├── mock_standardization.py
+|   ├── test_Classificatore_KNN.py
+|   ├── test_df_proc.py
+|   ├── test_Kfold_2.py
+|   ├── test_metriche.py
+|   ├── test_standardization.py
+|
+├── .gitignore
+|
+├── Dockerfile
+|
+├── main.py
+|
+├── README.md
+|
+├── requirements.txt
+
+ 
+
+
+# Installazione e Setup
 
 Per eseguire il progetto bisogna:
 
 1) Fare un clone del repository
 
-2) Installare i requirements nel proprio ambiente python
+2) Installare le librerie contenute in requirements.txt nel proprio ambiente python
 
 3) Dal terminale spostarsi nella directory clonata e digitare "python main.py", in questo modo l'applicazione prenderà come file di input del dataset il file version_1.csv
 
@@ -15,6 +95,9 @@ L'applicazione legge i file di log con estensione csv, xlsx, txt, json e tsv
 
 5) Digitare gli input richiesti dal terminale
 
+
+
+# Guida all’uso con Docker
 
 Inoltre l'applicazione può essere eseguita anche attraverso il Dockerfile da una macchina Linux (con Docker installato):
 
@@ -25,4 +108,6 @@ Inoltre l'applicazione può essere eseguita anche attraverso il Dockerfile da un
 3) Costruire un'immagine dell'applicazione digitando il comando "docker build -t <nome_dell'immagine> ." 
 
 4) Creare ed eseguire il conteiner basato sull'immagine del progetto tramite due Bind Mounts (uno per l'input e uno per l'output) digitando: docker run -it -v /percorso_host/Fia_projects/dati:/usr/src/app/dati -v /percorso_host/Fia_projects/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py
+
+
 
