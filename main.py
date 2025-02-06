@@ -3,8 +3,6 @@ from scripts.data_preprocessing.loader.factory import load_data
 from scripts.data_preprocessing.Target_Features.ClassLabel_Selector import Class_label_selector
 from scripts.data_preprocessing.pulizia_dataset.pulizia_data import Df_Processor
 
-import pandas as pd
-
 from scripts.interfaccia_utente import interfaccia_utente
 
 from scripts.Model_Evaluation.Validation.Holdout_Class import HoldoutValidation

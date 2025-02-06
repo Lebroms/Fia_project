@@ -42,9 +42,7 @@ class TestClassificatoreKNN(unittest.TestCase):
         Test sulla funzione trova_k_vicini per verificare che restituisca i vicini corretti.
         """
         k_vicini = self.knn._Classificatore_KNN__trova_k_vicini(self.X_train, self.Y_train, np.array([3,3]), self.k)  # si usa np.array([3,3]) perchè il metodo non vuole 
-                                                                                                                      # un df, per poter chiamare poi distanza euclidea
-       
-        
+                                                                                                                      # un df, per poter chiamare poi distanza euclidea        
         self.assertEqual(len(k_vicini), 2)  # Dovrebbero essere esattamente k=2 vicini ovvero (1,1) e (5,5)
         self.assertIsInstance(k_vicini, list)  # La lista dei k più vicini deve restituire una lista
 
