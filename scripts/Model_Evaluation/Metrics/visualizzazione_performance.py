@@ -1,6 +1,4 @@
 import pandas as pd
-from scripts.interfaccia_utente import interfaccia_utente
-
 
 def salva_metriche_su_excel(lista_dizionari,percorso_completo):
     """
@@ -39,5 +37,5 @@ def salva_metriche_su_excel(lista_dizionari,percorso_completo):
     df.to_excel(percorso_completo, index=True)
 
     print(f"Le metriche sono state salvate in '{percorso_completo}'\n")
-    print(f"Il file si trova nella cartella 'risultati' dentro 'Fia_project'.")
+    print("Il file si trova nella cartella 'risultati' dentro 'Fia_project'.")
 

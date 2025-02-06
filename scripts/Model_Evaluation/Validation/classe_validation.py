@@ -1,7 +1,4 @@
 from abc import ABC, abstractmethod
-import numpy as np
-import random
-
 
 #interfaccia comune per tutte le strategie di evaluation
 class validation(ABC):

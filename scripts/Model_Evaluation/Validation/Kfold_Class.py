@@ -4,12 +4,7 @@ from ...KNN.Classificatore_Knn import Classificatore_KNN
 
 from .classe_validation import validation
 
-
-
 from ..Metrics.Classe_Metriche import Metriche
-
-
-
 
 
 class KfoldValidation(validation):

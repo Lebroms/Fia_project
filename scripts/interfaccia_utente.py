@@ -1,15 +1,10 @@
 import pandas as pd
 
-
-
 class interfaccia_utente():
-
     """
     Classe che fornisce metodi statici per interagire con l'utente, consentendo di selezionare
     parametri per la pulizia dei dati, la validazione e la valutazione del modello.
     """
-
-
 
     @staticmethod    
     def get_columns_to_drop_input(df):
@@ -191,6 +186,7 @@ class interfaccia_utente():
             except ValueError:
                 print("Errore: Inserisci un numero valido (es. 10). Riprova.")
         return int(num_experiments)
+    
     @staticmethod
     def get_num_folds():
         """
@@ -304,9 +300,6 @@ class interfaccia_utente():
 
         return mod
         
-        
-
-                    
 
     @staticmethod
     def get_file():

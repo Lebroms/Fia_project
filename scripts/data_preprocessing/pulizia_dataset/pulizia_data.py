@@ -7,9 +7,6 @@ la gestione dei valori mancanti e il feature scaling.
 
 """
 import pandas as pd
-from scripts.interfaccia_utente import interfaccia_utente
-
-
 
 class Df_Processor:
     """
@@ -17,10 +14,9 @@ class Df_Processor:
 
     Tutti i metodi sono statici per evitare la creazione di copie inutili del dataset,
     ottimizzando l'uso della memoria.
-    """
-    
+    """   
     @staticmethod
-    def elimina_colonne(df,columns_to_drop):
+    def elimina_colonne(df, columns_to_drop):
         """
         Rimuove le colonne specificate dall'utente dal DataFrame.
 
@@ -29,10 +25,7 @@ class Df_Processor:
 
         Returns:
             pd.DataFrame: Il DataFrame senza le colonne specificate.
-
-        """
-        
-            
+        """          
         # Trova le colonne che non esistono nel DataFrame (Differenza tra insiemi)
         missing_columns = list(set(columns_to_drop) - set(df.columns))
 
@@ -78,7 +71,7 @@ class Df_Processor:
         return df
     
     @staticmethod
-    def gestisci_valori_mancanti(df,strategy):
+    def gestisci_valori_mancanti(df, strategy):
         """
         Gestisce i valori mancanti nel DataFrame in base alla strategia scelta dall'utente.
 
@@ -95,9 +88,6 @@ class Df_Processor:
             pd.DataFrame: Il DataFrame con i valori mancanti gestiti.
 
         """
-        
-        
-        
         if strategy == "media":
             df.fillna(df.mean(numeric_only=True),inplace=True)
         
@@ -112,10 +102,8 @@ class Df_Processor:
         
         return df
             
-        
-    
     @staticmethod
-    def scala_features(df,metodo):
+    def scala_features(df, metodo):
         """
         Normalizza o standardizza le colonne numeriche di un DataFrame.
 
@@ -131,9 +119,6 @@ class Df_Processor:
             None: Il DataFrame viene modificato in-place per risparmiare memoria.
 
         """
-        
-        
-        
         for col in df.columns:
             if str(df[col].dtypes) in ['int64', 'float64']: #Controlla il tipo complessivo della colonna (se la colonna
                 if metodo == "normalization":         # è mista è di tipo object)

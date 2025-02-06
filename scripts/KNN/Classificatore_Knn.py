@@ -1,8 +1,5 @@
 import numpy as np
 import random
-import pandas as pd
-
-
 
 class Classificatore_KNN:
     """
@@ -105,7 +102,6 @@ class Classificatore_KNN:
         """
 
         count_of_pos=0
-        list_of_perc_pos=[]
         
         for label in k_vicini:
             if label==1:

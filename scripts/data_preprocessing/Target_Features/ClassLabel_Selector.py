@@ -1,6 +1,4 @@
 import pandas as pd
-from scripts.interfaccia_utente import interfaccia_utente
-
 
 # Disabilita il warning SettingWithCopyWarning che veniva generato dalla riga 44 (.replace) perchè non 
 # facciamo una copia del df target
