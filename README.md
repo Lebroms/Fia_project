@@ -92,7 +92,7 @@ Per eseguire il progetto bisogna:
 
 3) Dal terminale spostarsi nella directory clonata e digitare "python main.py", in questo modo l'applicazione prenderà come file di input del dataset il file version_1.csv
 
-4) Se si vuole eseguire con un altro file di input basta salvarlo nella sottodirectory dati/ e digitare sul terminale "python main.py --input dati/<nome_file_del_dataset>".
+4) Se si vuole eseguire con un altro file di input basta salvarlo nella sottodirectory dati/ e digitare sul terminale `python main.py --input dati/<nome_file_del_dataset>`.
 L'applicazione legge i file di log con estensione csv, xlsx, txt, json e tsv
 
 5) Digitare gli input richiesti dal terminale
@@ -105,11 +105,12 @@ Inoltre l'applicazione può essere eseguita anche attraverso il Dockerfile da un
 
 1) Eseguire un clone del repository
 
-2) Nella bash spostarsi all'interno della cartella clonata
+2) Attraverso la bash spostarsi all'interno della cartella clonata
 
-3) Costruire un'immagine dell'applicazione digitando il comando "docker build -t <nome_dell'immagine> ." 
+3) Costruire un'immagine dell'applicazione digitando il comando `docker build -t <nome_dell'immagine> `. 
 
-4) Creare ed eseguire il conteiner basato sull'immagine del progetto tramite due Bind Mounts (uno per l'input e uno per l'output) digitando: docker run -it -v /percorso_host/Fia_projects/dati:/usr/src/app/dati -v /percorso_host/Fia_projects/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py
+4) Creare ed eseguire il container basato sull'immagine del progetto tramite due Bind Mounts (uno per l'input e uno per l'output) digitando un unico comando:
+` docker run -it -v /percorso_host/Fia_projects/dati:/usr/src/app/dati -v /percorso_host/Fia_projects/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py `
 
 
 
