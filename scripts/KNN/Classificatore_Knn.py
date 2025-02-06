@@ -33,7 +33,7 @@ class Classificatore_KNN:
                 - x1 (np array)
                 - x2 (np array)
             Return: distanza (np float64)
-            """
+        """
         
 
         return np.sum((x1 - x2) ** 2)
@@ -77,7 +77,7 @@ class Classificatore_KNN:
                 - k_vicini (list)
             Returns:
                 - random.choice(label_candidate) (int): se non c'è pareggio restituisce direttamente
-                                                       il valore della label più presente
+                                                        il valore della label più presente
         """
         count = {}
         
