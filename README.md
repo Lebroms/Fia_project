@@ -14,9 +14,9 @@ L'utente può:
 
 
 
-# Struttura del Progetto  
+# Struttura del Progetto
+```plaintext  
 📂 Fia_project
-|
 |
 ├── 📂 dati
 |   ├── version_1.csv
