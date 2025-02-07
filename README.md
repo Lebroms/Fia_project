@@ -177,13 +177,17 @@ Nel caso di Random SubSampling e Kfold validation, in cui la validazione viene e
 
 È possibile eseguire il progetto tramite Docker:
 
-1. **Costruire l'immagine**:
+1. Eseguire un clone del repository
+
+2. Attraverso la bash spostarsi all'interno della cartella clonata
+
+3. **Costruire l'immagine**:
    ```sh
-   docker build -t knn_classifier .
+   docker build -t <nome_dell' immagine> .
    ```
-2. **Eseguire il container**:
+4. **Eseguire il container**:
    ```sh
-   docker run -it -v $(pwd)/dati:/usr/src/app/dati -v $(pwd)/risultati:/usr/src/app/risultati knn_classifier python main.py
+   docker run -it -v /percorso_host/Fia_projects/dati:/usr/src/app/dati -v /percorso_host/Fia_projects/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py
    ```
 
 ---
