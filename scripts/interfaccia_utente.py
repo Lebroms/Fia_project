@@ -186,7 +186,8 @@ class interfaccia_utente():
             except ValueError:
                 print("Errore: Inserisci un numero valido (es. 10). Riprova.")
         return int(num_experiments)
-    
+
+
     @staticmethod
     def get_num_folds():
         """

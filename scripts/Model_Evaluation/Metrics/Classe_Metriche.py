@@ -94,6 +94,7 @@ class Metriche:
         Returns:
             float: Il valore della specificity (da 0 a 1). Restituisce 0 se il denominatore è = 0
         """
+
         confusion_matrix = self.make_confusion_matrix()
         true_negative, false_positive = confusion_matrix[0]
         true_positive, false_negative = confusion_matrix[1]
@@ -140,7 +141,20 @@ class Metriche:
     
     @staticmethod
     def auc(fpr_values,tpr_values):
-        auc_value= np.trapz(tpr_values, fpr_values)
+        """
+        Calcola l'Area Under the Curve per un esperimento
+        
+        Args:
+            fpr_values (list): Lista contenente i valori di False Positive Rate per ogni threshold, ovvero i
+                               valori sull'asse x della ROC curve
+                              
+            tpr_values (list): Lista contenente i valori di True Positive Rate per ogni threshold, ovvero i
+                               valori sull'asse y della ROC curve
+                             
+        Returns:
+            auc_value (float): Il valore dell'AUC
+        """
+        auc_value= np.trapz(tpr_values, fpr_values)  # Utilizza la regola del trapezio per calcolare l'area sottesa alla ROC curve
         return auc_value
 
 
@@ -327,13 +341,17 @@ class Metriche:
     
 
     @staticmethod
-    def plot_roc_curves(liste_punti,auc):
+    def plot_roc_curves(liste_punti, auc):
 
         """
         Disegna più ROC Curve in un'unica immagine, organizzandole in una griglia.
 
         Args:
-            liste_punti (list of list): Lista contenente più liste di punti della curva roc una per ogni esperimento.
+            liste_punti (list of list): Lista contenente più liste di punti della curva roc una per 
+                                        ogni esperimento.
+            
+            auc (boolean): Parametro che indica se si vuole visualizzare l'Area Under the Curve (se False
+                           rende visibile comunque il plot della ROC curve)
         """
 
 

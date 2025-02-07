@@ -22,10 +22,10 @@ class Classificatore_KNN:
         self.Y_train_set = Y_train
 
     
-    def __distanza_euclidea(self,x1, x2):
+    def __calcola_distanza(self,x1, x2):
 
         """
-        Calcola la distanza euclidea 
+        Calcola la distanza tra il punto preso in esame (x1) e i vari punti del training set (x2)
             Args:
                 - x1 (np array)
                 - x2 (np array)
@@ -37,13 +37,13 @@ class Classificatore_KNN:
 
 
 
-    def __trova_k_vicini(self,X_train_set, Y_train_set, X_test, k=3):
+    def __trova_k_vicini(self, X_train_set, Y_train_set, x_test, k):
         """ 
         Calcola la lista delle label corrispondenti ai primi k vicini per un record di test
             Args:
                 - X_train (pandas dataframe): training set
                 - Y_train (pandas dataframe): labels del training
-                - X_test (np array): singola riga delle features del test set
+                - x_test (np array): singola riga delle features del test set
                 - k (int): numero di k più vicini
             Return:
                 - k_vicini (list): lista di interi con le label dei k_vicini di X_test
@@ -51,11 +51,13 @@ class Classificatore_KNN:
         """
         distanze = []
 
-        for idx, row in X_train_set.iterrows():
+        for idx, row in X_train_set.iterrows(): #itera sulle righe del dataframe di train restituendo l'indice della riga e la series contenente la riga
             
-            dist = self.__distanza_euclidea(row.values, X_test)
+            dist = self.__calcola_distanza(row.values, x_test) # row.values traforma row in un np array, x_test è già un np array
             
-            distanze.append((dist, int(Y_train_set.loc[idx].values)))
+            distanze.append((dist, int(Y_train_set.loc[idx].values))) 
+            #aggiunge alla lista distanze una tupla fatta dalla distanza tra il campione di test e il campione
+            #di train e da la label del campione di train 
             
             
 
@@ -67,7 +69,7 @@ class Classificatore_KNN:
         return k_vicini
 
 
-    def __predici_label_max(self,k_vicini):
+    def __predici_label_max(self, k_vicini):
         """
         Conta e restituisce quale label (0 o 1) è più presente in k_vicini. In caso di pareggio 
         sceglie la label randomicamente
@@ -92,7 +94,7 @@ class Classificatore_KNN:
 
         return random.choice(label_candidate)
     
-    def __calc_perc_pos_in_k_neighbours(self,k_vicini):
+    def __calc_perc_pos_in_k_neighbours(self, k_vicini):
         """
         Conta e restituisce quale label (0 o 1) è più presente in k_vicini. In caso di pareggio 
         sceglie la label randomicamente
@@ -144,7 +146,7 @@ class Classificatore_KNN:
         
         
         
-    def predict_label_by_threshold(self,list_of_perc_pos):
+    def predict_label_by_threshold(self, list_of_perc_pos):
         """
         Genera etichette predette in base a soglie di decisione variabili.
 

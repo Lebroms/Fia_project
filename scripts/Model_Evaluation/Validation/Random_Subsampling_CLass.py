@@ -1,4 +1,5 @@
 
+
 import numpy as np
 
 import random 
@@ -19,28 +20,42 @@ class RandomSubsamplingValidation(validation):
     per effettuare le predizioni e calcolare le metriche di valutazione.
     """
 
+
     def __init__(self,num_experiments,test_size,k,modalità):
+
 
         """
         Inizializza un'istanza di RandomSubsamplingValidation.
 
         Attributi:
+            
             num_experiments (int): Numero di esperimenti di validazione da eseguire.
+            
             test_size (float): Percentuale del dataset da assegnare al test set.
+            
+            k (int): numero di vicini da usare nel Classificatore.
+            
+            modalità (boolean): True se l'utente vuole visualizzare la media delle metriche selezionate,
+                                False se l'utente vuole visualizzare le metriche selezionate per ogni esperimentomodalità (boolean): True se l'utente vuole visualizzare la media delle metriche selezionate,
+                                                    False se l'utente vuole visualizzare le metriche selezionate per ogni esperiment           
         """
         self.num_experiments =num_experiments
         self.test_size = test_size
         self.k=k
         self.modalità=modalità
-        
 
-    def validation(self, features, target,metriche_selezionate):
+
+
+    def validation(self, features, target, metriche_selezionate):
+
         """
         Esegue la validazione Random Subsampling suddividendo il dataset e calcolando le metriche.
 
         Args:
             features (pd.DataFrame): DataFrame contenente solo le feature del dataset.
             target (pd.DataFrame): DataFrame contenente la classe target.
+            metriche_selezionate (list of str): Lista di stringhe numeriche corrispondenti alle metriche
+                                                da calcolare
 
         Returns:
             list[dict]: Una lista contenente i dizionari con le metriche calcolate per ogni esperimento,
@@ -60,6 +75,7 @@ class RandomSubsamplingValidation(validation):
             - Viene generata e plottata la matrice di confusione.
             - Vengono calcolate le metriche selezionate dall'utente.
         Se l'utente sceglie di aggregare le metriche, il metodo restituisce la media delle metriche sui vari esperimenti.
+        :param metriche_selezionate:
         """
 
         lista_metriche=[]#crea un dizionario vuoto in cui salvare le metriche dei vari esperimenti
