@@ -22,10 +22,10 @@ class Classificatore_KNN:
         self.Y_train_set = Y_train
 
     
-    def __distanza_euclidea(self,x1, x2):
+    def __calcola_distanza(self,x1, x2):
 
         """
-        Calcola la distanza euclidea 
+        Calcola la distanza tra il punto preso in esame (x1) e i vari punti del training set (x2)
             Args:
                 - x1 (np array)
                 - x2 (np array)
@@ -53,7 +53,7 @@ class Classificatore_KNN:
 
         for idx, row in X_train_set.iterrows(): #itera sulle righe del dataframe di train restituendo l'indice della riga e la series contenente la riga
             
-            dist = self.__distanza_euclidea(row.values, x_test) # row.values traforma row in un np array, x_test è già un np array
+            dist = self.__calcola_distanza(row.values, x_test) # row.values traforma row in un np array, x_test è già un np array
             
             distanze.append((dist, int(Y_train_set.loc[idx].values))) 
             #aggiunge alla lista distanze una tupla fatta dalla distanza tra il campione di test e il campione
