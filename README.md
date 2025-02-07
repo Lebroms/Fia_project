@@ -84,29 +84,65 @@ Nel caso di Random SubSampling e Kfold validation, in cui la validazione viene e
 
   ```plaintext
   📂 Fia_project
-  │
-  ├── 📂 dati
-  │
-  ├── 📂 risultati
-  │   ├── performance_model.xlsx
-  │
-  ├── 📂 scripts
-  │   ├── 📂 data_preprocessing
-  │   │   ├── loader
-  │   │   ├── pulizia_dataset
-  │   │   ├── target_features
-  │   ├── 📂 KNN
-  │   ├── 📂 Model_Evaluation
-  │   │   ├── metrics
-  │   │   ├── validation
-  │
-  ├── 📂 tests
-  │
-  ├── .gitignore
-  ├── Dockerfile
-  ├── main.py
-  ├── README.md
-  ├── requirements.txt
+|
+├── 📂 dati
+|   ├── version_1.csv
+|   ├── version_2.xlsx
+|   ├── version_3.txt
+|   ├── version_4.json
+|   ├── version_5.tsv
+|
+├── 📂 risultati
+|   ├── perfromance_model.xlsx
+|
+├── 📂 scripts
+|
+|   ├── 📂 data_preprocessing 
+|   |   ├── 📂 loader
+|   |   |   ├── classe_loader.py
+|   |   |   ├── csv_loader.py
+|   |   |   ├── Excel_loader.py
+|   |   |   ├── factory_loader.py
+|   |   |   ├── json_loader.py
+|   |   |   ├── txt_loader.py
+|   |   |   ├── xml_loader.py
+|   |   ├── 📂 pulizia_dataset
+|   |   |   ├── pulizia_dataset.py
+|   |   ├── 📂 Target_Features
+|   |   |   ├── ClassLabel_Selector.py
+|   |   
+|   ├── 📂 KNN
+|       ├── Classificatore_Knn.py
+|
+|   ├── 📂 Model_Evaluation
+|   |   ├── 📂 Metrics
+|   |   |   ├── Classe_Metriche.py
+|   |   |   ├── visualizzazione_performance.py
+|   |   
+|   |   ├── 📂 Validation
+|   |   |   ├── classe_validation.py
+|   |   |   ├── Holdout_Class.py
+|   |   |   ├── Kfold_Class.py
+|   |   |   ├── Random_Subsampling_Class.py 
+|
+├── 📂 tests
+|   ├── mock_interfaccia_utente.py
+|   ├── mock_standardization.py
+|   ├── test_Classificatore_KNN.py
+|   ├── test_df_proc.py
+|   ├── test_Kfold_2.py
+|   ├── test_metriche.py
+|   ├── test_standardization.py
+|
+├── .gitignore
+|
+├── Dockerfile
+|
+├── main.py
+|
+├── README.md
+|
+├── requirements.txt
   ```
 </details>
 
