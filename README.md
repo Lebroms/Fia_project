@@ -43,7 +43,7 @@ In automatico, invece, se ci saranno colonne contenenti dati di tipo stringa, il
    - **Random SubSampling**: Viene richiesto all'utente di inserire 2 parametri: la percentuale di campioni del dataset da inserire nel test set e il numero di esperimenti n. Esegue più divisioni casuali del dataset secondo la percentuale inserita e viene attuato per n volte.
    - **K-fold Cross Validation**: Viene richiesto all'utente di inserire 1 parametro: K, numero di subset in cui dividere il dataset. Suddivide il dataset in K parti per una validazione più robusta, eseguendo K ripetizioni in cui ogni volta viene usato un diverso subset come testset e K-1 subsets come train set.
 
-3. **Configurare il Classificatore k-NN**:
+- **Configurare il Classificatore k-NN**:
    - Specificando il numero di vicini **(k)** da considerare per la classificazione. Il classificatore predice le label dei campioni di test. 
    - Visualizzare:
        - la **matrice di confusione**: una tabella che mostra il numero di predizioni corrette e errate suddivise per classe, fornendo un'analisi dettagliata delle prestazioni del modello in termini di true positive, true negative, false positive e false negative.
@@ -51,7 +51,7 @@ In automatico, invece, se ci saranno colonne contenenti dati di tipo stringa, il
 
     Questi elementi vengono costruiti per permettere all'utente di analizzare il comportamento del modello sul test set.
 
-4. **Calcolare e salvare le metriche di valutazione**:
+- **Calcolare e salvare le metriche di valutazione**:
    - Selezionando le metriche che si vogliono calcolare, per valutare le predizioni rispetto alle vere label dei campioni di test.
    - I risultati vengono salvati in un file Excel nella cartella `risultati/`.
 
