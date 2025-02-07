@@ -26,6 +26,8 @@ class validation(ABC):
         Args:
             features (pd.DataFrame o np.array): Il dataset contenente le feature.
             target (pd.Series o np.array): Il dataset contenente la classe target.
+            metriche_selezionate (list of str): Lista di stringhe numeriche corrispondenti alle metriche
+                                                da calcolare
 
         Returns:
             Variabile definita nella sottoclasse: Può essere l'accuratezza del modello, un insieme di metriche, 

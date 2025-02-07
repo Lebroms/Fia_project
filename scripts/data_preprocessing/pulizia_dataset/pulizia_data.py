@@ -12,8 +12,8 @@ class Df_Processor:
     """
     Classe per la pre-elaborazione di un DataFrame.
 
-    Tutti i metodi sono statici per evitare la creazione di copie inutili del dataset,
-    ottimizzando l'uso della memoria.
+    Tutti i metodi sono statici per evitare di dover instanziare la classe: verrebbero create copie inutili
+    del dataset.
     """   
     @staticmethod
     def elimina_colonne(df, columns_to_drop):
@@ -22,9 +22,10 @@ class Df_Processor:
 
         Args:
             df (pd.DataFrame): Il DataFrame da cui rimuovere le colonne.
+            columns_to_drop (list): Lista delle colonne da eliminare (lista di stringhe)
 
         Returns:
-            pd.DataFrame: Il DataFrame senza le colonne specificate.
+            pd.DataFrame: Il DataFrame senza le colonne specificate (inplace).
         """          
         # Trova le colonne che non esistono nel DataFrame (Differenza tra insiemi)
         missing_columns = list(set(columns_to_drop) - set(df.columns))
@@ -48,7 +49,7 @@ class Df_Processor:
             df (pd.DataFrame): Il DataFrame da processare.
 
         Returns:
-            pd.DataFrame: Il DataFrame con variabili dummy al posto delle colonne categoriche.
+            pd.DataFrame: Il DataFrame con variabili dummy al posto delle colonne categoriche (inplace).
         """
         # Identifica le colonne con valori stringa. Pandas rinconosce di default le colonne 
         # contenti stringhe con il tipo object o category. Solo nelle nuove versioni di pandas
@@ -79,13 +80,13 @@ class Df_Processor:
         - "media": Sostituisce i valori mancanti con la media della colonna.
         - "mediana": Sostituisce i valori mancanti con la mediana della colonna.
         - "moda": Sostituisce i valori mancanti con il valore più frequente della colonna.
-        - "elimina": Rimuove tutte le righe contenenti valori mancanti.
 
         Args:
             df (pd.DataFrame): Il DataFrame da processare.
+            strategy (str): Strategia da applicare
 
         Returns:
-            pd.DataFrame: Il DataFrame con i valori mancanti gestiti.
+            pd.DataFrame: Il DataFrame con i valori mancanti gestiti (inplace).
 
         """
         if strategy == "media":
@@ -114,6 +115,7 @@ class Df_Processor:
 
         Args:
             df (pd.DataFrame): Il DataFrame da processare.
+            metodo (str): Tecnica di scaling
 
         Returns:
             None: Il DataFrame viene modificato in-place per risparmiare memoria.
