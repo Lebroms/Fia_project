@@ -26,3 +26,8 @@ Inoltre l'applicazione può essere eseguita anche attraverso il Dockerfile da un
 
 4) Creare ed eseguire il conteiner basato sull'immagine del progetto tramite due Bind Mounts (uno per l'input e uno per l'output) digitando: docker run -it -v /percorso_host/Fia_projects/dati:/usr/src/app/dati -v /percorso_host/Fia_projects/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py
 
+
+
+
+
+

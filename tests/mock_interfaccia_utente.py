@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Tue Feb  4 18:47:23 2025
 
@@ -18,7 +17,6 @@ class MockInterfacciaUtente:
     @staticmethod
     def get_scaling_method():
         return "normalization"  
-
 
 
 

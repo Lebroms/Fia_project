@@ -91,7 +91,6 @@ class KfoldValidation(validation):
             #Gli indici non selezionati compongono il training set."""
             feature_test_set = features.iloc[indici_test]
             feature_train_set = features.iloc[indici_training]
-
             label_test_set = target.iloc[indici_test]
             label_train_set = target.iloc[indici_training]
 
