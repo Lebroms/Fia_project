@@ -57,6 +57,7 @@ class Classificatore_KNN:
             
             distanze.append((dist, int(Y_train_set.loc[idx].values)))
             
+            
 
         distanze.sort(key=lambda x: x[0])  # ordina la lista delle distanze tra il campione e i vari record in ordine crescente, rispetto alla distanza
 
