@@ -187,7 +187,7 @@ Nel caso di Random SubSampling e Kfold validation, in cui la validazione viene e
    ```
 4. **Eseguire il container**:
    ```sh
-   docker run -it -v /percorso_host/Fia_projects/dati:/usr/src/app/dati -v /percorso_host/Fia_projects/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py
+   docker run -it -v /percorso_host/Fia_project/dati:/usr/src/app/dati -v /percorso_host/Fia_project/risultati:/usr/src/app/risultati <nome_dell'immagine> python main.py
    ```
 
 ---
